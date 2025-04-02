@@ -1,0 +1,62 @@
+.reactTracker_body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  display: flex;
+  margin: 0 auto;
+  position: relative;
+}
+.reactTracker_tableContainer {
+  width: 100%;
+}
+.reactTracker_table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #212121;
+  background-color: #333;
+}
+.reactTracker_tableBody tr:nth-child(even) {
+  background-color: #212121;
+}
+.reactTracker_table thead {
+  background-color: #4300af;
+}
+th,
+td {
+  /*border: 1px solid rgb(114, 114, 114);*/
+  border-collapse: collapse;
+  padding-left: 3px;
+  font-size: 12px;
+  font-family: Ubuntu;
+  text-align: center;
+}
+.reactTracker_editButton {
+  width: 25px;
+  height: 25px;
+  background-image: url("../../assets/edit_icon.png");
+  background-size: contain;
+  background-position: center;
+  border: 0px;
+  cursor: pointer;
+  background-color: transparent;
+  margin-top: 4px;
+}
+.reactTracker_editButton:hover {
+  border: 0px;
+  background-color: transparent;
+}
+.reactTracker_delButton {
+  width: 25px;
+  height: 25px;
+  background-image: url("../../assets/delete_icon.png");
+  background-size: contain;
+  background-position: center;
+  border: 0px;
+  cursor: pointer;
+  background-color: transparent;
+  margin-top: 4px;
+}
+.reactTracker_delButton:hover {
+  border: 0px;
+  background-color: transparent;
+}

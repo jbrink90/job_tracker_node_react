@@ -1,0 +1,80 @@
+.editSlideout_header {
+  font-size: xx-large;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.editSlideout_container {
+  display: flex;
+  margin: 0;
+  padding: 7px;
+  background-color: #382b58;
+  width: 40vw;
+  height: 100vh;
+  position: fixed;
+  right: 0;
+  opacity: 0;
+  flex-direction: column;
+}
+.editSlideout_navRow {
+  display: flex;
+}
+.editSlideout_content {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  margin: 10px;
+  line-height: 0.8;
+  font-family: 'Ubuntu';
+}
+.editSlideout_content label { 
+  margin-left: 3px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+.editSlideout_content input,
+.editSlideout_content textarea {
+  font-size: larger;
+  background-color: #333;
+  border: 1px solid grey;
+  border-radius: 5px;
+  font-family: 'Ubuntu';
+  padding: 10px;
+}
+.editSlideout_span {
+  margin-left: 3px;
+  font-size: larger;
+  font-weight: bolder;
+}
+.editSlideout_content input:focus,
+.editSlideout_content textarea:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgb(213, 62, 255); /* Optional: subtle glow effect */
+}
+@keyframes slideInFromRight {
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+}
+@keyframes slideOutRight {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+}
+
+.slide-out-right {
+    animation: slideOutRight 0.5s ease-out forwards;
+}
+
+.slide-in-right {
+    animation: slideInFromRight 0.5s ease-out forwards;
+}

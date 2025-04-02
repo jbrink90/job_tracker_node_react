@@ -1,0 +1,39 @@
+#root {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+.home_body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  width: 80vw;
+}
+h1 {
+  text-align: center;
+}
+.react_and_node {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 50vw;
+  background-image: linear-gradient(-45deg, #61dafb, yellow);
+  color: black;
+  padding: 10px;
+  border-radius: 10px;
+  height: 100px;
+}
+.react_and_node_link {
+  text-decoration: none;
+  cursor: pointer;
+}
+.react_side {
+  display: flex;
+  align-items: flex-start; /* Align text to the top */
+}
+.node_side {
+  display: flex;
+  text-align: right;
+  align-items: flex-end; /* Align text to the top */
+}
