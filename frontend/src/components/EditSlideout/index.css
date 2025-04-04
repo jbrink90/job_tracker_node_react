@@ -4,6 +4,7 @@
   margin-bottom: 20px;
 }
 .editSlideout_container {
+  transform: translateX(100%);
   display: flex;
   margin: 0;
   padding: 7px;
@@ -24,9 +25,9 @@
   flex-direction: column;
   margin: 10px;
   line-height: 0.8;
-  font-family: 'Ubuntu';
+  font-family: "Ubuntu";
 }
-.editSlideout_content label { 
+.editSlideout_content label {
   margin-left: 3px;
   margin-top: 15px;
   margin-bottom: 5px;
@@ -37,8 +38,9 @@
   background-color: #333;
   border: 1px solid grey;
   border-radius: 5px;
-  font-family: 'Ubuntu';
+  font-family: "Ubuntu";
   padding: 10px;
+  color: white;
 }
 .editSlideout_span {
   margin-left: 3px;
@@ -51,30 +53,30 @@
   box-shadow: 0 0 5px rgb(213, 62, 255); /* Optional: subtle glow effect */
 }
 @keyframes slideInFromRight {
-    0% {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 @keyframes slideOutRight {
-    0% {
-      transform: translateX(0);
-      opacity: 1;
-    }
-    100% {
-      transform: translateX(100%);
-      opacity: 0;
-    }
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
 .slide-out-right {
-    animation: slideOutRight 0.5s ease-out forwards;
+  animation: slideOutRight 0.5s ease-out forwards;
 }
 
 .slide-in-right {
-    animation: slideInFromRight 0.5s ease-out forwards;
+  animation: slideInFromRight 0.5s ease-out forwards;
 }

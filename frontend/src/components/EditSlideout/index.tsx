@@ -1,15 +1,39 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./index.css";
 import CloseIcon from '@mui/icons-material/Close';
-import { Job } from "../../../../shared/src/types/Job";
+import { Job } from "@mytypes/Job";
 
 interface EditSlideoutProps {
     cssClass?: string
-    toggleSlideout: Function
+    toggleSlideout: () => void
     job: Job
+    masterJobList: Job[];
+    setMasterJobList: React.Dispatch<React.SetStateAction<Job[]>>;
 }
 
-const EditSlideout: React.FC<EditSlideoutProps> = ({cssClass, toggleSlideout, job}) => {
+const EditSlideout: React.FC<EditSlideoutProps> = ({cssClass, toggleSlideout, job, masterJobList, setMasterJobList}) => {
+
+    const [jobValues, setJobValues] = useState(job);
+
+    useEffect(() => {
+        setJobValues(job);
+    }, [job])
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const {name, value} = e.target;
+        setJobValues((prevJob) => ({
+            ...prevJob,
+            [name]: value
+        }));
+    }
+
+    const saveApplication = () => {
+        setMasterJobList(masterJobList.map((item) =>
+            item.id === jobValues.id ? jobValues : item
+        ));
+        toggleSlideout();
+    }
+
     return (<>
         <aside className={cssClass}>
             <div className="editSlideout_navRow">
@@ -19,25 +43,26 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({cssClass, toggleSlideout, jo
                 <header className="editSlideout_header">Edit Application</header>
                 
                 <label>Company</label>
-                <input type="text" placeholder="Company" value={job.company}/>
+                <input type="text" name="company" value={jobValues.company} onChange={handleInputChange}/>
 
                 <label>Position</label>
-                <input type="text" placeholder="Position" value={job.job_title}/>
+                <input type="text" name="job_title" value={jobValues.job_title} onChange={handleInputChange}/>
 
                 <label>Description</label>
-                <textarea defaultValue={'whoknows'} rows={10} value={job.description}></textarea>
+                <textarea rows={10} name="description" value={jobValues.description} onChange={handleInputChange}></textarea>
 
                 <label>Location</label>
-                <input type="text" placeholder="Location" value={job.location}/>
+                <input type="text" name="location" value={jobValues.location} onChange={handleInputChange}/>
 
                 <label>Status</label>
-                <input type="text" placeholder="Status" value={job.status}/>
+                <input type="text" name="status" value={jobValues.status} onChange={handleInputChange}/>
 
                 <label>Date Applied</label>
-                <input type="text" placeholder="Date Applied" value={job.applied?.toString()}/>
+                <input type="text" name="applied" value={jobValues.applied?.toString()} onChange={handleInputChange}/>
 
                 <label>Last Update</label>
-                <span className="editSlideout_span">{job ? job.last_updated?.toString() : '04/02/2024 12:07 AM'}</span>
+                <span className="editSlideout_span">{jobValues ? jobValues.last_updated?.toString() : '04/02/2024 12:07 AM'}</span>
+                <button style={{marginTop:'15px', height:'40px'}} onMouseUp={saveApplication}>Save Application</button>
             </div>
         </aside>
     </>)

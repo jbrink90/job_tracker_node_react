@@ -1,4 +1,4 @@
-[
+export const mockApiResponseAll =[
   {
     "id": 1,
     "company": "TechCorp",

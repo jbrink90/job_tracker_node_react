@@ -6,7 +6,11 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@types/*": ["../shared/src/types/*"],
+      "@mocks/*": ["../shared/src/__mocks__/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/server.ts"],
   "exclude": ["node_modules"]

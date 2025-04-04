@@ -1,13 +1,18 @@
+import { useState } from 'react';
 import EditSlideout from "../../components/EditSlideout";
 import { ReactTable } from "../../components";
 import "./index.css";
-import mock_response from "../../__mocks__/all_response.json";
+import {mockApiResponseAll} from "@mocks/mockApiResponseAll";
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadIcon from '@mui/icons-material/Upload';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { Job } from "@mytypes/Job";
 
 const SlideoutPage = () => {
 
+    const [masterJobList, setMasterJobList] = useState<Job[]>(mockApiResponseAll);
+    const [selectedJobIndex, setSelectedJobIndex] = useState<number | null>(0);
+    
     const toggleSlideout = () => {
         const slideout: HTMLElement = document.getElementsByTagName("aside")[0];
         if (slideout.classList.contains("slide-in-right")) {
@@ -16,6 +21,9 @@ const SlideoutPage = () => {
         }
         else if (slideout.classList.contains("slide-out-right")) {
             slideout.classList.remove("slide-out-right");
+            slideout.classList.add("slide-in-right");
+        }
+        else {
             slideout.classList.add("slide-in-right");
         }
     }
@@ -31,9 +39,19 @@ const SlideoutPage = () => {
                 <button><RefreshIcon fontSize="large"/></button>
                 </div>
             </div>
-            <ReactTable jobs={mock_response} toggleSlideoutFunction={toggleSlideout} />
+            <ReactTable 
+                jobs={masterJobList} 
+                toggleSlideoutFunction={toggleSlideout} 
+                setSelectedJobIndex={setSelectedJobIndex}
+            />
         </div>
-        <EditSlideout job={mock_response[0]} toggleSlideout={toggleSlideout} cssClass={"editSlideout_container slide-in-right"} />
+        <EditSlideout 
+            job={masterJobList[selectedJobIndex ?? 0]} 
+            toggleSlideout={toggleSlideout} 
+            cssClass={"editSlideout_container"}
+            masterJobList={masterJobList}
+            setMasterJobList={setMasterJobList}
+        />
     </>
     )
 }

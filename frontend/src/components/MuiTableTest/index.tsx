@@ -1,6 +1,6 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
-import mock_response from "../../__mocks__/all_response.json";
+import {mockApiResponseAll} from "@mocks/mockApiResponseAll";
 import { ReactNode } from "react";
 import "../ReactTable/index.css";
 import "@fontsource/roboto/400.css"; // Specify weight if needed
@@ -54,7 +54,7 @@ const columns: GridColDef[] = [
 function MuiTableTest() {
   return (
     <Paper elevation={12}>
-      <DataGrid rows={mock_response} columns={columns} sx={{ display: 'flex', flexDirection: 'column'}} />
+      <DataGrid rows={mockApiResponseAll} columns={columns} sx={{ display: 'flex', flexDirection: 'column'}} />
     </Paper>
   );
 }
