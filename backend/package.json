@@ -5,19 +5,22 @@
   "main": "./src/server.ts",
   "type": "commonjs",
   "scripts": {
-    "dev": "npx ts-node -r tsconfig-paths/register ./src/server.ts",
+    "dev": "nodemon ./src/server.ts",
     "prod": "npx ts-node -r tsconfig-paths/register ./src/server.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.2",
+    "npm": "^11.2.0",
     "sqlite3": "^5.1.7",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1"
   }
 }

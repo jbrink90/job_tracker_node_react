@@ -4,12 +4,13 @@ import '@fontsource/ubuntu/400.css';
 import { Job } from "../../../../shared/src/types/Job";
 
 interface ReactTableProps {
-  toggleSlideoutFunction: () => void;
+  slideIn: () => void;
   jobs: Job[];
-  setSelectedJobIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  setSelectedJobIndex: React.Dispatch<React.SetStateAction<number>>;
+  deleteJob: (arg: number) => void;
 }
 
-const ReactTable: React.FC<ReactTableProps> = ({ toggleSlideoutFunction, jobs, setSelectedJobIndex }) => {
+const ReactTable: React.FC<ReactTableProps> = ({ slideIn, jobs, setSelectedJobIndex, deleteJob }) => {
   return (
     <div className="reactTracker_body">
       <div className="reactTracker_tableContainer">
@@ -29,7 +30,7 @@ const ReactTable: React.FC<ReactTableProps> = ({ toggleSlideoutFunction, jobs, s
           </thead>
           <tbody className="reactTracker_tableBody">
             {jobs.map((row, index) => (
-              <tr key={row.id} onClick={() => setSelectedJobIndex(index)}>
+              <tr key={row.id}>
                 <td>{row.id}</td>
                 <td>{row.company}</td>
                 <td>{row.job_title}</td>
@@ -42,13 +43,19 @@ const ReactTable: React.FC<ReactTableProps> = ({ toggleSlideoutFunction, jobs, s
                   <button
                     className="reactTracker_editButton"
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevents row click event from triggering
+                      e.stopPropagation();
                       setSelectedJobIndex(index);
-                      toggleSlideoutFunction();
+                      slideIn();
                     }}
                   >
                   </button>
-                  <button className="reactTracker_delButton"></button>
+                  <button 
+                    className="reactTracker_delButton"
+                    onClick={(e) => {
+                      e.stopPropagation(); 
+                      deleteJob(index);
+                    }}
+                  ></button>
                 </td>
               </tr>
             ))}

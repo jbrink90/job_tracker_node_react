@@ -8,7 +8,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@types/*": ["../shared/src/types/*"],
+      "@mytypes/*": ["../shared/src/types/*"],
       "@mocks/*": ["../shared/src/__mocks__/*"]
     }
   },

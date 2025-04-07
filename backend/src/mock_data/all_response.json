@@ -38,5 +38,215 @@
     "status": "Offer Received",
     "applied": "2025-02-28",
     "last_updated": "2025-03-15"
+  },
+  {
+    "id": 5,
+    "company": "TechSavvy",
+    "job_title": "Full Stack Developer",
+    "description": "Develop both front-end and back-end systems.",
+    "location": "Boston, MA",
+    "status": "Applied",
+    "applied": "2025-02-10",
+    "last_updated": "2025-03-01"
+  },
+  {
+    "id": 6,
+    "company": "DataInsights",
+    "job_title": "Data Scientist",
+    "description": "Build machine learning models to predict trends.",
+    "location": "Chicago, IL",
+    "status": "Interview Scheduled",
+    "applied": "2025-03-01",
+    "last_updated": "2025-03-07"
+  },
+  {
+    "id": 7,
+    "company": "InnovativeSolutions",
+    "job_title": "Project Manager",
+    "description": "Oversee project timelines and team coordination.",
+    "location": "Denver, CO",
+    "status": "Rejected",
+    "applied": "2025-01-20",
+    "last_updated": "2025-02-05"
+  },
+  {
+    "id": 8,
+    "company": "CreativeLabs",
+    "job_title": "Graphic Designer",
+    "description": "Create visual designs for marketing campaigns.",
+    "location": "Los Angeles, CA",
+    "status": "Offer Received",
+    "applied": "2025-02-25",
+    "last_updated": "2025-03-10"
+  },
+  {
+    "id": 9,
+    "company": "WebSolutions",
+    "job_title": "Frontend Developer",
+    "description": "Build interactive user interfaces.",
+    "location": "San Francisco, CA",
+    "status": "Applied",
+    "applied": "2025-02-15",
+    "last_updated": "2025-03-05"
+  },
+  {
+    "id": 10,
+    "company": "TechWorld",
+    "job_title": "Software Engineer",
+    "description": "Write and maintain software applications.",
+    "location": "Chicago, IL",
+    "status": "Interview Scheduled",
+    "applied": "2025-02-18",
+    "last_updated": "2025-03-02"
+  },
+  {
+    "id": 11,
+    "company": "NetSolutions",
+    "job_title": "Cloud Engineer",
+    "description": "Manage cloud infrastructure and deployments.",
+    "location": "New York, NY",
+    "status": "Offer Received",
+    "applied": "2025-02-12",
+    "last_updated": "2025-03-07"
+  },
+  {
+    "id": 12,
+    "company": "TechPro",
+    "job_title": "Data Engineer",
+    "description": "Design and maintain data pipelines.",
+    "location": "Austin, TX",
+    "status": "Rejected",
+    "applied": "2025-01-22",
+    "last_updated": "2025-02-10"
+  },
+  {
+    "id": 13,
+    "company": "DesignLab",
+    "job_title": "UI Developer",
+    "description": "Build and improve user interfaces.",
+    "location": "Seattle, WA",
+    "status": "Applied",
+    "applied": "2025-02-08",
+    "last_updated": "2025-03-01"
+  },
+  {
+    "id": 14,
+    "company": "InnovationHub",
+    "job_title": "Business Analyst",
+    "description": "Analyze and interpret business data.",
+    "location": "San Diego, CA",
+    "status": "Interview Scheduled",
+    "applied": "2025-02-10",
+    "last_updated": "2025-03-03"
+  },
+  {
+    "id": 15,
+    "company": "TechPioneers",
+    "job_title": "DevOps Engineer",
+    "description": "Automate and streamline operations and infrastructure.",
+    "location": "Boston, MA",
+    "status": "Offer Received",
+    "applied": "2025-02-14",
+    "last_updated": "2025-03-08"
+  },
+  {
+    "id": 16,
+    "company": "CyberNet",
+    "job_title": "Security Engineer",
+    "description": "Design and implement security systems.",
+    "location": "Denver, CO",
+    "status": "Rejected",
+    "applied": "2025-01-28",
+    "last_updated": "2025-02-15"
+  },
+  {
+    "id": 17,
+    "company": "GreenTech",
+    "job_title": "Sustainability Manager",
+    "description": "Develop and manage sustainability programs.",
+    "location": "Portland, OR",
+    "status": "Applied",
+    "applied": "2025-03-05",
+    "last_updated": "2025-03-07"
+  },
+  {
+    "id": 18,
+    "company": "MarketPro",
+    "job_title": "Marketing Specialist",
+    "description": "Develop marketing strategies for product promotion.",
+    "location": "New York, NY",
+    "status": "Interview Scheduled",
+    "applied": "2025-02-22",
+    "last_updated": "2025-03-01"
+  },
+  {
+    "id": 19,
+    "company": "SkyTech",
+    "job_title": "System Administrator",
+    "description": "Manage and maintain IT infrastructure.",
+    "location": "Los Angeles, CA",
+    "status": "Offer Received",
+    "applied": "2025-02-18",
+    "last_updated": "2025-03-03"
+  },
+  {
+    "id": 20,
+    "company": "CodeLabs",
+    "job_title": "Software Engineer",
+    "description": "Develop and maintain software solutions.",
+    "location": "Austin, TX",
+    "status": "Rejected",
+    "applied": "2025-01-10",
+    "last_updated": "2025-01-25"
+  },
+  {
+    "id": 21,
+    "company": "AlphaTech",
+    "job_title": "QA Engineer",
+    "description": "Test and ensure the quality of software products.",
+    "location": "Chicago, IL",
+    "status": "Applied",
+    "applied": "2025-02-25",
+    "last_updated": "2025-03-02"
+  },
+  {
+    "id": 22,
+    "company": "InnovatorsHub",
+    "job_title": "Front-end Developer",
+    "description": "Create responsive and interactive user interfaces.",
+    "location": "San Francisco, CA",
+    "status": "Interview Scheduled",
+    "applied": "2025-02-15",
+    "last_updated": "2025-03-01"
+  },
+  {
+    "id": 23,
+    "company": "StartTech",
+    "job_title": "Product Manager",
+    "description": "Manage the development and launch of new products.",
+    "location": "Seattle, WA",
+    "status": "Offer Received",
+    "applied": "2025-02-28",
+    "last_updated": "2025-03-10"
+  },
+  {
+    "id": 24,
+    "company": "BizTech",
+    "job_title": "Operations Manager",
+    "description": "Oversee the day-to-day operations of the business.",
+    "location": "Boston, MA",
+    "status": "Rejected",
+    "applied": "2025-01-30",
+    "last_updated": "2025-02-12"
+  },
+  {
+    "id": 25,
+    "company": "CloudLabs",
+    "job_title": "Cloud Architect",
+    "description": "Design and implement cloud infrastructure.",
+    "location": "Portland, OR",
+    "status": "Applied",
+    "applied": "2025-02-22",
+    "last_updated": "2025-03-05"
   }
 ]

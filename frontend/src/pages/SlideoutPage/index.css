@@ -1,39 +1,39 @@
 .slideOutPage_leftPane {
-    display:flex;
-    width: 100vw;
-    background-color: #2e2d2d;
-    flex: 1;
-    flex-direction: column;
-    padding: 20px;
+  display: flex;
+  width: 100vw;
+  background-color: #2e2d2d;
+  flex: 1;
+  flex-direction: column;
+  padding: 20px;
 }
 .slideOutPage_toggleButton {
-    height: 75px;
-    width: 150px;
-    display: flex;
+  height: 75px;
+  width: 150px;
+  display: flex;
 }
 .slideoutPage_buttonsContainer {
-    display: flex;
-    width: 30%;
-    align-self: flex-end;
-  }
-  .slideoutPage_buttonsContainer button {
-    background-color: #4300af;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-    margin: 5px;
-    border: 1px solid #333;
-    padding-top: 7px;
-  }
-  .slideoutPage_buttonsInner {
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;
-  }
-  .slideoutPage_header {
-    font-size: xx-large;
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
+  display: flex;
+  width: 30%;
+  align-self: flex-end;
+}
+.slideoutPage_buttonsContainer button {
+  background-color: #4300af;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  border: 1px solid #333;
+  padding-top: 7px;
+}
+.slideoutPage_buttonsInner {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+.slideoutPage_header {
+  font-size: xx-large;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}

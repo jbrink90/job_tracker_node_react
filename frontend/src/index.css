@@ -19,6 +19,5 @@ body {
 }
 #root {
   display: flex;
-  height: 100vh; /* Full screen height */
   overflow: hidden;
 }
