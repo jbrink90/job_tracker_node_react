@@ -10,15 +10,18 @@ interface EditSlideoutProps {
   slideOut: () => void;
   addingNewJob: boolean;
 }
+const today = new Date();
+const formattedDate = today.toLocaleDateString("en-US");
+
 const defaultJob: Job = {
   id: 0,
-  company: '',
-  job_title: '',
-  description: '',
-  location: '',
-  status: '',
-  applied: '',
-  last_updated: ''
+  company: "",
+  job_title: "",
+  description: "",
+  location: "",
+  status: "",
+  applied: "",
+  last_updated: formattedDate,
 };
 
 const EditSlideout: React.FC<EditSlideoutProps> = ({
@@ -26,8 +29,8 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   job,
   masterJobList,
   setMasterJobList,
+  addingNewJob,
 }) => {
-  
   const [jobValues, setJobValues] = useState<Job>(defaultJob);
   const [hasJobBeenModified, setHasJobBeenModified] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -41,8 +44,12 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   };
 
   useEffect(() => {
-    setJobValues(job || defaultJob);
-  }, [job]);
+    if (addingNewJob) {
+      setJobValues(defaultJob);
+    } else {
+      setJobValues(job || defaultJob);
+    }
+  }, [job, addingNewJob]);
 
   const discardChanges = () => {
     setJobValues(job);
@@ -64,11 +71,22 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
 
   const saveApplication = () => {
     setIsModalVisible(false);
-    slideOut();
-    setMasterJobList(
-      masterJobList.map((item) => (item.id === jobValues.id ? jobValues : item))
-    );
-    setHasJobBeenModified(false);
+
+    if (addingNewJob) {
+      setMasterJobList([...masterJobList, jobValues]);
+    } else {
+      try {
+        setMasterJobList(
+          masterJobList.map((item) =>
+            item.id === jobValues.id ? jobValues : item
+          )
+        );
+        setHasJobBeenModified(false);
+        slideOut();
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
   };
 
   return (
@@ -83,13 +101,15 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           />
         </div>
         <div className="editSlideout_content">
-          <header className="editSlideout_header">Edit Application</header>
+          <header className="editSlideout_header">
+            {addingNewJob ? "Add Job" : "Edit Job"}
+          </header>
 
           <label>Company</label>
           <input
             type="text"
             name="company"
-            value={jobValues.company ? jobValues.company : ''}
+            value={jobValues.company ? jobValues.company : ""}
             onChange={handleInputChange}
           />
 
@@ -97,7 +117,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <input
             type="text"
             name="job_title"
-            value={jobValues.job_title ? jobValues.job_title : ''}
+            value={jobValues.job_title ? jobValues.job_title : ""}
             onChange={handleInputChange}
           />
 
@@ -105,7 +125,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <textarea
             rows={10}
             name="description"
-            value={jobValues.description ? jobValues.description : ''}
+            value={jobValues.description ? jobValues.description : ""}
             onChange={handleInputChange}
           ></textarea>
 
@@ -113,7 +133,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <input
             type="text"
             name="location"
-            value={jobValues.location ? jobValues.location : ''}
+            value={jobValues.location ? jobValues.location : ""}
             onChange={handleInputChange}
           />
 
@@ -121,7 +141,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <input
             type="text"
             name="status"
-            value={jobValues.status ? jobValues.status : ''}
+            value={jobValues.status ? jobValues.status : ""}
             onChange={handleInputChange}
           />
 
@@ -129,7 +149,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <input
             type="text"
             name="applied"
-            value={jobValues.applied ? jobValues.applied?.toString() : ''}
+            value={jobValues.applied ? jobValues.applied?.toString() : ""}
             onChange={handleInputChange}
           />
 
@@ -143,7 +163,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             style={{ marginTop: "15px", height: "40px" }}
             onMouseUp={saveApplication}
           >
-            Save Application
+            {addingNewJob ? "Add Job" : "Save Job"}
           </button>
         </div>
       </aside>

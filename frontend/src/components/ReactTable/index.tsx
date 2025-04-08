@@ -1,6 +1,6 @@
-import React from 'react'
-import './index.css'
-import '@fontsource/ubuntu/400.css';
+import React from "react";
+import "./index.css";
+import "@fontsource/ubuntu/400.css";
 import { Job } from "../../../../shared/src/types/Job";
 
 interface ReactTableProps {
@@ -8,9 +8,16 @@ interface ReactTableProps {
   jobs: Job[];
   setSelectedJobIndex: React.Dispatch<React.SetStateAction<number>>;
   deleteJob: (arg: number) => void;
+  setAddingNewJob: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ReactTable: React.FC<ReactTableProps> = ({ slideIn, jobs, setSelectedJobIndex, deleteJob }) => {
+const ReactTable: React.FC<ReactTableProps> = ({
+  slideIn,
+  jobs,
+  setSelectedJobIndex,
+  deleteJob,
+  setAddingNewJob,
+}) => {
   return (
     <div className="reactTracker_body">
       <div className="reactTracker_tableContainer">
@@ -43,16 +50,16 @@ const ReactTable: React.FC<ReactTableProps> = ({ slideIn, jobs, setSelectedJobIn
                   <button
                     className="reactTracker_editButton"
                     onClick={(e) => {
+                      setAddingNewJob(false);
                       e.stopPropagation();
                       setSelectedJobIndex(index);
                       slideIn();
                     }}
-                  >
-                  </button>
-                  <button 
+                  ></button>
+                  <button
                     className="reactTracker_delButton"
                     onClick={(e) => {
-                      e.stopPropagation(); 
+                      e.stopPropagation();
                       deleteJob(index);
                     }}
                   ></button>
@@ -66,4 +73,4 @@ const ReactTable: React.FC<ReactTableProps> = ({ slideIn, jobs, setSelectedJobIn
   );
 };
 
-export default ReactTable
+export default ReactTable;
