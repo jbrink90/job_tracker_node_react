@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import EditSlideout from "../../components/EditSlideout";
 import { ReactTable } from "../../components";
 import "./index.css";
-//import {mockApiResponseAll} from "@mocks/mockApiResponseAll";
-import DownloadIcon from "@mui/icons-material/Download";
-import UploadIcon from "@mui/icons-material/Upload";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import { Job } from "@mytypes/Job";
@@ -19,7 +16,6 @@ const SlideoutPage = () => {
 
   const getAllJobs = async () => {
     try {
-      console.log("API");
       const response = await fetch("/api/all", {
         method: "GET",
         headers: {
@@ -32,7 +28,6 @@ const SlideoutPage = () => {
       }
 
       const data = await response.json();
-      console.log("Success:", data);
       setMasterJobList(data);
     } catch (error) {
       console.error("Error:", error);
@@ -40,11 +35,7 @@ const SlideoutPage = () => {
   };
 
   const deleteJob = async (indexNumber: number) => {
-    console.log(
-      `trying to delete ${JSON.stringify(masterJobList[indexNumber])}`
-    );
     try {
-      console.log("API");
       const response = await fetch("/api/deletejob", {
         method: "DELETE",
         headers: {
@@ -57,12 +48,30 @@ const SlideoutPage = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-
+      //const data = await response.json();
       setMasterJobList(
         masterJobList.filter((_, index) => index !== indexNumber)
       );
-      console.log("Success:", data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const addJob = async (jobValues: Job) => {
+    try {
+      const response = await fetch("/api/addjob", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jobValues),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      //const data = await response.json();
     } catch (error) {
       console.error("Error:", error);
     }
@@ -72,6 +81,10 @@ const SlideoutPage = () => {
     setAddingNewJob(true);
     slideIn();
   };
+
+  useEffect(() => {
+    getAllJobs();
+  },[])
 
   useEffect(() => {
     setCurrentEditingJob(masterJobList[selectedJobIndex]);
@@ -103,12 +116,6 @@ const SlideoutPage = () => {
         <div className="slideoutPage_buttonsContainer">
           <div className="slideoutPage_buttonsInner">
             <button>
-              <DownloadIcon fontSize="large" />
-            </button>
-            <button>
-              <UploadIcon fontSize="large" />
-            </button>
-            <button>
               <RefreshIcon onClick={getAllJobs} fontSize="large" />
             </button>
             <button>
@@ -130,6 +137,7 @@ const SlideoutPage = () => {
         setMasterJobList={setMasterJobList}
         slideOut={slideOut}
         addingNewJob={addingNewJob}
+        addJob={addJob}
       />
     </>
   );

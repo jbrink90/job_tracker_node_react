@@ -16,6 +16,16 @@
   opacity: 0;
   flex-direction: column;
 }
+@media screen and (max-width: 850px) {
+  .editSlideout_container {
+    width: 75vw;
+  }
+}
+@media screen and (max-width: 700px) {
+  .editSlideout_container {
+    width: 97vw;
+  }
+}
 .editSlideout_navRow {
   display: flex;
 }

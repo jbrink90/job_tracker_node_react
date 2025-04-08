@@ -9,12 +9,12 @@ interface EditSlideoutProps {
   setMasterJobList: React.Dispatch<React.SetStateAction<Job[]>>;
   slideOut: () => void;
   addingNewJob: boolean;
+  addJob: (jobValues: Job) => void;
 }
 const today = new Date();
 const formattedDate = today.toLocaleDateString("en-US");
 
 const defaultJob: Job = {
-  id: 0,
   company: "",
   job_title: "",
   description: "",
@@ -30,6 +30,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   masterJobList,
   setMasterJobList,
   addingNewJob,
+  addJob,
 }) => {
   const [jobValues, setJobValues] = useState<Job>(defaultJob);
   const [hasJobBeenModified, setHasJobBeenModified] = useState(false);
@@ -49,7 +50,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     } else {
       setJobValues(job || defaultJob);
     }
-  }, [job, addingNewJob]);
+  }, [job, addingNewJob, addJob]);
 
   const discardChanges = () => {
     setJobValues(job);
@@ -73,7 +74,15 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     setIsModalVisible(false);
 
     if (addingNewJob) {
-      setMasterJobList([...masterJobList, jobValues]);
+
+      try {
+        setMasterJobList([...masterJobList, jobValues]);
+        addJob(jobValues);
+        setJobValues(defaultJob);
+        slideOut();
+      } catch (error) {
+        console.error("Error:", error);
+      }
     } else {
       try {
         setMasterJobList(

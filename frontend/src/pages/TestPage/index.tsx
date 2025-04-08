@@ -14,7 +14,7 @@ function TestPage() {
 
     const addJobToSQL = async () => {
         try {
-            const response = await fetch('/api/createjob', {
+            const response = await fetch('/api/addjob', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -26,8 +26,7 @@ function TestPage() {
               throw new Error(`HTTP error! status: ${response.status}`);
             }
         
-            const data = await response.json();
-            console.log('Success:', data);
+            //const data = await response.json();
           } catch (error) {
             console.error('Error:', error);
           }

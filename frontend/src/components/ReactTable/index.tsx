@@ -41,7 +41,7 @@ const ReactTable: React.FC<ReactTableProps> = ({
                 <td>{row.id}</td>
                 <td>{row.company}</td>
                 <td>{row.job_title}</td>
-                <td>{row.description}</td>
+                <td>{row.description.substring(0,40)}</td>
                 <td>{row.location}</td>
                 <td>{row.status}</td>
                 <td>{row.applied}</td>

@@ -18,7 +18,7 @@ app.use(express.json());
 const port = process.env.API_PORT || 4444;
 const filename = process.env.SQLITE_FILENAME || "jobtracker.sqlite";
 
-app.post('/createjob', async (req: Request, res: Response) => {
+app.post('/addjob', async (req: Request, res: Response) => {
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { body: jobData } = req;
 
