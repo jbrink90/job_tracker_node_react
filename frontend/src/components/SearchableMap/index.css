@@ -1,0 +1,6 @@
+.searchableMap_searchDiv {
+  position: absolute;
+  z-index: 999;
+  padding: 20px;
+  left: 50%;
+}
