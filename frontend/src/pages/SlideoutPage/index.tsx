@@ -77,6 +77,26 @@ const SlideoutPage = () => {
     }
   };
 
+  const saveJob = async (jobValues: Job) => {
+    try {
+      const response = await fetch("/api/modifyjob", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jobValues),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      //const data = await response.json();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const slideoutNewJob = () => {
     setAddingNewJob(true);
     slideIn();
@@ -138,6 +158,7 @@ const SlideoutPage = () => {
         slideOut={slideOut}
         addingNewJob={addingNewJob}
         addJob={addJob}
+        saveJob={saveJob}
       />
     </>
   );

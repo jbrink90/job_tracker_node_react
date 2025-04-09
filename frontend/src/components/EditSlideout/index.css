@@ -3,6 +3,7 @@
   margin-top: 10px;
   margin-bottom: 20px;
 }
+
 .editSlideout_container {
   transform: translateX(100%);
   display: flex;
@@ -53,9 +54,9 @@
   color: white;
 }
 .editSlideout_span {
-  margin-left: 3px;
   font-size: larger;
   font-weight: bolder;
+  margin: 7px 0 0 3px;
 }
 .editSlideout_content input:focus,
 .editSlideout_content textarea:focus {

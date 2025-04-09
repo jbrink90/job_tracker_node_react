@@ -3,6 +3,9 @@ import "./index.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { Job } from "@mytypes/Job";
 
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+
 interface EditSlideoutProps {
   job: Job;
   masterJobList: Job[];
@@ -10,6 +13,7 @@ interface EditSlideoutProps {
   slideOut: () => void;
   addingNewJob: boolean;
   addJob: (jobValues: Job) => void;
+  saveJob: (jobValues: Job) => void;
 }
 const today = new Date();
 const formattedDate = today.toLocaleDateString("en-US");
@@ -31,6 +35,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   setMasterJobList,
   addingNewJob,
   addJob,
+  saveJob,
 }) => {
   const [jobValues, setJobValues] = useState<Job>(defaultJob);
   const [hasJobBeenModified, setHasJobBeenModified] = useState(false);
@@ -74,7 +79,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     setIsModalVisible(false);
 
     if (addingNewJob) {
-
       try {
         setMasterJobList([...masterJobList, jobValues]);
         addJob(jobValues);
@@ -90,6 +94,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             item.id === jobValues.id ? jobValues : item
           )
         );
+        saveJob(jobValues);
         setHasJobBeenModified(false);
         slideOut();
       } catch (error) {
@@ -153,15 +158,31 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             value={jobValues.status ? jobValues.status : ""}
             onChange={handleInputChange}
           />
+          
 
           <label>Date Applied</label>
-          <input
-            type="text"
-            name="applied"
-            value={jobValues.applied ? jobValues.applied?.toString() : ""}
-            onChange={handleInputChange}
-          />
-
+            <DatePicker
+              value={
+                jobValues.applied ? dayjs(jobValues.applied?.toString()) : dayjs()
+              }
+              defaultValue={dayjs()}
+              onChange={(value) => {
+                jobValues.applied = value?.format("MM/DD/YYYY") || "";
+              }}
+              slotProps={{
+                textField: {
+                  sx: {
+                    '& .MuiInputAdornment-root .MuiIconButton-root': {
+                      color: 'white',
+                    },
+                    input: {
+                      color: 'white',
+                      borderColor: 'grey'
+                    },
+                  }
+                }
+              }}
+            />
           <label>Last Update</label>
           <span className="editSlideout_span">
             {jobValues.last_updated
