@@ -1,6 +1,6 @@
 .slideOutPage_leftPane {
   display: flex;
-  width: 100vw;
+  width: 98vw;
   flex: 1;
   flex-direction: column;
   padding: 20px;

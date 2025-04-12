@@ -18,7 +18,7 @@ app.use(express.json());
 const port = process.env.API_PORT || 4444;
 const filename = process.env.SQLITE_FILENAME || "jobtracker.sqlite";
 
-app.post('/addjob', async (req: Request, res: Response) => {
+app.post('/jobs', async (req: Request, res: Response) => {
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { body: jobData } = req;
 
@@ -32,7 +32,7 @@ app.post('/addjob', async (req: Request, res: Response) => {
     }
 });
 
-app.patch('/modifyjob', async (req: Request, res: Response) => {
+app.patch('/jobs', async (req: Request, res: Response) => {
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { body: jobData } = req;
 
@@ -46,7 +46,7 @@ app.patch('/modifyjob', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/deletejob', async (req: Request, res: Response) => {
+app.delete('/jobs', async (req: Request, res: Response) => {
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { body: jobData } = req;
 
@@ -60,7 +60,7 @@ app.delete('/deletejob', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/all', async (req: Request, res: Response) => {
+app.get('/jobs', async (req: Request, res: Response) => {
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READONLY);
     let sql = `SELECT * FROM jobs`;
   

@@ -12,9 +12,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/reacttracker" element={<ReactTable setSelectedJobIndex={()=>{}} slideIn={()=>{}} jobs={mockApiResponseAll} />} /> */}
         <Route path="/table" element={<MuiTableTest />} />
-        <Route path="/slideout" element={<SlideoutPage />} />
+        <Route path="/reacttracker" element={<SlideoutPage />} />
         <Route path="/test" element={<TestPage />} />
         <Route path="/map" element={<MapPage />} />
       </Routes>

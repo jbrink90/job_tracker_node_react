@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./index.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { Job } from "@mytypes/Job";
-
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 
@@ -15,8 +14,6 @@ interface EditSlideoutProps {
   addJob: (jobValues: Job) => void;
   saveJob: (jobValues: Job) => void;
 }
-const today = new Date();
-const formattedDate = today.toLocaleDateString("en-US");
 
 const defaultJob: Job = {
   company: "",
@@ -24,8 +21,8 @@ const defaultJob: Job = {
   description: "",
   location: "",
   status: "",
-  applied: "",
-  last_updated: formattedDate,
+  applied: new Date(),
+  last_updated: new Date(),
 };
 
 const EditSlideout: React.FC<EditSlideoutProps> = ({
@@ -39,11 +36,11 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
 }) => {
   const [jobValues, setJobValues] = useState<Job>(defaultJob);
   const [hasJobBeenModified, setHasJobBeenModified] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [isSaveModalVisible, setIsSaveModalVisible] = useState<boolean>(false);
 
   const toggleLocalSlideout = () => {
     if (hasJobBeenModified) {
-      setIsModalVisible(true);
+      setIsSaveModalVisible(true);
     } else {
       slideOut();
     }
@@ -61,7 +58,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     setJobValues(job);
     setHasJobBeenModified(false);
     slideOut();
-    setIsModalVisible(false);
+    setIsSaveModalVisible(false);
   };
 
   const handleInputChange = (
@@ -76,11 +73,10 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   };
 
   const saveApplication = () => {
-    setIsModalVisible(false);
+    setIsSaveModalVisible(false);
 
     if (addingNewJob) {
       try {
-        setMasterJobList([...masterJobList, jobValues]);
         addJob(jobValues);
         setJobValues(defaultJob);
         slideOut();
@@ -123,7 +119,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <input
             type="text"
             name="company"
-            value={jobValues.company ? jobValues.company : ""}
+            value={jobValues ? jobValues.company : ""}
             onChange={handleInputChange}
           />
 
@@ -131,7 +127,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <input
             type="text"
             name="job_title"
-            value={jobValues.job_title ? jobValues.job_title : ""}
+            value={jobValues ? jobValues.job_title : ""}
             onChange={handleInputChange}
           />
 
@@ -139,7 +135,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <textarea
             rows={10}
             name="description"
-            value={jobValues.description ? jobValues.description : ""}
+            value={jobValues ? jobValues.description : ""}
             onChange={handleInputChange}
           ></textarea>
 
@@ -147,7 +143,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <input
             type="text"
             name="location"
-            value={jobValues.location ? jobValues.location : ""}
+            value={jobValues ? jobValues.location : ""}
             onChange={handleInputChange}
           />
 
@@ -155,7 +151,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <input
             type="text"
             name="status"
-            value={jobValues.status ? jobValues.status : ""}
+            value={jobValues ? jobValues.status : ""}
             onChange={handleInputChange}
           />
           
@@ -163,11 +159,11 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <label>Date Applied</label>
             <DatePicker
               value={
-                jobValues.applied ? dayjs(jobValues.applied?.toString()) : dayjs()
+                jobValues ? dayjs(jobValues.applied?.toString()) : dayjs()
               }
               defaultValue={dayjs()}
               onChange={(value) => {
-                jobValues.applied = value?.format("MM/DD/YYYY") || "";
+                jobValues.applied = value ? new Date(value.format("MM/DD/YYYY")) : new Date();
               }}
               slotProps={{
                 textField: {
@@ -185,33 +181,35 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             />
           <label>Last Update</label>
           <span className="editSlideout_span">
-            {jobValues.last_updated
-              ? jobValues.last_updated?.toString()
-              : "04/02/2024 12:07 AM"}
+            {jobValues?.last_updated ? dayjs(jobValues.last_updated).format("MM/DD/YYYY") : ""}
           </span>
+        </div>
+        <div className="editSlideout_saveDiv">
           <button
-            style={{ marginTop: "15px", height: "40px" }}
-            onMouseUp={saveApplication}
+            className="editSlideout_saveButton"
+            onClick={saveApplication}
           >
             {addingNewJob ? "Add Job" : "Save Job"}
           </button>
         </div>
       </aside>
-      {isModalVisible && (
+
+      {isSaveModalVisible && (
         <div id="myModal" className="editSlideout_modal">
           <div className="editSlideout_modal-content">
             <span
-              className="editSlideout_close"
-              onClick={() => setIsModalVisible(false)}
+              className="editSlideout_modal-close"
+              onClick={() => setIsSaveModalVisible(false)}
             >
               &times;
             </span>
-            <p>Save your changes?</p>
-            <button onClick={saveApplication}>Yes, save them.</button>
-            <button onClick={discardChanges}>No, discard them.</button>
+            <h2 className="editSlideout_modal-message">Save your changes?</h2>
+            <button className="editSlideout_modal-button"onClick={saveApplication}>Yes</button>
+            <button className="editSlideout_modal-button"onClick={discardChanges}>No</button>
             <button
+              className="editSlideout_modal-button"
               onClick={() => {
-                setIsModalVisible(false);
+                setIsSaveModalVisible(false);
               }}
             >
               Cancel
@@ -219,6 +217,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           </div>
         </div>
       )}
+
     </>
   );
 };

@@ -16,7 +16,7 @@ const SlideoutPage = () => {
 
   const getAllJobs = async () => {
     try {
-      const response = await fetch("/api/all", {
+      const response = await fetch("/api/jobs", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -35,8 +35,11 @@ const SlideoutPage = () => {
   };
 
   const deleteJob = async (indexNumber: number) => {
+    setMasterJobList(
+      masterJobList.filter((_, index) => index !== indexNumber)
+    );
     try {
-      const response = await fetch("/api/deletejob", {
+      const response = await fetch("/api/jobs", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -47,19 +50,17 @@ const SlideoutPage = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      //const data = await response.json();
-      setMasterJobList(
-        masterJobList.filter((_, index) => index !== indexNumber)
-      );
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   const addJob = async (jobValues: Job) => {
+    jobValues.last_updated = new Date();
+    setMasterJobList([...masterJobList, jobValues]);
+
     try {
-      const response = await fetch("/api/addjob", {
+      const response = await fetch("/api/jobs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +80,7 @@ const SlideoutPage = () => {
 
   const saveJob = async (jobValues: Job) => {
     try {
-      const response = await fetch("/api/modifyjob", {
+      const response = await fetch("/api/jobs", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

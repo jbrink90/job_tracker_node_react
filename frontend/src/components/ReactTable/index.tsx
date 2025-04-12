@@ -2,6 +2,9 @@ import React from "react";
 import "./index.css";
 import "@fontsource/ubuntu/400.css";
 import { Job } from "../../../../shared/src/types/Job";
+import dayjs from "dayjs";
+import EditDocumentIcon from '@mui/icons-material/EditDocument';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface ReactTableProps {
   slideIn: () => void;
@@ -24,7 +27,6 @@ const ReactTable: React.FC<ReactTableProps> = ({
         <table className="reactTracker_table">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Company</th>
               <th>Position</th>
               <th>Description</th>
@@ -37,17 +39,16 @@ const ReactTable: React.FC<ReactTableProps> = ({
           </thead>
           <tbody className="reactTracker_tableBody">
             {jobs.map((row, index) => (
-              <tr key={row.id}>
-                <td>{row.id}</td>
-                <td>{row.company}</td>
-                <td>{row.job_title}</td>
-                <td>{row.description.substring(0,40)}</td>
-                <td>{row.location}</td>
-                <td>{row.status}</td>
-                <td>{row.applied}</td>
-                <td>{row.last_updated}</td>
+              <tr key={row ? row.id : 0}>
+                <td>{row ? row.company : ""}</td>
+                <td>{row ? row.job_title : ""}</td>
+                <td>{row ? row.description.substring(0,40) : ""}</td>
+                <td>{row ? row.location : ""}</td>
+                <td>{row ? row.status : ""}</td>
+                <td>{row?.applied ? dayjs(row.applied).format("MM/DD/YYYY") : ""}</td>
+                <td>{row?.last_updated ? dayjs(row.last_updated).format("MM/DD/YYYY") : ""}</td>
                 <td>
-                  <button
+                  <span
                     className="reactTracker_editButton"
                     onClick={(e) => {
                       setAddingNewJob(false);
@@ -55,14 +56,14 @@ const ReactTable: React.FC<ReactTableProps> = ({
                       setSelectedJobIndex(index);
                       slideIn();
                     }}
-                  ></button>
-                  <button
+                  ><EditDocumentIcon /></span>
+                  <span
                     className="reactTracker_delButton"
                     onClick={(e) => {
                       e.stopPropagation();
                       deleteJob(index);
                     }}
-                  ></button>
+                  ><DeleteIcon /></span>
                 </td>
               </tr>
             ))}

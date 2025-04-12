@@ -16,11 +16,30 @@
   background-color: #333;
   padding-bottom: 200px;
 }
+@media (max-width: 768px) {
+  .reactTracker_table th:nth-child(3),
+  .reactTracker_table td:nth-child(3) {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .reactTracker_table th:nth-child(7),
+  .reactTracker_table td:nth-child(7),
+  .reactTracker_table th:nth-child(3),
+  .reactTracker_table td:nth-child(3),
+  .reactTracker_table th:nth-child(4),
+  .reactTracker_table td:nth-child(4) {
+    display: none;
+  }
+}
 .reactTracker_tableBody tr:nth-child(even) {
   background-color: #212121;
 }
 .reactTracker_table thead {
   background-color: #4300af;
+}
+.reactTracker_table thead tr th {
+  padding: 10px;
 }
 th,
 td {
@@ -31,10 +50,13 @@ td {
   font-family: Ubuntu;
   text-align: center;
 }
+tr:hover {
+  background-color: #382b58;
+}
 .reactTracker_editButton {
   width: 25px;
   height: 25px;
-  background-image: url("../../assets/edit_icon.png");
+  /* background-image: url("../../assets/edit_icon.png"); */
   background-size: contain;
   background-position: center;
   border: 0px;
@@ -49,7 +71,7 @@ td {
 .reactTracker_delButton {
   width: 25px;
   height: 25px;
-  background-image: url("../../assets/delete_icon.png");
+  /* background-image: url("../../assets/delete_icon.png"); */
   background-size: contain;
   background-position: center;
   border: 0px;

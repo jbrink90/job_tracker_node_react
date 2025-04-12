@@ -1,0 +1,105 @@
+# 🧠 Job Tracker (using Node & React)
+
+----------
+
+A simple and efficient job tracking web app built using **React**, **Express (Node.js)**, and **SQLite**. This tool helps you keep track of your job applications, statuses, and updates in one clean interface.
+
+## 🚀 Features
+
+-   📝 Add, edit, and delete job entries
+    
+-   📅 Track application and status update dates
+    
+-   📍 Log company, role, location, and status
+    
+-   📊 Responsive table view with mobile-friendly column handling
+    
+-   🔒 Local storage with lightweight SQLite database
+    
+-   🌐 RESTful API built with Express
+    
+
+----------
+
+## 🛠️ Tech Stack
+
+Layer
+
+Technology
+
+Frontend
+
+React + Vite
+
+Backend
+
+Express (Node.js)
+
+Database
+
+SQLite
+
+Styling
+
+CSS, Media Queries
+
+Date Handling
+
+dayjs
+
+Development
+
+TypeScript (optional)
+
+----------
+
+## 📁 Project Structure
+
+job_tracker_node_react/
+├── backend/               # Express server + SQLite DB
+│   └── db.js              # SQLite schema and helpers
+│   └── routes/jobs.js     # Job API endpoints
+├── frontend/              # React UI
+│   └── components/        # Reusable UI components
+│   └── App.jsx            # Main app logic
+├── package.json           # Root config for scripts
+
+📦 Getting Started
+1. Clone the repo
+
+    git clone https://github.com/jbrink90/job_tracker_node_react.git 
+    cd job_tracker_node_react
+
+2. Install dependencies
+
+### Backend
+
+    cd backend 
+    npm install
+
+### Frontend
+
+    cd ../frontend
+    npm install
+
+3. Run the app
+
+    (from root) npm run dev
+
+📬 API Endpoints
+Method	Endpoint	Description
+GET	/jobs	Fetch all job entries
+POST	/jobs	Add a new job entry
+PUT	/jobs/:id	Update an existing job
+DELETE	/jobs/:id	Delete a job entry
+
+🧪 Future Enhancements
+
+   ✅ Authentication for multi-user support
+
+   📊 Dashboard with stats and charts
+
+   🔍 Search & filter capabilities
+
+   ⏰ Reminders for follow-ups
+

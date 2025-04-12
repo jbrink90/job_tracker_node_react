@@ -29,6 +29,7 @@
 }
 .editSlideout_navRow {
   display: flex;
+  flex: 0;
 }
 .editSlideout_content {
   display: flex;
@@ -37,11 +38,29 @@
   margin: 10px;
   line-height: 0.8;
   font-family: "Ubuntu";
+  flex: 1 auto;
+}
+.editSlideout_saveDiv {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  margin: 10px;
+  line-height: 0.8;
+  font-family: "Ubuntu";
+  margin-bottom: 20px;
+  flex: 0;
+}
+.editSlideout_saveButton {
+  background-color: #674e91;
+  height: 7vh;
+  border-radius: 7px;
+  border: 1px solid #00000000;
 }
 .editSlideout_content label {
   margin-left: 3px;
   margin-top: 15px;
   margin-bottom: 5px;
+  font-size: 0.8em;
 }
 .editSlideout_content input,
 .editSlideout_content textarea {
@@ -113,16 +132,28 @@
   width: 80%;
 }
 
-.editSlideout_close {
+.editSlideout_modal-close {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.editSlideout_close:hover,
-.editSlideout_close:focus {
+.editSlideout_modal-close:hover,
+.editSlideout_modal-close:focus {
   color: white;
   text-decoration: none;
   cursor: pointer;
+}
+.editSlideout_modal-button {
+  background-color: #4300af;
+  color: white;
+  border-radius: 5px;
+  border: 0px;
+  padding: 7px;
+  margin: 5px;
+  min-width: 75px;
+}
+.editSlideout_modal-message {
+  margin-top: 0px;
 }

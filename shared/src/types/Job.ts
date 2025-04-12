@@ -5,6 +5,6 @@ export interface Job {
     description: string;
     location: string;
     status: string;
-    applied: string | null;
-    last_updated: string | null;
+    applied: Date | null;
+    last_updated: Date | null;
 }

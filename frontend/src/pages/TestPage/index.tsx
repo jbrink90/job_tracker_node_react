@@ -14,7 +14,7 @@ function TestPage() {
 
     const addJobToSQL = async () => {
         try {
-            const response = await fetch('/api/addjob', {
+            const response = await fetch('/api/jobs', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
