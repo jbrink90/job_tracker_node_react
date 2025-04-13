@@ -1,13 +1,13 @@
-# 🧠 Job Tracker (using Node & React)
+🧠 Job Tracker (using Node & React)
 
 ----------
 
 A simple and efficient job tracking web app built using **React**, **Express (Node.js)**, and **SQLite**. This tool helps you keep track of your job applications, statuses, and updates in one clean interface.
 
-## 🚀 Features
+🚀 Features
 
 -   📝 Add, edit, and delete job entries
-    
+
 -   📅 Track application and status update dates
     
 -   📍 Log company, role, location, and status
@@ -21,39 +21,21 @@ A simple and efficient job tracking web app built using **React**, **Express (No
 
 ----------
 
-## 🛠️ Tech Stack
+🛠️ Tech Stack
 
-Layer
+-  React + Vite
 
-Technology
+-  Express (Node.js)
 
-Frontend
+-  SQLite
 
-React + Vite
+-  dayjs
 
-Backend
-
-Express (Node.js)
-
-Database
-
-SQLite
-
-Styling
-
-CSS, Media Queries
-
-Date Handling
-
-dayjs
-
-Development
-
-TypeScript (optional)
+-  TypeScript
 
 ----------
 
-## 📁 Project Structure
+📁 Project Structure
 
 job_tracker_node_react/
 ├── backend/               # Express server + SQLite DB
@@ -64,7 +46,10 @@ job_tracker_node_react/
 │   └── App.jsx            # Main app logic
 ├── package.json           # Root config for scripts
 
+----------
+
 📦 Getting Started
+
 1. Clone the repo
 
     git clone https://github.com/jbrink90/job_tracker_node_react.git 
@@ -86,20 +71,22 @@ job_tracker_node_react/
 
     (from root) npm run dev
 
+----------
+
 📬 API Endpoints
-Method	Endpoint	Description
-GET	/jobs	Fetch all job entries
-POST	/jobs	Add a new job entry
-PUT	/jobs/:id	Update an existing job
-DELETE	/jobs/:id	Delete a job entry
+Method      Endpoint         Description
+GET	        /jobs	         Fetch all job entries
+POST	    /jobs	         Add a new job entry
+PUT	        /jobs/:id	     Update an existing job
+DELETE	    /jobs/:id	     Delete a job entry
+
+----------
 
 🧪 Future Enhancements
 
-   ✅ Authentication for multi-user support
+-   ✅ Authentication for multi-user support
 
-   📊 Dashboard with stats and charts
+-   🔍 Search & filter capabilities
 
-   🔍 Search & filter capabilities
-
-   ⏰ Reminders for follow-ups
+-   ⏰ Reminders for follow-ups
 
