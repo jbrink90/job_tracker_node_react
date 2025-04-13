@@ -1,21 +1,21 @@
-.slideOutPage_leftPane {
+.reactTrackerPage_leftPane {
   display: flex;
   width: 98vw;
   flex: 1;
   flex-direction: column;
   padding: 20px;
 }
-.slideOutPage_toggleButton {
+.reactTrackerPage_toggleButton {
   height: 75px;
   width: 150px;
   display: flex;
 }
-.slideoutPage_buttonsContainer {
+.reactTrackerPage_buttonsContainer {
   display: flex;
   width: 30%;
   align-self: flex-end;
 }
-.slideoutPage_buttonsContainer button {
+.reactTrackerPage_buttonsContainer button {
   background-color: #4300af;
   color: white;
   border-radius: 5px;
@@ -26,12 +26,12 @@
   border: 1px solid #333;
   padding-top: 7px;
 }
-.slideoutPage_buttonsInner {
+.reactTrackerPage_buttonsInner {
   display: flex;
   width: 100%;
   justify-content: flex-end;
 }
-.slideoutPage_header {
+.reactTrackerPage_header {
   font-size: xx-large;
   margin-top: 10px;
   margin-bottom: 20px;

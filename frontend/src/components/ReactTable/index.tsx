@@ -39,7 +39,7 @@ const ReactTable: React.FC<ReactTableProps> = ({
           </thead>
           <tbody className="reactTracker_tableBody">
             {jobs.map((row, index) => (
-              <tr key={row ? row.id : 0}>
+              <tr key={`${index}9`}>
                 <td>{row ? row.company : ""}</td>
                 <td>{row ? row.job_title : ""}</td>
                 <td>{row ? row.description.substring(0,40) : ""}</td>
@@ -56,14 +56,14 @@ const ReactTable: React.FC<ReactTableProps> = ({
                       setSelectedJobIndex(index);
                       slideIn();
                     }}
-                  ><EditDocumentIcon /></span>
+                  ><EditDocumentIcon sx={{color: '#7b7caa'}}/></span>
                   <span
                     className="reactTracker_delButton"
                     onClick={(e) => {
                       e.stopPropagation();
                       deleteJob(index);
                     }}
-                  ><DeleteIcon /></span>
+                  ><DeleteIcon sx={{color: '#7b7caa'}}/></span>
                 </td>
               </tr>
             ))}

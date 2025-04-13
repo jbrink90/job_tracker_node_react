@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import EditSlideout from "../../components/EditSlideout";
-import { ReactTable } from "../../components";
+import { ReactTable, NavBar } from "../../components";
 import "./index.css";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import { Job } from "@mytypes/Job";
 
-const SlideoutPage = () => {
+const ReactTrackerPage = () => {
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
   const [selectedJobIndex, setSelectedJobIndex] = useState<number>(0);
   const [currentEditingJob, setCurrentEditingJob] = useState<Job>(
@@ -124,7 +124,8 @@ const SlideoutPage = () => {
 
   return (
     <>
-      <div className="slideOutPage_leftPane">
+      <NavBar />
+      <div className="reactTrackerPage_leftPane">
         <header
           style={{
             textAlign: "left",
@@ -132,10 +133,10 @@ const SlideoutPage = () => {
             fontSize: "xxx-large",
           }}
         >
-          Current Applications
+          Your Applications
         </header>
-        <div className="slideoutPage_buttonsContainer">
-          <div className="slideoutPage_buttonsInner">
+        <div className="reactTrackerPage_buttonsContainer">
+          <div className="reactTrackerPage_buttonsInner">
             <button>
               <RefreshIcon onClick={getAllJobs} fontSize="large" />
             </button>
@@ -164,4 +165,4 @@ const SlideoutPage = () => {
     </>
   );
 };
-export default SlideoutPage;
+export default ReactTrackerPage;

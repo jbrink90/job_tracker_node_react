@@ -1,0 +1,18 @@
+.navBar_main {
+  background-color: #353535;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+.navBar_userDiv {
+  display: flex;
+  padding: 15px;
+}
+.navBar_userDiv:hover {
+  background-color: black;
+}
