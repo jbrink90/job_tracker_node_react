@@ -125,14 +125,12 @@ const ReactTrackerPage = () => {
 
   return (
     <>
-      <NavBar />
       <div className="reactTrackerPage_main">
         <div className="reactTrackerPage_leftPane">
+        <NavBar />
+
           <header
-            style={{
-              fontSize: "xxx-large",
-            }}
-          >
+            className="reactTrackerPage_header">
             Your Applications
           </header>
           <div className="reactTrackerPage_buttonsContainer">
@@ -149,13 +147,15 @@ const ReactTrackerPage = () => {
               </Tooltip>
             </div>
           </div>
-          <ReactTable
-            jobs={masterJobList}
-            slideIn={slideIn}
-            setSelectedJobIndex={setSelectedJobIndex}
-            deleteJob={deleteJob}
-            setAddingNewJob={setAddingNewJob}
-          />
+          <div className="reactTrackerPage_tableContainer">
+            <ReactTable
+              jobs={masterJobList}
+              slideIn={slideIn}
+              setSelectedJobIndex={setSelectedJobIndex}
+              deleteJob={deleteJob}
+              setAddingNewJob={setAddingNewJob}
+            />
+          </div>
         </div>
         <EditSlideout
           job={currentEditingJob}

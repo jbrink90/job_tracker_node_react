@@ -15,6 +15,7 @@
   border: 1px solid #212121;
   background-color: #333;
   padding-bottom: 200px;
+  box-shadow: 5px 5px 10px #00000057;
 }
 @media (max-width: 768px) {
   .reactTracker_table th:nth-child(3),
@@ -34,6 +35,9 @@
 }
 .reactTracker_tableBody tr:nth-child(even) {
   background-color: #212121;
+}
+.reactTracker_tableBody tr:nth-child(even):hover {
+  background-color: #382b58;
 }
 .reactTracker_table thead {
   background-color: #4300af;
