@@ -4,6 +4,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Job } from "@mytypes/Job";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import SearchableMap from "../SearchableMap";
 
 interface EditSlideoutProps {
   job: Job;
@@ -25,6 +28,17 @@ const defaultJob: Job = {
   last_updated: new Date(),
 };
 
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: '#3E3E3E',
+  border: '2px solid #000',
+  boxShadow: 24,
+  borderRadius: '7px'
+};
+
 const EditSlideout: React.FC<EditSlideoutProps> = ({
   slideOut,
   job,
@@ -37,6 +51,10 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   const [jobValues, setJobValues] = useState<Job>(defaultJob);
   const [hasJobBeenModified, setHasJobBeenModified] = useState(false);
   const [isSaveModalVisible, setIsSaveModalVisible] = useState<boolean>(false);
+  const [isMapModalVisible, setIsMapModalVisible] = useState<boolean>(false);
+
+  const openMapModal = () => setIsMapModalVisible(true);
+  const closeMapModal = () => setIsMapModalVisible(false);
 
   const toggleLocalSlideout = () => {
     if (hasJobBeenModified) {
@@ -141,6 +159,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
 
           <label>Location</label>
           <input
+            onClick={openMapModal}
             type="text"
             name="location"
             value={jobValues ? jobValues.location : ""}
@@ -217,6 +236,23 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           </div>
         </div>
       )}
+
+      <Modal
+        open={isMapModalVisible}
+        onClose={closeMapModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+        <CloseIcon
+            fontSize="large"
+            onClick={() => {
+              closeMapModal();
+            }}
+          />
+          <SearchableMap />
+        </Box>
+      </Modal>
 
     </>
   );

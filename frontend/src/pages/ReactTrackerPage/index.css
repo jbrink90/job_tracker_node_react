@@ -7,7 +7,6 @@
   width: 98vw;
   flex: 1;
   flex-direction: column;
-  padding: 20px;
 }
 .reactTrackerPage_toggleButton {
   height: 75px;
@@ -36,7 +35,9 @@
   justify-content: flex-end;
 }
 .reactTrackerPage_header {
-  font-size: xx-large;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  font-size: 5.9vw;
+  padding: 10px 0 0 10px;
+}
+.reactTrackerPage_tableContainer {
+  padding-left: 20px;
 }

@@ -1,11 +1,12 @@
 // Using Mapbox
-import * as React from 'react';
-import Map, {Marker, Source, Layer} from 'react-map-gl/mapbox';
+import {useEffect, useState} from 'react';
+import Map, { Source, Layer} from 'react-map-gl/mapbox';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { SearchBox } from "@mapbox/search-js-react";
 import type {CircleLayer} from 'react-map-gl/maplibre';
 import type {FeatureCollection} from 'geojson';
 import "./index.css";
+
 
 const geojson: FeatureCollection = {
   type: 'FeatureCollection',
@@ -31,13 +32,12 @@ const layerStyle: CircleLayer = {
 };
 
 export default function SearchableMap() {
-  const [value, setValue] = React.useState('');
-  const [viewState, setViewState] = React.useState({
+  const [value, setValue] = useState('');
+  const [viewState, setViewState] = useState({
     longitude: -86.529808,
     latitude: 39.166554,
     zoom: 3.5
   });
-  
 
   const retrieveChange = (b) => {
     console.log(b.features);
@@ -55,7 +55,7 @@ export default function SearchableMap() {
   //   console.log(viewState);
   // }, [viewState])
 
-  React.useEffect(() => {
+  useEffect(() => {
     console.log(value);
   }, [value])
 
@@ -71,6 +71,7 @@ export default function SearchableMap() {
   return (
     <>
     <div className='searchableMap_searchDiv'>
+      {/* @ts-expect-error- App continues to work despite error: 'SearchBox' cannot be used as a JSX component.  */}
       <SearchBox
         options={{
           proximity: {
