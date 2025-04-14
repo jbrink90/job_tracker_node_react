@@ -5,6 +5,7 @@ import "./index.css";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import { Job } from "@mytypes/Job";
+import Tooltip from '@mui/material/Tooltip';
 
 const ReactTrackerPage = () => {
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
@@ -125,43 +126,47 @@ const ReactTrackerPage = () => {
   return (
     <>
       <NavBar />
-      <div className="reactTrackerPage_leftPane">
-        <header
-          style={{
-            textAlign: "left",
-            marginBottom: "0px",
-            fontSize: "xxx-large",
-          }}
-        >
-          Your Applications
-        </header>
-        <div className="reactTrackerPage_buttonsContainer">
-          <div className="reactTrackerPage_buttonsInner">
-            <button>
-              <RefreshIcon onClick={getAllJobs} fontSize="large" />
-            </button>
-            <button>
-              <AddIcon onClick={slideoutNewJob} fontSize="large" />
-            </button>
+      <div className="reactTrackerPage_main">
+        <div className="reactTrackerPage_leftPane">
+          <header
+            style={{
+              fontSize: "xxx-large",
+            }}
+          >
+            Your Applications
+          </header>
+          <div className="reactTrackerPage_buttonsContainer">
+            <div className="reactTrackerPage_buttonsInner">
+              <Tooltip title="Refresh Applications">
+                <button>
+                  <RefreshIcon onClick={getAllJobs} fontSize="large" />
+                </button>
+              </Tooltip>
+              <Tooltip title="Add New Application">
+                <button>
+                  <AddIcon onClick={slideoutNewJob} fontSize="large" />
+                </button>
+              </Tooltip>
+            </div>
           </div>
+          <ReactTable
+            jobs={masterJobList}
+            slideIn={slideIn}
+            setSelectedJobIndex={setSelectedJobIndex}
+            deleteJob={deleteJob}
+            setAddingNewJob={setAddingNewJob}
+          />
         </div>
-        <ReactTable
-          jobs={masterJobList}
-          slideIn={slideIn}
-          setSelectedJobIndex={setSelectedJobIndex}
-          deleteJob={deleteJob}
-          setAddingNewJob={setAddingNewJob}
+        <EditSlideout
+          job={currentEditingJob}
+          masterJobList={masterJobList}
+          setMasterJobList={setMasterJobList}
+          slideOut={slideOut}
+          addingNewJob={addingNewJob}
+          addJob={addJob}
+          saveJob={saveJob}
         />
       </div>
-      <EditSlideout
-        job={currentEditingJob}
-        masterJobList={masterJobList}
-        setMasterJobList={setMasterJobList}
-        slideOut={slideOut}
-        addingNewJob={addingNewJob}
-        addJob={addJob}
-        saveJob={saveJob}
-      />
     </>
   );
 };

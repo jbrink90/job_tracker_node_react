@@ -5,6 +5,7 @@ import { Job } from "../../../../shared/src/types/Job";
 import dayjs from "dayjs";
 import EditDocumentIcon from '@mui/icons-material/EditDocument';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Tooltip from '@mui/material/Tooltip';
 
 interface ReactTableProps {
   slideIn: () => void;
@@ -48,22 +49,30 @@ const ReactTable: React.FC<ReactTableProps> = ({
                 <td>{row?.applied ? dayjs(row.applied).format("MM/DD/YYYY") : ""}</td>
                 <td>{row?.last_updated ? dayjs(row.last_updated).format("MM/DD/YYYY") : ""}</td>
                 <td>
-                  <span
-                    className="reactTracker_editButton"
-                    onClick={(e) => {
-                      setAddingNewJob(false);
-                      e.stopPropagation();
-                      setSelectedJobIndex(index);
-                      slideIn();
-                    }}
-                  ><EditDocumentIcon sx={{color: '#7b7caa'}}/></span>
-                  <span
-                    className="reactTracker_delButton"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteJob(index);
-                    }}
-                  ><DeleteIcon sx={{color: '#7b7caa'}}/></span>
+                  <Tooltip title={`Edit ${row.job_title.substring(0, 25)}`}>
+                    <span
+                      className="reactTracker_editButton"
+                      onClick={(e) => {
+                        setAddingNewJob(false);
+                        e.stopPropagation();
+                        setSelectedJobIndex(index);
+                        slideIn();
+                      }}
+                    >
+                      <EditDocumentIcon sx={{color: '#7b7caa'}}/>
+                    </span>
+                  </Tooltip>
+                  <Tooltip title={`Delete ${row.job_title.substring(0, 25)}`}>
+                    <span
+                      className="reactTracker_delButton"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteJob(index);
+                      }}
+                      >
+                        <DeleteIcon sx={{color: '#7b7caa'}}/>
+                      </span>
+                    </Tooltip>
                 </td>
               </tr>
             ))}

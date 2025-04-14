@@ -1,3 +1,7 @@
+.reactTrackerPage_main {
+  display: flex;
+  flex-direction: row;
+}
 .reactTrackerPage_leftPane {
   display: flex;
   width: 98vw;

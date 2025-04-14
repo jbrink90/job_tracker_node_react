@@ -8,11 +8,13 @@
   top: 0;
   left: 0;
   z-index: 999;
+  border-bottom: 1px solid black;
+  cursor: pointer;
 }
 .navBar_userDiv {
   display: flex;
-  padding: 15px;
+  padding: 10px;
 }
 .navBar_userDiv:hover {
-  background-color: black;
+  background-color: #4300af;
 }
