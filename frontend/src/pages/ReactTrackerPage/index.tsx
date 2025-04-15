@@ -137,12 +137,12 @@ const ReactTrackerPage = () => {
             <div className="reactTrackerPage_buttonsInner">
               <Tooltip title="Refresh Applications">
                 <button>
-                  <RefreshIcon onClick={getAllJobs} fontSize="large" />
+                  <RefreshIcon onClick={getAllJobs} />
                 </button>
               </Tooltip>
               <Tooltip title="Add New Application">
                 <button>
-                  <AddIcon onClick={slideoutNewJob} fontSize="large" />
+                  <AddIcon onClick={slideoutNewJob} />
                 </button>
               </Tooltip>
             </div>

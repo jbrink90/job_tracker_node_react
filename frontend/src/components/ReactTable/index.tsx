@@ -59,7 +59,7 @@ const ReactTable: React.FC<ReactTableProps> = ({
                         slideIn();
                       }}
                     >
-                      <EditDocumentIcon sx={{color: '#7b7caa'}}/>
+                      <EditDocumentIcon sx={{color: '#00abff'}}/>
                     </span>
                   </Tooltip>
                   <Tooltip title={`Delete ${row.job_title.substring(0, 25)}`}>
@@ -70,7 +70,7 @@ const ReactTable: React.FC<ReactTableProps> = ({
                         deleteJob(index);
                       }}
                       >
-                        <DeleteIcon sx={{color: '#7b7caa'}}/>
+                        <DeleteIcon sx={{color: '#00abff'}}/>
                       </span>
                     </Tooltip>
                 </td>
