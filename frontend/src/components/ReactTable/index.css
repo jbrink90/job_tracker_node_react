@@ -37,10 +37,10 @@
   background-color: #212121;
 }
 .reactTracker_tableBody tr:nth-child(even):hover {
-  background-color: #382b58;
+  background-color: #146086;
 }
 .reactTracker_table thead {
-  background-color: #4300af;
+  background-color: #009ce8;
 }
 .reactTracker_table thead tr th {
   padding: 10px;
@@ -55,7 +55,7 @@ td {
   text-align: center;
 }
 tr:hover {
-  background-color: #382b58;
+  background-color: #146086;
 }
 .reactTracker_editButton {
   width: 25px;

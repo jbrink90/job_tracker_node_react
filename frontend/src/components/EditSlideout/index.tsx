@@ -55,10 +55,12 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
 
   const openMapModal = () => setIsMapModalVisible(true);
   const closeMapModal = () => setIsMapModalVisible(false);
+  const openSaveModal = () => setIsSaveModalVisible(true);
+  const closeSaveModal = () => setIsSaveModalVisible(false);
 
   const toggleLocalSlideout = () => {
     if (hasJobBeenModified) {
-      setIsSaveModalVisible(true);
+      openSaveModal();
     } else {
       slideOut();
     }
@@ -76,7 +78,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     setJobValues(job);
     setHasJobBeenModified(false);
     slideOut();
-    setIsSaveModalVisible(false);
+    closeSaveModal();
   };
 
   const handleInputChange = (
@@ -91,7 +93,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   };
 
   const saveApplication = () => {
-    setIsSaveModalVisible(false);
+    closeSaveModal();
 
     if (addingNewJob) {
       try {
@@ -213,35 +215,31 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
         </div>
       </aside>
 
-      {isSaveModalVisible && (
-        <div id="myModal" className="editSlideout_modal">
-          <div className="editSlideout_modal-content">
-            <span
-              className="editSlideout_modal-close"
-              onClick={() => setIsSaveModalVisible(false)}
-            >
-              &times;
-            </span>
+
+      <Modal
+        open={isSaveModalVisible}
+        onClose={closeSaveModal}
+      >
+        <Box sx={modalStyle} style={{padding:'10px'}}>
+          <CloseIcon
+              fontSize="small"
+              onClick={closeSaveModal}
+            />
             <h2 className="editSlideout_modal-message">Save your changes?</h2>
             <button className="editSlideout_modal-button"onClick={saveApplication}>Yes</button>
             <button className="editSlideout_modal-button"onClick={discardChanges}>No</button>
             <button
               className="editSlideout_modal-button"
-              onClick={() => {
-                setIsSaveModalVisible(false);
-              }}
+              onClick={closeSaveModal}
             >
               Cancel
             </button>
-          </div>
-        </div>
-      )}
+        </Box>
+      </Modal>
 
       <Modal
         open={isMapModalVisible}
         onClose={closeMapModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
       >
         <Box sx={modalStyle}>
         <CloseIcon
