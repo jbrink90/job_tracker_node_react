@@ -10,6 +10,7 @@
   z-index: 999;
   border-bottom: 1px solid black;
   cursor: pointer;
+  box-shadow: 3px 3px 6px #00000057;
 }
 .navBar_userDiv {
   display: flex;
