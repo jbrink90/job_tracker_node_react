@@ -1,0 +1,9 @@
+services:
+  backend:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    ports:
+      - "4444:4444"
+    command: npm run dev

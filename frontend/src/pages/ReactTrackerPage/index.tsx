@@ -5,7 +5,7 @@ import "./index.css";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import { Job } from "@mytypes/Job";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 
 const ReactTrackerPage = () => {
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
@@ -36,9 +36,7 @@ const ReactTrackerPage = () => {
   };
 
   const deleteJob = async (indexNumber: number) => {
-    setMasterJobList(
-      masterJobList.filter((_, index) => index !== indexNumber)
-    );
+    setMasterJobList(masterJobList.filter((_, index) => index !== indexNumber));
     try {
       const response = await fetch("/api/jobs", {
         method: "DELETE",
@@ -106,7 +104,7 @@ const ReactTrackerPage = () => {
 
   useEffect(() => {
     getAllJobs();
-  },[])
+  }, []);
 
   useEffect(() => {
     setCurrentEditingJob(masterJobList[selectedJobIndex]);
@@ -127,13 +125,12 @@ const ReactTrackerPage = () => {
     <>
       <div className="reactTrackerPage_main">
         <div className="reactTrackerPage_leftPane">
-        <NavBar />
+          <NavBar isUserLoggedIn={false} />
 
-          <header
-            className="reactTrackerPage_header">
-            Your Applications
-          </header>
           <div className="reactTrackerPage_buttonsContainer">
+            <div className="reactTrackerPage_buttonsInner">
+              <header className="reactTrackerPage_header">Applications</header>
+            </div>
             <div className="reactTrackerPage_buttonsInner">
               <Tooltip title="Refresh Applications">
                 <button>

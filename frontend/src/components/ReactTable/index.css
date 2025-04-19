@@ -12,10 +12,39 @@
 .reactTracker_table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #212121;
-  background-color: #333;
   padding-bottom: 200px;
   box-shadow: 5px 5px 10px #00000057;
+}
+.reactTracker_modal-button {
+  background-color: #4300af;
+  font-size: 0.85em;
+  color: white;
+  border-radius: 5px;
+  border: 0px;
+  padding: 10px;
+  margin: 5px;
+  min-width: 75px;
+}
+.reactTracker_modal-message {
+  margin-top: 5px;
+  text-align: center;
+}
+.reactTracker_modal-buttonDiv {
+  display: flex;
+  justify-content: center;
+}
+
+table thead tr:first-child th:first-child {
+  border-top-left-radius: 5px;
+}
+table thead tr:first-child th:last-child {
+  border-top-right-radius: 5px;
+}
+table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 5px;
+}
+table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 5px;
 }
 @media (max-width: 768px) {
   .reactTracker_table th:nth-child(3),
@@ -34,13 +63,14 @@
   }
 }
 .reactTracker_tableBody tr:nth-child(even) {
-  background-color: #212121;
+  background-color: #454545;
 }
 .reactTracker_tableBody tr:nth-child(even):hover {
   background-color: #146086;
 }
 .reactTracker_table thead {
   background-color: #009ce8;
+  font-weight: bolder;
 }
 .reactTracker_table thead tr th {
   padding: 10px;
@@ -50,7 +80,7 @@ td {
   /*border: 1px solid rgb(114, 114, 114);*/
   border-collapse: collapse;
   padding-left: 3px;
-  font-size: 12px;
+  font-size: 0.8em;
   font-family: Ubuntu;
   text-align: center;
 }
@@ -66,7 +96,6 @@ tr:hover {
   border: 0px;
   cursor: pointer;
   background-color: transparent;
-  margin-top: 4px;
 }
 .reactTracker_editButton:hover {
   border: 0px;
