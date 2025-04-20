@@ -44,81 +44,79 @@ const ReactTable: React.FC<ReactTableProps> = ({
 
   return (
     <>
-      <div className="reactTracker_body">
-        <div className="reactTracker_tableContainer">
-          <table className="reactTracker_table">
-            <thead>
-              <tr>
-                <th>Company</th>
-                <th>Position</th>
-                <th>Description</th>
-                <th>Location</th>
-                <th>Status</th>
-                <th>Applied</th>
-                <th>Last Update</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody className="reactTracker_tableBody">
-              {jobs.map((row, index) => (
-                <tr
-                  key={`${index}9`}
-                  style={{ cursor: "pointer" }}
-                  onClick={(e) => {
-                    setAddingNewJob(false);
-                    e.stopPropagation();
-                    setSelectedJobIndex(index);
-                    slideIn();
-                  }}
-                >
-                  <td>{row ? row.company : ""}</td>
-                  <td>{row ? row.job_title : ""}</td>
-                  <td>{row ? row.description.substring(0, 40) : ""}</td>
-                  <td>{row ? row.location : ""}</td>
-                  <td>{row ? row.status : ""}</td>
-                  <td>
-                    {row?.applied
-                      ? dayjs(row.applied).format("MM/DD/YYYY")
-                      : ""}
-                  </td>
-                  <td>
-                    {row?.last_updated
-                      ? dayjs(row.last_updated).format("MM/DD/YYYY")
-                      : ""}
-                  </td>
-                  <td>
-                    <Tooltip title={`Edit ${row.job_title.substring(0, 25)}`}>
-                      <span
-                        className="reactTracker_editButton"
-                        onClick={(e) => {
-                          setAddingNewJob(false);
-                          e.stopPropagation();
-                          setSelectedJobIndex(index);
-                          slideIn();
-                        }}
-                      >
-                        <EditDocumentIcon sx={{ color: "#00abff" }} />
-                      </span>
-                    </Tooltip>
-                    <Tooltip title={`Delete ${row.job_title.substring(0, 25)}`}>
-                      <span
-                        className="reactTracker_delButton"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setJobIndexToDelete(index);
-                          openSaveModal();
-                        }}
-                      >
-                        <DeleteIcon sx={{ color: "#00abff" }} />
-                      </span>
-                    </Tooltip>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <table className="reactTracker_table">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Position</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Applied</th>
+            <th>Last Update</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody className="reactTracker_tableBody">
+          {jobs.map((row, index) => (
+            <tr
+              key={`${index}9`}
+              style={{ cursor: "pointer" }}
+              onDoubleClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.getSelection()?.removeAllRanges();
+                setAddingNewJob(false);
+                setSelectedJobIndex(index);
+                slideIn();
+              }}
+            >
+              <td>{row ? row.company : ""}</td>
+              <td>{row ? row.job_title : ""}</td>
+              <td>{row ? row.description.substring(0, 40) : ""}</td>
+              <td>{row ? row.location : ""}</td>
+              <td>{row ? row.status : ""}</td>
+              <td>
+                {row?.applied
+                  ? dayjs(row.applied).format("MM/DD/YYYY")
+                  : ""}
+              </td>
+              <td>
+                {row?.last_updated
+                  ? dayjs(row.last_updated).format("MM/DD/YYYY")
+                  : ""}
+              </td>
+              <td>
+                <Tooltip title={`Edit ${row.job_title.substring(0, 25)}`}>
+                  <span
+                    className="reactTracker_editButton"
+                    onClick={(e) => {
+                      setAddingNewJob(false);
+                      e.stopPropagation();
+                      setSelectedJobIndex(index);
+                      slideIn();
+                    }}
+                  >
+                    <EditDocumentIcon sx={{ color: "#0087ff" }} />
+                  </span>
+                </Tooltip>
+                <Tooltip title={`Delete ${row.job_title.substring(0, 25)}`}>
+                  <span
+                    className="reactTracker_delButton"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setJobIndexToDelete(index);
+                      openSaveModal();
+                    }}
+                  >
+                    <DeleteIcon sx={{ color: "#0087ff" }} />
+                  </span>
+                </Tooltip>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <Modal open={isSaveModalVisible} onClose={closeSaveModal}>
         <Box
           sx={modalStyle}
