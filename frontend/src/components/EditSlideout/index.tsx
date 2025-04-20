@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
 import CloseIcon from "@mui/icons-material/Close";
+import MapIcon from '@mui/icons-material/Map';
 import { Job } from "@mytypes/Job";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
@@ -160,13 +161,16 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           ></textarea>
 
           <label>Location</label>
-          <input
-            onClick={openMapModal}
-            type="text"
-            name="location"
-            value={jobValues ? jobValues.location : ""}
-            onChange={handleInputChange}
-          />
+          <div className="editSlideout_locationDiv">
+            <input
+              type="text"
+              name="location"
+              value={jobValues ? jobValues.location : ""}
+              onChange={handleInputChange}
+              className="editSlideout_locationInput"
+            />
+            <MapIcon className="editSlideout_mapIcon" onClick={openMapModal} />
+          </div>
 
           <label>Status</label>
           <input
