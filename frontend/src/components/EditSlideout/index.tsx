@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import SearchableMap from "../SearchableMap";
 
 interface EditSlideoutProps {
-  job: Job;
+  currentEditingJob: Job;
   masterJobList: Job[];
   setMasterJobList: React.Dispatch<React.SetStateAction<Job[]>>;
   slideOut: () => void;
@@ -42,7 +42,7 @@ const modalStyle = {
 
 const EditSlideout: React.FC<EditSlideoutProps> = ({
   slideOut,
-  job,
+  currentEditingJob,
   masterJobList,
   setMasterJobList,
   addingNewJob,
@@ -71,12 +71,16 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     if (addingNewJob) {
       setJobValues(defaultJob);
     } else {
-      setJobValues(job || defaultJob);
+      if (hasJobBeenModified) {
+        openSaveModal();
+      } else {
+        setJobValues(currentEditingJob || defaultJob);
+      }
     }
-  }, [job, addingNewJob, addJob]);
+  }, [currentEditingJob, addingNewJob, addJob]);
 
   const discardChanges = () => {
-    setJobValues(job);
+    setJobValues(currentEditingJob);
     setHasJobBeenModified(false);
     slideOut();
     closeSaveModal();
@@ -113,7 +117,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
         );
         saveJob(jobValues);
         setHasJobBeenModified(false);
-        slideOut();
       } catch (error) {
         console.error("Error:", error);
       }

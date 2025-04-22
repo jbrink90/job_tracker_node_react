@@ -62,14 +62,14 @@ const ReactTable: React.FC<ReactTableProps> = ({
             <tr
               key={`${index}9`}
               style={{ cursor: "pointer" }}
-              onDoubleClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                window.getSelection()?.removeAllRanges();
-                setAddingNewJob(false);
-                setSelectedJobIndex(index);
-                slideIn();
-              }}
+              // onDoubleClick={(e) => {
+              //   e.preventDefault();
+              //   e.stopPropagation();
+              //   window.getSelection()?.removeAllRanges();
+              //   setAddingNewJob(false);
+              //   setSelectedJobIndex(index);
+              //   slideIn();
+              // }}
             >
               <td>{row ? row.company : ""}</td>
               <td>{row ? row.job_title : ""}</td>

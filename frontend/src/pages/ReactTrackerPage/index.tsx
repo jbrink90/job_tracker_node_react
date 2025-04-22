@@ -155,7 +155,7 @@ const ReactTrackerPage = () => {
           </div>
         </div>
         <EditSlideout
-          job={currentEditingJob}
+          currentEditingJob={currentEditingJob}
           masterJobList={masterJobList}
           setMasterJobList={setMasterJobList}
           slideOut={slideOut}
