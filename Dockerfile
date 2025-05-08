@@ -19,6 +19,8 @@ WORKDIR /app
 # Copy shared code (for backend use)
 COPY ./shared ./shared
 
+COPY ./tsconfig.base.json ./tsconfig.base.json
+
 # Copy and install backend
 WORKDIR /app/backend
 COPY backend/package*.json ./
