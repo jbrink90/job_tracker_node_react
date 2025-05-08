@@ -11,7 +11,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const filename = process.env.SQLITE_FILENAME || "./jobtracker.sqlite";
-const port = process.env.API_PORT || 4444;
+const port = parseInt(process.env.API_PORT || '4444', 10);
 const app = express();
 
 app.use((req, res, next) => {
@@ -151,6 +151,6 @@ app.get("/mockdata", async (req: Request, res: Response) => {
 
 // ---------------------------------------------------------------
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

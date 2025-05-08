@@ -2,16 +2,22 @@ version: "3.8"
 
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: frontend-build
     container_name: react_tracker
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "5173:5173"
     depends_on:
       - backend
 
   backend:
-    build: ./backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: backend-build
     container_name: node_tracker_backend
     restart: unless-stopped
     ports:
