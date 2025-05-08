@@ -7,7 +7,7 @@
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run dev --workspace=backend",
     "dev": "concurrently --kill-others-on-fail \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "build": "npm run build --workspace=frontend",
+    "build": "npm run build --workspace frontend && npm run build --workspace backend",
     "lint": "eslint \"{frontend,backend}/**/*.{ts,tsx,js,jsx}\" --fix",
     "format": "prettier --write \"{frontend,backend}/**/*.{ts,tsx,js,jsx,json,md}\""
   },
@@ -16,7 +16,8 @@
   "private": true,
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "shared"
   ],
   "devDependencies": {
     "@eslint/js": "^9.15.0",
