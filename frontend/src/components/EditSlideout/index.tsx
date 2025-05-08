@@ -97,7 +97,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     setHasJobBeenModified(true);
   };
 
-  const saveApplication = () => {
+  const saveApplication = (event: React.MouseEvent<HTMLButtonElement>) => {
     closeSaveModal();
 
     if (addingNewJob) {
@@ -120,6 +120,9 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       } catch (error) {
         console.error("Error:", error);
       }
+    }
+    if (event.target instanceof HTMLButtonElement) {
+      event.target.blur();
     }
   };
 
