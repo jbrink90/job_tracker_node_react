@@ -1,9 +1,20 @@
+version: "3.8"
+
 services:
+  frontend:
+    build: ./frontend
+    container_name: react_tracker
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
   backend:
-    image: node:20
-    working_dir: /app
-    volumes:
-      - ./backend:/app
+    build: ./backend
+    container_name: node_tracker_backend
+    restart: unless-stopped
     ports:
       - "4444:4444"
-    command: npm run dev
+    environment:
+      - NODE_ENV=production
