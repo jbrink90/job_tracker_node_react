@@ -1,5 +1,5 @@
 # Stage 1: Build Frontend
-FROM node:20 as frontend-build
+FROM node:20 AS frontend-build
 WORKDIR /app
 
 COPY tsconfig.base.json ./tsconfig.base.json
@@ -15,7 +15,7 @@ COPY frontend/ ./
 RUN npm run build
 
 # Stage 2: Build Shared Code
-FROM node:20 as shared-build
+FROM node:20 AS shared-build
 WORKDIR /app
 
 COPY tsconfig.base.json ./tsconfig.base.json
@@ -30,7 +30,7 @@ WORKDIR /app/shared
 RUN tsc -p ./tsconfig.json  # or similar for shared directory
 
 # Stage 3: Build Backend
-FROM node:20 as backend-build
+FROM node:20 AS backend-build
 WORKDIR /app
 
 COPY tsconfig.base.json ./tsconfig.base.json
@@ -48,7 +48,7 @@ COPY backend/ ./
 RUN npx tsc  # Backend compilation
 
 # Stage 4: Final Image
-FROM node:20 as production
+FROM node:20 AS production
 
 # Copy backend build output
 WORKDIR /app
@@ -58,7 +58,7 @@ COPY --from=backend-build /app/backend/package*.json ./backend/
 COPY --from=shared-build /app/shared ./shared
 
 # Copy frontend build to nginx
-FROM nginx:alpine as nginx-frontend
+FROM nginx:alpine AS nginx-frontend
 COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
 
 # Optional: expose only if backend and frontend run together
