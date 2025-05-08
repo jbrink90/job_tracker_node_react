@@ -1,33 +1,35 @@
-version: "3.8"
-
 services:
-  # Frontend service (React with Vite)
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: frontend-build # Ensure this target is defined in your Dockerfile
-    container_name: react_tracker
-    restart: unless-stopped
-    ports:
-      - "8080:5173" # Map port 5173 from the container to port 8080 on the host
-    networks:
-      - app-network
-
-  # Backend service (Node.js with Express or similar)
   backend:
     build:
       context: .
       dockerfile: Dockerfile
-      target: backend-build # Ensure this target is defined in your Dockerfile
+    working_dir: /app/backend
     container_name: node_tracker_backend
-    restart: unless-stopped
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/backend/node_modules
     ports:
-      - "4444:4444" # Expose port 4444 for the backend API
-    networks:
-      - app-network
+      - "4444:4444"
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
 
-# Define a custom network for frontend and backend communication
-networks:
-  app-network:
-    driver: bridge
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app/frontend
+    container_name: react_tracker
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/frontend/node_modules
+    ports:
+      - "5173:5173" # Vite default port
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+    restart: unless-stopped
