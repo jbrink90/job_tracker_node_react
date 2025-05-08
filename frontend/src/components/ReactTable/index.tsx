@@ -77,9 +77,7 @@ const ReactTable: React.FC<ReactTableProps> = ({
               <td>{row ? row.location : ""}</td>
               <td>{row ? row.status : ""}</td>
               <td>
-                {row?.applied
-                  ? dayjs(row.applied).format("MM/DD/YYYY")
-                  : ""}
+                {row?.applied ? dayjs(row.applied).format("MM/DD/YYYY") : ""}
               </td>
               <td>
                 {row?.last_updated
@@ -97,7 +95,7 @@ const ReactTable: React.FC<ReactTableProps> = ({
                       slideIn();
                     }}
                   >
-                    <EditDocumentIcon sx={{ color: "#0087ff" }} />
+                    <EditDocumentIcon sx={{ color: "#e1e1e1" }} />
                   </span>
                 </Tooltip>
                 <Tooltip title={`Delete ${row.job_title.substring(0, 25)}`}>
@@ -109,7 +107,7 @@ const ReactTable: React.FC<ReactTableProps> = ({
                       openSaveModal();
                     }}
                   >
-                    <DeleteIcon sx={{ color: "#0087ff" }} />
+                    <DeleteIcon sx={{ color: "#e1e1e1" }} />
                   </span>
                 </Tooltip>
               </td>

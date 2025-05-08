@@ -122,7 +122,6 @@ const ReactTrackerPage = () => {
   };
 
   return (
-    <>
       <div className="reactTrackerPage_main">
         <div className="reactTrackerPage_leftPane">
           <NavBar isUserLoggedIn={false} />
@@ -164,7 +163,6 @@ const ReactTrackerPage = () => {
           saveJob={saveJob}
         />
       </div>
-    </>
   );
 };
 export default ReactTrackerPage;
