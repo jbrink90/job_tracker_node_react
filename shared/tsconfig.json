@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@mytypes/*": ["src/types/*"],
+      "@mocks/*": ["src/__mocks__/*"]
+    },
+    "outDir": "../dist"
+  },
+  "include": ["src/**/*"]
+}

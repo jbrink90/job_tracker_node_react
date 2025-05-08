@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es6",
     "module": "commonjs",
-    "outDir": "./dist",
+    "outDir": "dist",
+    "target": "ES2020",
+    "rootDir": "./",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -12,6 +13,6 @@
       "@mocks/*": ["../shared/src/__mocks__/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/server.ts"],
+  "include": ["src/**/*", "src/server.ts", "../shared/src/**/*.ts"],
   "exclude": ["node_modules"]
 }
