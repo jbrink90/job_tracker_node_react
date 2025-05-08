@@ -2,15 +2,15 @@
 FROM node:20 AS frontend-build
 WORKDIR /app
 
-COPY tsconfig.base.json ./tsconfig.base.json
-
 # Copy shared code (for frontend use)
 COPY ./shared ./shared
 
-# Copy and install frontend
+# Copy and install frontend dependencies
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm install --legacy-peer-deps
+
+# Copy frontend source code and build the frontend
 COPY frontend/ ./
 RUN npm run build
 
@@ -18,52 +18,48 @@ RUN npm run build
 FROM node:20 AS shared-build
 WORKDIR /app
 
-COPY tsconfig.base.json ./tsconfig.base.json
-# Copy shared code
+# Copy shared code (e.g., utilities, types, etc.) for compilation
 COPY ./shared ./shared
 
-# Install TypeScript globally in the shared build stage
+# Install TypeScript globally to compile shared code
 RUN npm install -g typescript
 
-# Compile the shared code first to generate the necessary .d.ts files
+# Compile the shared code to generate necessary .d.ts files
 WORKDIR /app/shared
-RUN tsc -p ./tsconfig.json  # or similar for shared directory
+RUN tsc -p ./tsconfig.json  # Compile shared code (adjust if necessary)
 
 # Stage 3: Build Backend
 FROM node:20 AS backend-build
 WORKDIR /app
 
-COPY tsconfig.base.json ./tsconfig.base.json
-# Copy shared code (compiled)
+# Copy compiled shared code from the shared-build stage
 COPY --from=shared-build /app/shared ./shared
 
-# Copy and install backend
+# Install backend dependencies
 WORKDIR /app/backend
 COPY backend/package*.json ./
-
 RUN npm install
 
-# Add a backend build step
+# Copy backend source code and build the backend
 COPY backend/ ./
-RUN npx tsc  # Backend compilation
+RUN npx tsc  # Compile backend code
 
-# Stage 4: Final Image
+# Stage 4: Production Image for Backend and Frontend
 FROM node:20 AS production
 
-# Copy backend build output
+# Copy backend build output (compiled code) to the production container
 WORKDIR /app
-COPY tsconfig.base.json ./tsconfig.base.json
 COPY --from=backend-build /app/backend/dist ./backend/dist
 COPY --from=backend-build /app/backend/package*.json ./backend/
 COPY --from=shared-build /app/shared ./shared
 
-# Copy frontend build to nginx
+# Stage 5: Nginx for Frontend
 FROM nginx:alpine AS nginx-frontend
 COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
 
-# Optional: expose only if backend and frontend run together
+# Expose the ports for frontend and backend
 EXPOSE 5173
 EXPOSE 4444
 
-# Start the backend (e.g. Express)
+# Start the backend (e.g., Express)
 CMD ["node", "backend/dist/server.js"]

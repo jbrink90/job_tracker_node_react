@@ -10,7 +10,7 @@ services:
     container_name: react_tracker
     restart: unless-stopped
     ports:
-      - "5173:5173" # Expose port 5173 for Vite
+      - "8080:5173" # Map port 5173 from the container to port 8080 on the host
     networks:
       - app-network
 
