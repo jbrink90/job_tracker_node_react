@@ -5,6 +5,9 @@ WORKDIR /app
 COPY ./shared ./shared
 COPY ./tsconfig.base.json ./
 
+WORKDIR /app/shared
+RUN npm install
+
 WORKDIR /app/backend
 # Copy backend dependencies and package files
 COPY ./backend/package*.json ./
