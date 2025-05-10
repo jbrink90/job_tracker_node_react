@@ -11,7 +11,7 @@ services:
       - /app/backend/node_modules
     ports:
       - "4444:4444"
-    command: npm run dev
+    command: npm run prod
     environment:
       - NODE_ENV=production
     restart: unless-stopped
@@ -28,7 +28,6 @@ services:
       - /app/frontend/node_modules
     ports:
       - "5173:5173" # Vite default port
-    command: npm run dev
     environment:
       - VITE_ENV=production
       - NODE_ENV=production
