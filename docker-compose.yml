@@ -1,37 +1,26 @@
 services:
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    working_dir: /app/backend
-    container_name: node_tracker_backend
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/backend/node_modules
-    ports:
-      - "4444:4444"
-    command: npm run prod
-    environment:
-      - NODE_ENV=production
-    restart: unless-stopped
-
   frontend:
+    restart: unless-stopped
     build:
-      context: .
-      dockerfile: Dockerfile
-    working_dir: /app/frontend
-    container_name: react_tracker
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/frontend/node_modules
+      context: . # The root of your project
+      dockerfile: Dockerfile.frontend # Separate Dockerfile for frontend
     ports:
-      - "5173:5173" # Vite default port
+      - "5173:80" # Expose port 80 for the frontend
     environment:
       - VITE_ENV=production
       - NODE_ENV=production
       - VITE_PROXY_TARGET=backend
       - VITE_PROXY_PORT=4444
       - HOST=0.0.0.0
+  backend:
     restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "4444:4444"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./backend:/app
+    command: npm run prod
