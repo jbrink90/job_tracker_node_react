@@ -1,5 +1,8 @@
 FROM node:20-alpine
 
+WORKDIR /app
+COPY ./tsconfig*.json ./
+
 # 1. Copy and build shared
 WORKDIR /app/shared
 COPY ./shared/package*.json ./
@@ -26,4 +29,4 @@ RUN npm install --production
 EXPOSE 4444
 
 # Run the backend server in production mode
-CMD ["npm", "run", "prod"]
+CMD ["node", "dist/src/server.js"]
