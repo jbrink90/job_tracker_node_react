@@ -6,8 +6,8 @@
   "type": "commonjs",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/server.ts",
+    "prod": "npx ts-node -r tsconfig-paths/register ./dist/src/server.js",
     "dev2": "nodemon ./src/server.ts",
-    "prod": "npx ts-node -r tsconfig-paths/register ./src/server.ts",
     "build": "tsc"
   },
   "keywords": [],
