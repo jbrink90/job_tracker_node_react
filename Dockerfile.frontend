@@ -1,0 +1,30 @@
+# Stage 1: Build frontend
+FROM node:20-alpine AS builder
+
+# Create app directory
+WORKDIR /app
+
+# Copy shared code into /app/shared
+COPY ./shared ./shared
+
+# Copy frontend package and config files
+WORKDIR /app/frontend
+COPY ./frontend/package*.json ./
+COPY ./frontend/tsconfig.json ./
+
+# Install frontend dependencies
+RUN npm install --legacy-peer-deps
+
+# Copy frontend source
+COPY ./frontend ./
+
+# Build frontend (tsconfig paths should resolve correctly)
+RUN npm run build
+
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /app/frontend/dist /usr/share/nginx/html
+
+EXPOSE 5173
+CMD ["nginx", "-g", "daemon off;"]
