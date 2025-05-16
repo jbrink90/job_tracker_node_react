@@ -1,18 +1,13 @@
 {
   "name": "job_tracker_node_react",
   "version": "1.0.0",
-  "description": "Keep track of your Job Application information locally.",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "prod2": "npm run build:frontend && npm run docker:build && npm run docker:up",
-    "dev": "concurrently --kill-others-on-fail \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "docker:build": "docker compose build --no-cache",
-    "docker:up": "docker compose up",
-    "docker:down": "docker compose down",
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run dev --workspace=backend",
-    "prod:backend": "npm run prod --workspace=backend",
-    "build": "npm run build --workspace=shared && npm run build --workspace=frontend && npm run build --workspace=backend",
+    "dev": "concurrently --kill-others-on-fail \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "build": "npm run build --workspace=frontend",
     "lint": "eslint \"{frontend,backend}/**/*.{ts,tsx,js,jsx}\" --fix",
     "format": "prettier --write \"{frontend,backend}/**/*.{ts,tsx,js,jsx,json,md}\""
   },
@@ -21,17 +16,18 @@
   "private": true,
   "workspaces": [
     "frontend",
-    "backend",
-    "shared"
+    "backend"
   ],
   "devDependencies": {
     "@eslint/js": "^9.15.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.3.7",
     "concurrently": "^9.1.2",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "typescript": "~5.6.2"
+  },
+  "dependencies": {
+    "mapbox-gl": "^3.11.0",
+    "react-map-gl": "^8.0.2"
   }
 }

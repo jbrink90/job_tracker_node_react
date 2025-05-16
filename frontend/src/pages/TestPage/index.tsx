@@ -1,4 +1,4 @@
-import { Job } from "@reacttracker/shared";
+import { Job } from "@mytypes/Job";
 
 function TestPage() { 
     const testRow: Job = {
@@ -8,8 +8,8 @@ function TestPage() {
         "description": "Develop and maintain baskets.",
         "location": "Chicago, CA",
         "status": "Applied",
-        "applied": new Date("2025-03-01"),
-        "last_updated": new Date("2025-03-10")
+        "applied": "2025-03-01",
+        "last_updated": "2025-03-10"
       };
 
     const addJobToSQL = async () => {

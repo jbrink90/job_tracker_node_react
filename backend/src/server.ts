@@ -4,13 +4,14 @@ import cors from "cors";
 import jobRoutes from "./routes/jobs";
 import authRoutes from "./routes/auth";
 import { execute } from "./utils/sql_functions";
-import { Job, mockApiResponseAll } from "@reacttracker/shared";
+import { mockApiResponseAll } from "@mocks/mockApiResponseAll";
+import { Job } from "@mytypes/Job";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const filename = process.env.SQLITE_FILENAME || "./jobtracker.sqlite";
-const port = parseInt(process.env.API_PORT || '4444', 10);
+const port = process.env.API_PORT || 4444;
 const app = express();
 
 app.use((req, res, next) => {
@@ -150,6 +151,6 @@ app.get("/mockdata", async (req: Request, res: Response) => {
 
 // ---------------------------------------------------------------
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
