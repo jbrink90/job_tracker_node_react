@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./index.css";
 import CloseIcon from "@mui/icons-material/Close";
 import MapIcon from '@mui/icons-material/Map';
-import { Job } from "@reacttracker/shared";
+import { Job } from "@mytypes/Job";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import Modal from '@mui/material/Modal';
@@ -97,7 +97,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     setHasJobBeenModified(true);
   };
 
-  const saveApplication = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const saveApplication = () => {
     closeSaveModal();
 
     if (addingNewJob) {
@@ -120,9 +120,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       } catch (error) {
         console.error("Error:", error);
       }
-    }
-    if (event.target instanceof HTMLButtonElement) {
-      event.target.blur();
     }
   };
 

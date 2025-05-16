@@ -4,7 +4,7 @@ import { ReactTable, NavBar } from "../../components";
 import "./index.css";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
-import { Job } from "@reacttracker/shared";
+import { Job } from "@mytypes/Job";
 import Tooltip from "@mui/material/Tooltip";
 
 const ReactTrackerPage = () => {
