@@ -12,7 +12,7 @@
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run dev --workspace=backend",
     "prod:backend": "npm run prod --workspace=backend",
-    "build": "npm run build --workspace=frontend && npm run build --workspace=backend",
+    "build": "npm run build --workspace=shared && npm run build --workspace=frontend && npm run build --workspace=backend",
     "lint": "eslint \"{frontend,backend}/**/*.{ts,tsx,js,jsx}\" --fix",
     "format": "prettier --write \"{frontend,backend}/**/*.{ts,tsx,js,jsx,json,md}\""
   },

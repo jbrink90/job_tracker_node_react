@@ -4,6 +4,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  console.log('Proxying to:', env.VITE_PROXY_TARGET, env.VITE_PROXY_PORT);
 
   return {
     plugins: [react(), tsconfigPaths()],
@@ -14,7 +15,6 @@ export default defineConfig(({ mode }) => {
       ],
       proxy: {
         '/api': {
-          // expects VITE_PROXY_TARGET and VITE_PROXY_PORT in env
           target: `http://${env.VITE_PROXY_TARGET || 'localhost'}:${env.VITE_PROXY_PORT || '4444'}`,
           changeOrigin: true,
           rewrite: (path) => path,
