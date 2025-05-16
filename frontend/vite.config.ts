@@ -14,9 +14,10 @@ export default defineConfig(({ mode }) => {
       ],
       proxy: {
         '/api': {
+          // expects VITE_PROXY_TARGET and VITE_PROXY_PORT in env
           target: `http://${env.VITE_PROXY_TARGET || 'localhost'}:${env.VITE_PROXY_PORT || '4444'}`,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''),
+          rewrite: (path) => path,
         },
       },
     },

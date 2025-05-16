@@ -4,8 +4,7 @@ import cors from "cors";
 import jobRoutes from "./routes/jobs";
 import authRoutes from "./routes/auth";
 import { execute } from "./utils/sql_functions";
-import { mockApiResponseAll } from "@shared/__mocks__/mockApiResponseAll";
-import { Job } from "@shared/types/Job";
+import { Job, mockApiResponseAll } from "@reacttracker/shared";
 import dotenv from "dotenv";
 
 dotenv.config();
