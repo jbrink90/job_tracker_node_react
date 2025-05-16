@@ -9,10 +9,6 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "baseUrl": "./",
-    "paths": {
-      "@mytypes/*": ["../shared/src/types/*"],
-      "@mocks/*": ["../shared/src/__mocks__/*"]
-    },
 
     /* Bundler mode */
     "moduleResolution": "node",

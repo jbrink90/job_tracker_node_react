@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
+    "composite": true,
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "node",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "@mytypes/*": ["../shared/src/types/*"],
-      "@mocks/*": ["../shared/src/__mocks__/*"]
+      "@reacttracker/shared": ["../shared"]
     },
     "jsx": "react-jsx",
     "allowImportingTsExtensions": true,

@@ -1,6 +1,6 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
-import {mockApiResponseAll} from "@mocks/mockApiResponseAll";
+import {mockApiResponseAll} from "@reacttracker/shared";
 import { ReactNode } from "react";
 import "../ReactTable/index.css";
 import "@fontsource/roboto/400.css"; // Specify weight if needed

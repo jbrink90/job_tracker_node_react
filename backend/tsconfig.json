@@ -3,9 +3,10 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "dist",
+    "rootDir": "src",
     "baseUrl": ".",
     "paths": {
-      "@shared/*": ["../shared/src/*"]
+      "@reacttracker/shared/*": ["../shared/dist/*"]
     }
   },
   "references": [{ "path": "../shared" }],

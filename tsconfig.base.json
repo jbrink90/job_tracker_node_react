@@ -7,18 +7,18 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "paths": {
-      "@shared/*": ["shared/src/*"],
-      "@backend/*": ["backend/src/*"],
-      "@frontend/*": ["frontend/src/*"]
-    }
+    "baseUrl": "."
+    // "paths": {
+    //   "@shared/*": ["shared/src/*"],
+    //   "@backend/*": ["backend/src/*"],
+    //   "@frontend/*": ["frontend/src/*"]
+    // }
   },
   "include": ["shared/src/**/*", "backend/src/**/*", "frontend/src/**/*"],
-  "exclude": ["node_modules", "dist"],
-  "references": [
-    { "path": "./shared" },
-    { "path": "./backend" },
-    { "path": "./frontend" }
-  ]
+  "exclude": ["node_modules", "dist"]
+  // "references": [
+  //   { "path": "./shared" },
+  //   { "path": "./backend" },
+  //   { "path": "./frontend" }
+  // ]
 }

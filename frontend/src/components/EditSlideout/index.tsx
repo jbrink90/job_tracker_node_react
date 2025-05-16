@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./index.css";
 import CloseIcon from "@mui/icons-material/Close";
 import MapIcon from '@mui/icons-material/Map';
-import { Job } from "@mytypes/Job";
+import { Job } from "@reacttracker/shared";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import Modal from '@mui/material/Modal';

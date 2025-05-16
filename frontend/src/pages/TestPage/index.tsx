@@ -1,4 +1,4 @@
-import { Job } from "@mytypes/Job";
+import { Job } from "@reacttracker/shared";
 
 function TestPage() { 
     const testRow: Job = {

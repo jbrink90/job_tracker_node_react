@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import sqlite3 from "sqlite3";
-import { Job } from "@shared/types/Job";
+import { Job } from "@reacttracker/shared";
 import {fetchAll, insertJob, modifyJob, deleteJob} from "../utils/sql_functions";
 
 const filename = process.env.SQLITE_FILENAME || "./jobtracker.sqlite";
