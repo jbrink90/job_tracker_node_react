@@ -7,7 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Job } from "@mytypes/Job";
 import Tooltip from "@mui/material/Tooltip";
 
-const ReactTrackerPage = () => {
+const ReactTracker = () => {
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
   const [selectedJobIndex, setSelectedJobIndex] = useState<number>(0);
   const [currentEditingJob, setCurrentEditingJob] = useState<Job>(
@@ -165,4 +165,4 @@ const ReactTrackerPage = () => {
       </div>
   );
 };
-export default ReactTrackerPage;
+export default ReactTracker;

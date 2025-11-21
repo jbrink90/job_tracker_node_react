@@ -1,5 +1,6 @@
 export { default as Home } from "./Home";
-export { default as ReactTrackerPage } from "./ReactTrackerPage";
-export { default as TestPage } from "./TestPage";
-export { default as MapPage } from "./MapPage";
-export { default as LoginPage } from "./LoginPage";
+export { default as ReactTracker } from "./ReactTracker";
+export { default as Test } from "./Test";
+export { default as Map } from "./Map";
+export { default as Login } from "./Login";
+export { default as AuthCallback } from "./AuthCallback";
