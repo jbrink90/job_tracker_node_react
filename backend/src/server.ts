@@ -16,7 +16,7 @@ const app = express();
 
 app.use((req, res, next) => {
   res.append("Access-Control-Allow-Origin", ["*"]);
-  res.append("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+  res.append("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE");
   res.append("Access-Control-Allow-Headers", "Content-Type");
   next();
 });
@@ -63,11 +63,9 @@ app.get("/createtables", async (req: Request, res: Response) => {
     await execute(db, job_table);
     await execute(db, actions_table);
     await execute(db, users_table);
-    res.send(
-      JSON.stringify({ message: "Tables created successfully" }, null, 2)
-    );
+    res.json({ message: "Tables created successfully" });
   } catch (error: any) {
-    res.status(500).send(JSON.stringify({ error: error.message }, null, 2));
+    res.status(500).json({ error: error.message });
   } finally {
     db.close();
   }
@@ -104,9 +102,9 @@ app.get("/resettables", async (req: Request, res: Response) => {
       stmt.finalize();
     });
 
-    res.send(JSON.stringify({ message: "Tables reset successfully" }, null, 2));
+    res.json({ message: "Tables reset successfully" });
   } catch (error: any) {
-    res.status(500).send(JSON.stringify({ error: error.message }, null, 2));
+    res.status(500).json({ error: error.message });
   } finally {
     db.close();
   }
@@ -141,9 +139,9 @@ app.get("/mockdata", async (req: Request, res: Response) => {
 
       stmt.finalize();
     });
-    res.send(JSON.stringify({ message: "Successfully mocked data" }, null, 2));
+    res.json({ message: "Successfully mocked data" });
   } catch (err) {
-    res.status(500).send(JSON.stringify({ error: err }, null, 2));
+    res.status(500).json({ error: err });
   } finally {
     db.close();
   }

@@ -12,9 +12,9 @@ router.post('/', async (req: Request, res: Response) => {
 
     try {
         await insertJob(db, jobData);
-        res.send(JSON.stringify({ message: "Job: '" + jobData.job_title + "' created successfully" }, null, 2));
+        res.json({ message: "Job: '" + jobData.job_title + "' created successfully" });
     } catch (error: any) {
-        res.status(500).send(JSON.stringify({ error: error.message }, null, 2));
+        res.status(500).json({ error: error.message });
     } finally {
         db.close();
     }
@@ -26,9 +26,9 @@ router.patch('/', async (req: Request, res: Response) => {
 
     try {
         await modifyJob(db, jobData);
-        res.send(JSON.stringify({ message: "Job: '" + jobData.job_title + "' modified successfully" }, null, 2));
+        res.json({ message: "Job: '" + jobData.job_title + "' modified successfully" });
     } catch (error: any) {
-        res.status(500).send(JSON.stringify({ error: error.message }, null, 2));
+        res.status(500).json({ error: error.message });
     } finally {
         db.close();
     }
@@ -40,9 +40,9 @@ router.delete('/', async (req: Request, res: Response) => {
 
     try {
         await deleteJob(db, jobData);
-        res.send(JSON.stringify({ message: "Job: '" + jobData.job_title + "' deleted successfully" }, null, 2));
+        res.json({ message: "Job: '" + jobData.job_title + "' deleted successfully" });
     } catch (error: any) {
-        res.status(500).send(JSON.stringify({ error: error.message }, null, 2));
+        res.status(500).json({ error: error.message });
     } finally {
         db.close();
     }
@@ -54,9 +54,9 @@ router.get('/', async (req: Request, res: Response) => {
   
     try {
       const jobs: Job[] = await fetchAll(db, sql);
-      res.send(JSON.stringify(jobs, null, 2));
+      res.json(jobs);
     } catch (err) {
-        res.status(500).send(JSON.stringify({ error: err }, null, 2));
+        res.status(500).json({ error: err });
     } finally {
       db.close();
     }

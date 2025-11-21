@@ -1,0 +1,23 @@
+meta {
+  name: Create new Job
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base.url}}/jobs
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "company": "Some Company Here",
+    "job_title": "Software Engineer",
+    "description": "Develop and maintain web applications.",
+    "location": "San Francisco, CA",
+    "status": "Applied",
+    "applied": "2025-10-01",
+    "last_updated": "2025-10-10"
+  }
+}
