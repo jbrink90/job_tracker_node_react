@@ -1,0 +1,17 @@
+meta {
+  name: Delete a Job
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{base.url}}/jobs
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": 41
+  }
+}
