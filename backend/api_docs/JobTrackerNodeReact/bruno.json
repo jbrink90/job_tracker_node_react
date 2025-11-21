@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "JobTrackerNodeReact",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
