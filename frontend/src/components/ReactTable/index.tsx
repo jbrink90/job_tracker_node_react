@@ -1,18 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
+import "./index.css";
+import "@fontsource/ubuntu/400.css";
+import { Job } from "../../../../shared/src/types/Job";
 import dayjs from "dayjs";
 import EditDocumentIcon from "@mui/icons-material/EditDocument";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  DataGrid,
-  GridColDef,
-  GridValueGetterParams,
-  GridRenderCellParams,
-} from "@mui/x-data-grid";
+import Tooltip from "@mui/material/Tooltip";
+import CloseIcon from "@mui/icons-material/Close";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 
-// ---------------------------
-// Row Type
-// ---------------------------
-export interface JobRow {
+interface ReactTableProps {
+  slideIn: () => void;
+  jobs: Job[];
+  setSelectedJobIndex: React.Dispatch<React.SetStateAction<number>>;
+  deleteJob: (arg: number) => void;
+  setAddingNewJob: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "#3E3E3E",
+  border: "1px solid #000",
+  boxShadow: "5px 5px 10px #00000057",
+  borderRadius: "7px",
+};
+
+interface JobRow {
   id: number;
   company: string;
   job_title: string;
@@ -22,127 +39,129 @@ export interface JobRow {
   applied?: string | null;
   last_updated?: string | null;
 
+  // actions
   onEdit: () => void;
   onDelete: () => void;
 }
 
-// ---------------------------
-// Columns
-// ---------------------------
-const columns: GridColDef<JobRow>[] = [
-  { field: "company", headerName: "Company", flex: 1 },
-  { field: "job_title", headerName: "Position", flex: 1 },
-
-  {
-    field: "description",
-    headerName: "Description",
-    flex: 1,
-    valueGetter: (params: GridValueGetterParams<JobRow>) => {
-      const row = params.row;
-      if (!row || !row.description) return "";
-      return row.description.substring(0, 40);
-    },
-  },
-
-  { field: "location", headerName: "Location", flex: 1 },
-  { field: "status", headerName: "Status", flex: 1 },
-
-  {
-    field: "applied",
-    headerName: "Applied",
-    flex: 1,
-    valueGetter: (params: GridValueGetterParams<JobRow>) =>
-      params.row.applied
-        ? dayjs(params.row.applied).format("MM/DD/YYYY")
-        : "",
-  },
-
-  {
-    field: "last_updated",
-    headerName: "Last Update",
-    flex: 1,
-    valueGetter: (params: GridValueGetterParams<JobRow>) =>
-      params.row.last_updated
-        ? dayjs(params.row.last_updated).format("MM/DD/YYYY")
-        : "",
-  },
-
-  {
-    field: "actions",
-    headerName: "Actions",
-    sortable: false,
-    flex: 1,
-    renderCell: (params: GridRenderCellParams<JobRow>) => (
-      <>
-        <span
-          style={{ marginRight: 10, cursor: "pointer" }}
-          onClick={(e) => {
-            e.stopPropagation(); // ← modern fix
-            params.row.onEdit();
-          }}
-        >
-          <EditDocumentIcon sx={{ color: "#e1e1e1" }} />
-        </span>
-
-        <span
-          style={{ cursor: "pointer" }}
-          onClick={(e) => {
-            e.stopPropagation(); // ← modern fix
-            params.row.onDelete();
-          }}
-        >
-          <DeleteIcon sx={{ color: "#e1e1e1" }} />
-        </span>
-      </>
-    ),
-  },
-];
-
-
-// ---------------------------
-// Main Component
-// ---------------------------
-interface ReactTableProps {
-  jobs: any[];
-  slideIn: () => void;
-  deleteJob: (index: number) => void;
-  setSelectedJobIndex: React.Dispatch<React.SetStateAction<number>>;
-}
-
 const ReactTable: React.FC<ReactTableProps> = ({
-  jobs,
   slideIn,
-  deleteJob,
+  jobs,
   setSelectedJobIndex,
+  deleteJob,
+  setAddingNewJob,
 }) => {
-  // Build typed rows
-  const rows: JobRow[] = jobs.map((job, i) => ({
-    id: i,
-    ...job,
+  const [isSaveModalVisible, setIsSaveModalVisible] = useState<boolean>(false);
+  const [jobIndexToDelete, setJobIndexToDelete] = useState<number>(-1);
 
-    onEdit: () => {
-      setSelectedJobIndex(i);
-      slideIn();
-    },
-
-    onDelete: () => {
-      deleteJob(i);
-    },
-  }));
+  const openSaveModal = () => setIsSaveModalVisible(true);
+  const closeSaveModal = () => setIsSaveModalVisible(false);
 
   return (
-    <div style={{ height: "75vh", width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        disableRowSelectionOnClick
-        sx={{
-          border: "none",
-          color: "#e1e1e1",
-          background: "#303030",
-        }}
-      />
-    </div>
+    <>
+      <table className="reactTracker_table">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Position</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Applied</th>
+            <th>Last Update</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody className="reactTracker_tableBody">
+          {jobs.map((row, index) => (
+            <tr
+              key={`${index}9`}
+              style={{ cursor: "pointer" }}
+              // onDoubleClick={(e) => {
+              //   e.preventDefault();
+              //   e.stopPropagation();
+              //   window.getSelection()?.removeAllRanges();
+              //   setAddingNewJob(false);
+              //   setSelectedJobIndex(index);
+              //   slideIn();
+              // }}
+            >
+              <td>{row ? row.company : ""}</td>
+              <td>{row ? row.job_title : ""}</td>
+              <td>{row ? row.description.substring(0, 40) : ""}</td>
+              <td>{row ? row.location : ""}</td>
+              <td>{row ? row.status : ""}</td>
+              <td>
+                {row?.applied ? dayjs(row.applied).format("MM/DD/YYYY") : ""}
+              </td>
+              <td>
+                {row?.last_updated
+                  ? dayjs(row.last_updated).format("MM/DD/YYYY")
+                  : ""}
+              </td>
+              <td>
+                <Tooltip title={`Edit ${row.job_title.substring(0, 25)}`}>
+                  <span
+                    className="reactTracker_editButton"
+                    onClick={(e) => {
+                      setAddingNewJob(false);
+                      e.stopPropagation();
+                      setSelectedJobIndex(index);
+                      slideIn();
+                    }}
+                  >
+                    <EditDocumentIcon sx={{ color: "#e1e1e1" }} />
+                  </span>
+                </Tooltip>
+                <Tooltip title={`Delete ${row.job_title.substring(0, 25)}`}>
+                  <span
+                    className="reactTracker_delButton"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setJobIndexToDelete(index);
+                      openSaveModal();
+                    }}
+                  >
+                    <DeleteIcon sx={{ color: "#e1e1e1" }} />
+                  </span>
+                </Tooltip>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <Modal open={isSaveModalVisible} onClose={closeSaveModal}>
+        <Box
+          sx={modalStyle}
+          style={{
+            padding: "10px",
+          }}
+        >
+          <CloseIcon fontSize="small" onClick={closeSaveModal} />
+          <h2 className="reactTracker_modal-message">
+            Really delete application?
+          </h2>
+          <div className="reactTracker_modal-buttonDiv">
+            <button
+              className="reactTracker_modal-button"
+              onClick={() => {
+                deleteJob(jobIndexToDelete);
+                setJobIndexToDelete(-1);
+                closeSaveModal();
+              }}
+            >
+              Yes
+            </button>
+            <button
+              className="reactTracker_modal-button"
+              onClick={closeSaveModal}
+            >
+              No
+            </button>
+          </div>
+        </Box>
+      </Modal>
+    </>
   );
 };
 
