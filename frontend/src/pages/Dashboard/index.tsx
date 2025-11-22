@@ -7,7 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Job } from "@mytypes/Job";
 import Tooltip from "@mui/material/Tooltip";
 
-const ReactTracker = () => {
+const Dashboard = () => {
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
   const [selectedJobIndex, setSelectedJobIndex] = useState<number>(0);
   const [currentEditingJob, setCurrentEditingJob] = useState<Job>(
@@ -126,10 +126,8 @@ const ReactTracker = () => {
         <div className="reactTrackerPage_leftPane">
           <NavBar isUserLoggedIn={false} />
 
+          <header className="reactTrackerPage_header">Applications</header>
           <div className="reactTrackerPage_buttonsContainer">
-            <div className="reactTrackerPage_buttonsInner">
-              <header className="reactTrackerPage_header">Applications</header>
-            </div>
             <div className="reactTrackerPage_buttonsInner">
               <Tooltip title="Refresh Applications">
                 <button>
@@ -165,4 +163,4 @@ const ReactTracker = () => {
       </div>
   );
 };
-export default ReactTracker;
+export default Dashboard;
