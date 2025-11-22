@@ -1,6 +1,6 @@
 import { Job } from "@mytypes/Job";
 
-function TestPage() { 
+function Test() { 
     const testRow: Job = {
         "id": 1,
         "company": "Test",
@@ -8,8 +8,8 @@ function TestPage() {
         "description": "Develop and maintain baskets.",
         "location": "Chicago, CA",
         "status": "Applied",
-        "applied": "2025-03-01",
-        "last_updated": "2025-03-10"
+        "applied": new Date("2025-03-01"),
+        "last_updated": new Date("2025-03-10")
       };
 
     const addJobToSQL = async () => {
@@ -38,4 +38,4 @@ function TestPage() {
         </>
     );
 }
-export default TestPage;
+export default Test;
