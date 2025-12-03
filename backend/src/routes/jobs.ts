@@ -12,7 +12,7 @@ router.post('/', async (req: Request, res: Response) => {
 
     try {
         await insertJob(db, jobData);
-        res.json({ message: "Job: '" + jobData.job_title + "' created successfully" });
+        res.json(jobData);
     } catch (error: any) {
         res.status(500).json({ error: error.message });
     } finally {

@@ -24,8 +24,8 @@ export const fetchAll = async (db: any, sql: string) : Promise<Job[]> => {
 
 export const insertJob = (db: sqlite3.Database, jobData: Job) => {
     const sql = `
-    INSERT INTO jobs (company, job_title, description, location, status, applied, last_updated)
-    VALUES (?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO jobs (company, job_title, description, location, status, applied, last_updated)
+        VALUES (?, ?, ?, ?, ?, ?, ?);
     `;
     
     const sqlValues = [
@@ -38,12 +38,15 @@ export const insertJob = (db: sqlite3.Database, jobData: Job) => {
         jobData.last_updated,
     ];
 
-    return new Promise<boolean>((resolve, reject) => {
-        db.run(sql, sqlValues, (err) => {
+    return new Promise<Job>((resolve, reject) => {
+        db.run(sql, sqlValues, function (err) {
             if (err) {
                 reject(err);
             } else {
-                resolve(true);
+                // "this" in this callback is the statement object
+                // lastID is the auto-increment primary key SQLite assigned
+                jobData.id = this.lastID;
+                resolve(jobData);
             }
         });
     });

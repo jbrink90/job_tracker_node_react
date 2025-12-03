@@ -1,0 +1,47 @@
+.reactTrackerPage_main {
+  display: flex;
+  flex-direction: row;
+}
+.reactTrackerPage_leftPane {
+  display: flex;
+  width: 98vw;
+  flex: 1;
+  flex-direction: column;
+}
+.reactTrackerPage_toggleButton {
+  height: 75px;
+  width: 150px;
+  display: flex;
+}
+.reactTrackerPage_buttonsContainer {
+  display: flex;
+  align-self: flex-end;
+  padding-right: 20px;
+  margin: auto 0;
+}
+.reactTrackerPage_buttonsContainer button {
+  background-color: #009ce8;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  border: 1px solid #333;
+  padding-top: 7px;
+  box-shadow: 2px 2px 1px #00000057;
+}
+.reactTrackerPage_buttonsInner {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-self: baseline;
+}
+.reactTrackerPage_header {
+  font-size: 2vw;
+  margin: auto auto 0 0;
+  padding-left: 20px;
+  padding-top: 20px;
+  text-shadow: 2px 2px 1px #00000057;
+}
+.reactTrackerPage_tableContainer {
+  padding: 20px;
+}
