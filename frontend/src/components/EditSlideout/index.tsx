@@ -27,6 +27,7 @@ import {
 import "@mdxeditor/editor/style.css";
 
 interface EditSlideoutProps {
+  setCurrentEditingJob: React.Dispatch<React.SetStateAction<Job>>;
   currentEditingJob: Job;
   masterJobList: Job[];
   setMasterJobList: React.Dispatch<React.SetStateAction<Job[]>>;
@@ -71,11 +72,13 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   const [isSaveModalVisible, setIsSaveModalVisible] = useState<boolean>(false);
   const [isMapModalVisible, setIsMapModalVisible] = useState<boolean>(false);
   const editorRef = useRef<MDXEditorMethods>(null);
+  const [markdownSource, setMarkdownSource] = useState<string>("");
 
   const openMapModal = () => setIsMapModalVisible(true);
   const closeMapModal = () => setIsMapModalVisible(false);
   const openSaveModal = () => setIsSaveModalVisible(true);
   const closeSaveModal = () => setIsSaveModalVisible(false);
+
 
   const toggleLocalSlideout = () => {
     if (hasJobBeenModified) {
@@ -88,14 +91,27 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   useEffect(() => {
     if (addingNewJob) {
       setJobValues(defaultJob);
+      setMarkdownSource("");
     } else {
-      if (hasJobBeenModified) {
-        openSaveModal();
-      } else {
-        setJobValues(currentEditingJob || defaultJob);
-      }
+      setJobValues(currentEditingJob || defaultJob);
+      setMarkdownSource(currentEditingJob?.description || "");
     }
-  }, [currentEditingJob, addingNewJob, addJob]);
+  }, [currentEditingJob, addingNewJob]);
+  
+
+  const handleEditorMarkdownChange = (newMarkdown: string, isInitial: boolean) => {
+    if (!isInitial) {
+      setMarkdownSource(newMarkdown);
+  
+      setJobValues(prev => ({
+        ...prev,
+        description: newMarkdown,
+      }));
+  
+      setHasJobBeenModified(true);
+    }
+  };
+  
 
   const discardChanges = () => {
     setJobValues(currentEditingJob);
@@ -141,11 +157,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     }
   };
 
-  const handleGetMarkdown = () => {
-    const markdown = editorRef.current?.getMarkdown();
-    console.log('Current Markdown:', markdown);
-    alert(markdown);
-  };
 
   return (
     <>
@@ -181,16 +192,10 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
 
           <label>Description</label>
           <MDXEditor
+            key={currentEditingJob?.id}
             ref={editorRef}
-            markdown={`
-  * Item 1
-  * Item 2
-  * Item 3
-    * nested item
-
-  1. Item 1
-  2. Item 2
-`}
+            markdown={markdownSource}
+            onChange={handleEditorMarkdownChange}
             contentEditableClassName="editSlideout_mdxeditor_text"
             plugins={[
               imagePlugin(),
@@ -200,8 +205,10 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               thematicBreakPlugin(),
               imagePlugin({
                 imageUploadHandler: () => {
-                  return Promise.resolve('https://lh3.googleusercontent.com/proxy/ByPklvBVCoshX99JEmMxg0DLx_7Ig_AyAkP5095aUlAuk22vxeD4W6pOxPPaWetDpu1RgvGms593mFnQtuw5uAerl_eBzmD-x_uIDJXTK4OcUfL8PNRh')
-                }
+                  return Promise.resolve(
+                    "https://lh3.googleusercontent.com/proxy/ByPklvBVCoshX99JEmMxg0DLx_7Ig_AyAkP5095aUlAuk22vxeD4W6pOxPPaWetDpu1RgvGms593mFnQtuw5uAerl_eBzmD-x_uIDJXTK4OcUfL8PNRh"
+                  );
+                },
               }),
               toolbarPlugin({
                 toolbarClassName: "editSlideout_mdxeditor_toolbar",
@@ -216,6 +223,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               }),
             ]}
           />
+
 
           <label>Location</label>
           <div className="editSlideout_locationDiv">
@@ -267,9 +275,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               : ""}
           </span>
         </div>
-        <button onClick={handleGetMarkdown} style={{ marginTop: '1rem' }}>
-        Get Markdown
-      </button>
+
         <div className="editSlideout_saveDiv">
           <button className="editSlideout_saveButton" onClick={saveApplication}>
             {addingNewJob ? "Add Job" : "Save Job"}
