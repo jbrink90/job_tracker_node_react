@@ -17,11 +17,10 @@ export async function apiAddJob(job: Job): Promise<Job> {
   return res.json();
 }
 
-export async function apiDeleteJob(job: Job): Promise<void> {
-  const res = await fetch("/api/jobs", {
+export async function apiDeleteJob(jobId: number): Promise<void> {
+  const res = await fetch(`/api/jobs?id=${jobId}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(job),
   });
   if (!res.ok) throw new Error("Failed to delete job");
 }
