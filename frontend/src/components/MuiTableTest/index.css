@@ -1,0 +1,10 @@
+.mdxeditor-popup-container {
+  position: relative;
+  z-index: 1000;
+}
+.MuiDataGrid-root .MuiDataGrid-cell {
+  user-select: none;
+}
+.MuiDataGrid-root .MuiDataGrid-columnHeader {
+  user-select: none;
+}
