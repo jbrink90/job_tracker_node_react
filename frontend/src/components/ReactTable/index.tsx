@@ -29,6 +29,21 @@ const modalStyle = {
   borderRadius: "7px",
 };
 
+interface JobRow {
+  id: number;
+  company: string;
+  job_title: string;
+  description: string;
+  location: string;
+  status: string;
+  applied?: string | null;
+  last_updated?: string | null;
+
+  // actions
+  onEdit: () => void;
+  onDelete: () => void;
+}
+
 const ReactTable: React.FC<ReactTableProps> = ({
   slideIn,
   jobs,
