@@ -88,14 +88,14 @@ export const modifyJob = (db: sqlite3.Database, jobData: Job) => {
     });
 };
 
-export const deleteJob = (db: sqlite3.Database, jobData: Job) => {
+export const deleteJob = (db: sqlite3.Database, jobId: number) => {
     const sql = `
         DELETE FROM jobs
         WHERE id = ?;
     `;
 
     const sqlValues = [
-        jobData.id
+        jobId
     ];
 
     return new Promise<boolean>((resolve, reject) => {

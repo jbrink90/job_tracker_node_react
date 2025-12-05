@@ -59,6 +59,10 @@
   border-radius: 7px;
   border: 1px solid #00000000;
   font-size: 1.2em;
+  cursor: pointer;
+}
+.editSlideout_saveButton[disabled] {
+  background-color: grey;
 }
 .editSlideout_content label {
   margin-left: 3px;
@@ -124,9 +128,10 @@
   padding: 10px;
   margin: 5px;
   min-width: 75px;
+  cursor: pointer;
 }
 .editSlideout_modal-message {
-  margin-top: 5px;
+  margin: 20px;
   text-align: center;
 }
 .editSlideout_mapModal {

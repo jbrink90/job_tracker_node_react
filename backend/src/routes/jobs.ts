@@ -36,11 +36,16 @@ router.patch('/', async (req: Request, res: Response) => {
 
 router.delete('/', async (req: Request, res: Response) => {
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
-    const { body: jobData } = req;
+    const { id } = req.query;
+    
+    if (!id) {
+        res.status(400).json({ error: "Missing id parameter" });
+        return;
+    }
 
     try {
-        await deleteJob(db, jobData);
-        res.json({ message: "Job: '" + jobData.job_title + "' deleted successfully" });
+        await deleteJob(db, parseInt(id as string, 10));
+        res.json({ message: "Job: '" + id + "' deleted successfully" });
     } catch (error: any) {
         res.status(500).json({ error: error.message });
     } finally {
