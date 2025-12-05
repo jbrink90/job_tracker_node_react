@@ -9,6 +9,9 @@ import { MuiTableTest } from "../../components/MuiTableTest";
 import "simple-table-core/styles.css";
 import "./index.css";
 import { apiGetJobs, apiAddJob, apiDeleteJob, apiSaveJob } from "src/lib/api_calls";
+import { getUserEmailSplit } from "../../lib/supabase";
+
+const userEmail = await getUserEmailSplit(); 
 
 const SimpleDashboard = () => {
   const defaultJob: Job = { company: "", job_title: "", description: "", location: "", status: "", applied: new Date(), last_updated: new Date(), };
@@ -100,7 +103,7 @@ const SimpleDashboard = () => {
       <div className="reactTrackerPage_leftPane">
         <NavBar isUserLoggedIn={false} />
 
-        <header className="reactTrackerPage_header">Applications</header>
+        <header className="reactTrackerPage_header">{userEmail ? userEmail + "'s" : 'Your'} Applications</header>
         <div className="reactTrackerPage_buttonsContainer">
           <div className="reactTrackerPage_buttonsInner">
             <Tooltip title="Refresh Applications">
