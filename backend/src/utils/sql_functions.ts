@@ -13,9 +13,18 @@ export const execute = (db: sqlite3.Database, sql: string) => {
     });
 };
 
-export const fetchAll = async (db: any, sql: string) : Promise<Job[]> => {
+export const fetchAll = async (db: sqlite3.Database, sql: string) : Promise<Job[]> => {
     return new Promise((resolve, reject) => {
         db.all(sql, (err: string, rows:Job[]) => {
+            if (err) reject(err);
+            resolve(rows);
+        });
+    });
+};
+
+export const getAllJobsById = async (db: sqlite3.Database, user_id: string) : Promise<Job[]> => {
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM jobs WHERE supabase_id = ?", [user_id], (err: string, rows:Job[]) => {
             if (err) reject(err);
             resolve(rows);
         });

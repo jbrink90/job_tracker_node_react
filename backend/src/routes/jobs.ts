@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import sqlite3 from "sqlite3";
 import { Job } from "@mytypes/Job"
-import {fetchAll, insertJob, modifyJob, deleteJob} from "../utils/sql_functions";
+import {insertJob, modifyJob, deleteJob, getAllJobsById} from "../utils/sql_functions";
 
 const filename = process.env.SQLITE_FILENAME || "./jobtracker.sqlite";
 const router = Router();
@@ -93,10 +93,10 @@ router.get('/', async (req: Request, res: Response) => {
     }
 
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READONLY);
-    let sql = `SELECT * FROM jobs where supabase_id = '${user_id}' ORDER BY last_updated DESC`;
   
     try {
-      const jobs: Job[] = await fetchAll(db, sql);
+      //const jobs: Job[] = await fetchAll(db, sql);
+      const jobs: Job[] = await getAllJobsById(db, user_id);
       res.json(jobs);
     } catch (err) {
         res.status(500).json({ error: err });
