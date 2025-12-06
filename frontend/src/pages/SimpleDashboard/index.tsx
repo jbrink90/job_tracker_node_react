@@ -9,11 +9,12 @@ import { MuiTableTest } from "../../components/MuiTableTest";
 import "simple-table-core/styles.css";
 import "./index.css";
 import { apiGetJobs, apiAddJob, apiDeleteJob, apiSaveJob } from "src/lib/api_calls";
-import { getUserEmailSplit, getCurrentUser } from "../../lib/supabase";
+import { getUserEmailSplit, supabase } from "../../lib/supabase";
 
 const userEmail = await getUserEmailSplit();
-const user = await getCurrentUser();
-const userId = user?.id ?? null;
+const session = await supabase.auth.getSession();
+const accessToken = session.data.session?.access_token ?? null;
+
 
 const SimpleDashboard = () => {
   const defaultJob: Job = { company: "", job_title: "", description: "", location: "", status: "", applied: new Date(), last_updated: new Date(), supabase_id: "" };
@@ -37,7 +38,7 @@ const SimpleDashboard = () => {
  */
   const getAllJobs = async () => {
     try {
-      const jobs = await apiGetJobs(userId);
+      const jobs = await apiGetJobs(accessToken);
       setMasterJobList(jobs);
     } catch (error) {
       console.error(error);
@@ -58,7 +59,7 @@ const SimpleDashboard = () => {
  */
   const deleteJob = async (jobId: number) => {
     try {
-      await apiDeleteJob(jobId, userId);
+      await apiDeleteJob(jobId, accessToken);
       console.log(`Deleted job with id`);
       setMasterJobList(prev => prev.filter(job => job.id !== jobId));
     } catch (error) {
@@ -81,7 +82,7 @@ const SimpleDashboard = () => {
   const addJob = async (jobValues: Job) => {
     jobValues.last_updated = new Date();
     try {
-      const newJob = await apiAddJob(jobValues, userId);
+      const newJob = await apiAddJob(jobValues, accessToken);
       setMasterJobList(prev => [...prev, newJob]);
       setIsSlideoutOpen(false);
     } catch (error) {
@@ -105,7 +106,7 @@ const SimpleDashboard = () => {
   const saveJob = async (jobValues: Job) => {
     jobValues.last_updated = new Date();
     try {
-      await apiSaveJob(jobValues, userId);
+      await apiSaveJob(jobValues, accessToken);
       setMasterJobList(
         masterJobList.map((item) =>
           item.id === jobValues.id ? jobValues : item
