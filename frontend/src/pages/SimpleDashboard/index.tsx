@@ -9,12 +9,14 @@ import { MuiTableTest } from "../../components/MuiTableTest";
 import "simple-table-core/styles.css";
 import "./index.css";
 import { apiGetJobs, apiAddJob, apiDeleteJob, apiSaveJob } from "src/lib/api_calls";
-import { getUserEmailSplit } from "../../lib/supabase";
+import { getUserEmailSplit, getCurrentUser } from "../../lib/supabase";
 
-const userEmail = await getUserEmailSplit(); 
+const userEmail = await getUserEmailSplit();
+const user = await getCurrentUser();
+const userId = user?.id ?? null;
 
 const SimpleDashboard = () => {
-  const defaultJob: Job = { company: "", job_title: "", description: "", location: "", status: "", applied: new Date(), last_updated: new Date(), };
+  const defaultJob: Job = { company: "", job_title: "", description: "", location: "", status: "", applied: new Date(), last_updated: new Date(), supabase_id: "" };
 
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
@@ -22,29 +24,64 @@ const SimpleDashboard = () => {
   const [isAddingNewJob, setIsAddingNewJob] = useState(false);
   const [isSlideoutOpen, setIsSlideoutOpen] = useState(false);
 
+  /**
+ * Fetch all jobs for the current user.
+ *
+ * @async
+ * @function
+ * @returns {Promise<Job[]>} Array of Job objects
+ * @throws Will throw an error if the fetch fails
+ *
+ * @example
+ * const jobs = await getAllJobs();
+ */
   const getAllJobs = async () => {
     try {
-      const jobs = await apiGetJobs();
+      const jobs = await apiGetJobs(userId);
       setMasterJobList(jobs);
     } catch (error) {
       console.error(error);
     }
   };
+
+  /**
+ * Delete a job by its ID.
+ *
+ * @async
+ * @function
+ * @param {number} jobId - The ID of the job to delete
+ * @returns {Promise<void>}
+ * @throws Will throw an error if the delete fails
+ *
+ * @example
+ * await deleteJob(57);
+ */
   const deleteJob = async (jobId: number) => {
-  
     try {
-      await apiDeleteJob(jobId);
+      await apiDeleteJob(jobId, userId);
       console.log(`Deleted job with id`);
       setMasterJobList(prev => prev.filter(job => job.id !== jobId));
     } catch (error) {
       console.error(error);
     }
   };
+
+  /**
+ * Add a new job.
+ *
+ * @async
+ * @function
+ * @param {Job} jobValues - The job data to add
+ * @returns {Promise<void>}
+ * @throws Will throw an error if adding the job fails
+ *
+ * @example
+ * await addJob({ company: 'ABC', job_title: 'Dev', ... });
+ */
   const addJob = async (jobValues: Job) => {
     jobValues.last_updated = new Date();
-  
     try {
-      const newJob = await apiAddJob(jobValues);
+      const newJob = await apiAddJob(jobValues, userId);
       setMasterJobList(prev => [...prev, newJob]);
       setIsSlideoutOpen(false);
     } catch (error) {
@@ -52,11 +89,23 @@ const SimpleDashboard = () => {
       alert("Failed to add job. Please try again.");
     }
   };
+
+/**
+ * Save updates to an existing job.
+ *
+ * @async
+ * @function
+ * @param {Job} jobValues - The updated job data
+ * @returns {Promise<void>}
+ * @throws Will throw an error if saving the job fails
+ *
+ * @example
+ * await saveJob({ company: 'ABC', job_title: 'Dev', ... });
+ */
   const saveJob = async (jobValues: Job) => {
     jobValues.last_updated = new Date();
-
     try {
-      await apiSaveJob(jobValues);
+      await apiSaveJob(jobValues, userId);
       setMasterJobList(
         masterJobList.map((item) =>
           item.id === jobValues.id ? jobValues : item
@@ -101,7 +150,7 @@ const SimpleDashboard = () => {
   return (
     <div className="reactTrackerPage_main">
       <div className="reactTrackerPage_leftPane">
-        <NavBar isUserLoggedIn={false} />
+        <NavBar userEmailSplit={userEmail} />
 
         <header className="reactTrackerPage_header">{userEmail ? userEmail + "'s" : 'Your'} Applications</header>
         <div className="reactTrackerPage_buttonsContainer">

@@ -41,6 +41,7 @@ app.get("/createtables", async (req: Request, res: Response) => {
       status TEXT,
       applied DATE,
       last_updated DATE
+      supabase_id TEXT
     );`;
 
   const actions_table = `
@@ -78,8 +79,8 @@ app.get("/resettables", async (req: Request, res: Response) => {
   const data = JSON.parse("");
 
   const sql = `
-    INSERT INTO jobs (company, job_title, description, location, status, applied, last_updated)
-    VALUES (?, ?, ?, ?, ?, ?, ?);
+    INSERT INTO jobs (company, job_title, description, location, status, applied, last_updated, supabase_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
     `;
 
   try {
@@ -96,7 +97,8 @@ app.get("/resettables", async (req: Request, res: Response) => {
           job.location,
           job.status,
           job.applied,
-          job.last_updated
+          job.last_updated,
+          job.supabase_id
         );
       });
       stmt.finalize();
@@ -117,8 +119,8 @@ app.get("/mockdata", async (req: Request, res: Response) => {
   const data: Job[] = mockApiResponseAll;
 
   const sql = `
-    INSERT INTO jobs (company, job_title, description, location, status, applied, last_updated)
-    VALUES (?, ?, ?, ?, ?, ?, ?);
+    INSERT INTO jobs (company, job_title, description, location, status, applied, last_updated, supabase_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
     `;
 
   try {
@@ -133,7 +135,8 @@ app.get("/mockdata", async (req: Request, res: Response) => {
           job.location,
           job.status,
           job.applied?.toString(),
-          job.last_updated?.toString()
+          job.last_updated?.toString(),
+          job.supabase_id
         );
       });
 
