@@ -1,9 +1,6 @@
 import { Router, Request, Response } from 'express';
 import sqlite3 from "sqlite3";
-import { Job } from "@mytypes/Job"
 import {insertJob, modifyJob, deleteJob, getAllJobsById} from "../utils/sql_functions";
-import { supabaseAuthMiddleware } from "../utils/supabaseAuth";
-
 
 const filename = process.env.SQLITE_FILENAME || "./jobtracker.sqlite";
 const router = Router();
@@ -13,26 +10,6 @@ const getAuthBearer = (req: Request): string | null => {
     if (authHeader[0] !== "Bearer") return null;
     return authHeader[1] || null;
 };
-
-router.post('/', async (req: Request, res: Response) => {
-    const user_id = getAuthBearer(req);
-    const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
-    const { body: jobData } = req;
-
-    if (!user_id) {
-        res.status(401).json({ error: "Unauthorized" });
-        return;
-    }
-
-    try {
-        const insertedJob = await insertJob(db, jobData, user_id);
-        res.json(insertedJob);
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
-    } finally {
-        db.close();
-    }
-});
 
 router.patch('/', async (req: Request, res: Response) => {
     const user_id = getAuthBearer(req);
@@ -77,22 +54,6 @@ router.delete('/', async (req: Request, res: Response) => {
         res.status(500).json({ error: error.message });
     } finally {
         db.close();
-    }
-});
-
-router.get('/', supabaseAuthMiddleware, async (req: Request, res: Response) => {
-    const user = (req as any).supabaseUser;
-
-    const db = new sqlite3.Database(filename, sqlite3.OPEN_READONLY);
-  
-    try {
-      //const jobs: Job[] = await fetchAll(db, sql);
-      const jobs: Job[] = await getAllJobsById(db, user.id);
-      res.json(jobs);
-    } catch (err) {
-        res.status(500).json({ error: err });
-    } finally {
-      db.close();
     }
 });
 
