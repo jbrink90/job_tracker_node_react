@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import sqlite3 from "sqlite3";
 import cors from "cors";
 import jobRoutes from "./routes/jobs";
-import authRoutes from "./routes/auth";
 import { execute } from "./utils/sql_functions";
 import { mockApiResponseAll } from "@mocks/mockApiResponseAll";
 import { Job } from "@mytypes/Job";
@@ -25,7 +24,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/jobs", jobRoutes);
-app.use("/auth", authRoutes);
 
 // ---------------------------------------------------------------
 
