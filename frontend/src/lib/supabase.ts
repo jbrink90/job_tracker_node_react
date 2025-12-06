@@ -11,12 +11,6 @@ export async function getCurrentUser() {
   return data.user;
 }
 
-export async function getUserEmail() {
-  const { data, error } = await supabase.auth.getUser();
-  if (error) console.log(error);
-  return data.user?.email;
-}
-
 export async function getUserEmailSplit() {
   // Return a capitalized version of the part of the email before the '@' symbol
   const { data, error } = await supabase.auth.getUser();

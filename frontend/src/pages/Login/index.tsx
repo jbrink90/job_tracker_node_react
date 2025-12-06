@@ -14,7 +14,7 @@ const Login = () => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `http://localhost:5173/auth/callback`,
       },
     });
 
@@ -70,7 +70,8 @@ const Login = () => {
                       border: "1px solid #ccc",
                       outline: "none",
                       transition: "border-color 0.2s",
-                      boxSizing: "border-box", // <-- THIS
+                      boxSizing: "border-box",
+                      color: 'white',
                     }}
                     
                     onFocus={(e) =>

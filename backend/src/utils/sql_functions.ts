@@ -22,10 +22,10 @@ export const fetchAll = async (db: any, sql: string) : Promise<Job[]> => {
     });
 };
 
-export const insertJob = (db: sqlite3.Database, jobData: Job) => {
+export const insertJob = (db: sqlite3.Database, jobData: Job, user_id: string) => {
     const sql = `
-        INSERT INTO jobs (company, job_title, description, location, status, applied, last_updated)
-        VALUES (?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO jobs (company, job_title, description, location, status, applied, last_updated, supabase_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
     `;
     
     const sqlValues = [
@@ -36,6 +36,7 @@ export const insertJob = (db: sqlite3.Database, jobData: Job) => {
         jobData.status,
         jobData.applied,
         jobData.last_updated,
+        jobData.supabase_id = user_id
     ];
 
     return new Promise<Job>((resolve, reject) => {
@@ -52,7 +53,7 @@ export const insertJob = (db: sqlite3.Database, jobData: Job) => {
     });
 };
 
-export const modifyJob = (db: sqlite3.Database, jobData: Job) => {
+export const modifyJob = (db: sqlite3.Database, jobData: Job, user_id: string) => {
     const sql = `
         UPDATE jobs
         SET 
@@ -63,7 +64,7 @@ export const modifyJob = (db: sqlite3.Database, jobData: Job) => {
             status = ?,
             applied = ?,
             last_updated = ?
-        WHERE id = ?;
+        WHERE id = ? AND supabase_id = ?;
     `;
 
     const sqlValues = [
@@ -88,14 +89,15 @@ export const modifyJob = (db: sqlite3.Database, jobData: Job) => {
     });
 };
 
-export const deleteJob = (db: sqlite3.Database, jobId: number) => {
+export const deleteJob = (db: sqlite3.Database, jobId: number, user_id: string) => {
     const sql = `
         DELETE FROM jobs
-        WHERE id = ?;
+        WHERE id = ? AND supabase_id = ?;
     `;
 
     const sqlValues = [
-        jobId
+        jobId,
+        user_id
     ];
 
     return new Promise<boolean>((resolve, reject) => {

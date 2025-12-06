@@ -6,10 +6,10 @@ import MenuItem from "@mui/material/MenuItem";
 import "./index.css";
 
 interface NavBarProps {
-  isUserLoggedIn: boolean;
+  userEmailSplit: string | null;
 }
 
-const NavBar: FC<NavBarProps> = ({ isUserLoggedIn }) => {
+const NavBar: FC<NavBarProps> = ({ userEmailSplit }) => {
   const [anchorElement, setAnchorElement] = React.useState<null | HTMLElement>(
     null
   );
@@ -35,7 +35,7 @@ const NavBar: FC<NavBarProps> = ({ isUserLoggedIn }) => {
             aria-expanded={open ? "true" : undefined}
             onClick={openMenu}
           >
-            {isUserLoggedIn ? "Welcome Jordan" : "Welcome Guest"}
+            {userEmailSplit ? `Welcome ${userEmailSplit}` : "Welcome Guest"}
           </Button>
           <Menu
             id="basic-menu"
@@ -43,12 +43,12 @@ const NavBar: FC<NavBarProps> = ({ isUserLoggedIn }) => {
             open={open}
             onClose={closeMenu}
           >
-            {isUserLoggedIn
+            {userEmailSplit
               ? [
                   <MenuItem onClick={closeMenu} key="account">
                     <NavLink
                       to="/account"
-                      style={{ textDecoration: "none" }}
+                      style={{ textDecoration: "none", color: "black" }}
                       onClick={closeMenu}
                     >
                       My account
@@ -57,7 +57,7 @@ const NavBar: FC<NavBarProps> = ({ isUserLoggedIn }) => {
                   <MenuItem onClick={closeMenu} key="logout">
                     <NavLink
                       to="/logout"
-                      style={{ textDecoration: "none" }}
+                      style={{ textDecoration: "none", color: "black" }}
                       onClick={closeMenu}
                     >
                       Logout
@@ -68,19 +68,10 @@ const NavBar: FC<NavBarProps> = ({ isUserLoggedIn }) => {
                   <MenuItem key="login">
                     <NavLink
                       to="/login"
-                      style={{ textDecoration: "none" }}
+                      style={{ textDecoration: "none", color: "black" }}
                       onClick={closeMenu}
                     >
                       Log In
-                    </NavLink>
-                  </MenuItem>,
-                  <MenuItem onClick={closeMenu} key="create">
-                    <NavLink
-                      to="/create"
-                      style={{ textDecoration: "none" }}
-                      onClick={closeMenu}
-                    >
-                      Create Account
                     </NavLink>
                   </MenuItem>,
                 ]}
