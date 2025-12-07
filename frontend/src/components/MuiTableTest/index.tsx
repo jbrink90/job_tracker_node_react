@@ -44,7 +44,6 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpe
   const closeDeleteModal = () => setIsDeleteModalVisible(false);
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", sortable: true, filterable: true, type: "number", flex: 0.2 },
     { field: "company", headerName: "Company", flex: 1, sortable: true, filterable: true },
     { field: "job_title", headerName: "Job Title", flex: 1, sortable: true, filterable: true },
     { field: "location", headerName: "Location", flex: 1, sortable: true, filterable: true },
@@ -68,7 +67,7 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpe
     {
       field: 'actions',
       headerName: 'Actions',
-      flex: 0.5,
+      minWidth: 150,
       sortable: false,
       filterable: false,
       hideable: false,

@@ -14,7 +14,7 @@ import { Job } from "@mytypes/Job";
  * const jobs = await apiGetJobs('user-id-123');
  */
 export async function apiGetJobs(supabase_id: string | null): Promise<Job[]> {
-  const res = await fetch(`/api/jobs`, {
+  const res = await fetch("/api/jobs", {
     method: "GET",
     headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
   });

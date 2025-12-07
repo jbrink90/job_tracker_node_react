@@ -3,7 +3,6 @@ import {useEffect, useState} from 'react';
 import Map, { Source, Layer} from 'react-map-gl/mapbox';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { SearchBox } from "@mapbox/search-js-react";
-import type {CircleLayer} from 'react-map-gl/maplibre';
 import type {FeatureCollection} from 'geojson';
 import "./index.css";
 
@@ -22,25 +21,27 @@ const geojson: FeatureCollection = {
   ]
 };
 
-const layerStyle: CircleLayer = {
-  id: 'point',
-  type: 'circle',
+const circleLayer = {
+  id: "my-circles",
+  type: "circle",
   paint: {
-    'circle-radius': 10,
-    'circle-color': '#FF0000'
-  }
-};
+    "circle-radius": 6,
+    "circle-color": "#ff0000",
+  },
+} as const;
 
 export default function SearchableMap() {
   const [value, setValue] = useState('');
-  const [viewState, setViewState] = useState({
+  const [, setViewState] = useState({
     longitude: -86.529808,
     latitude: 39.166554,
     zoom: 3.5
   });
 
+  {/* @ts-expect-error- Work in progress */ }
   const retrieveChange = (b) => {
     console.log(b.features);
+    {/* @ts-expect-error- Work in progress */ }
     b.features.forEach(result => {
       console.log(`${result.geometry.coordinates} -> ${result.properties.full_address}`);
     });
@@ -99,7 +100,7 @@ export default function SearchableMap() {
       onMove={evt => setViewState(evt.viewState)}
     >
       <Source id="my-data" type="geojson" data={geojson}>
-        <Layer {...layerStyle} />
+        <Layer {...circleLayer} />
       </Source>
     </Map>    
     </>
