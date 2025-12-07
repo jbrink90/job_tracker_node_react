@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { Home, SimpleDashboard, Table, Map, Login, Logout, AuthCallback, Account } from "./pages";
+import { Home, SimpleDashboard, Map, Login, Logout, AuthCallback, Account } from "./pages";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { supabase } from "./lib/supabase";
@@ -36,7 +36,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/dashboard" element={<ProtectedRoute><SimpleDashboard /></ProtectedRoute>} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/table" element={<Table />} />
         <Route path="/map" element={<Map />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />

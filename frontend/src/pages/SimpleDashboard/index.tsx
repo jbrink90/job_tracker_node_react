@@ -11,9 +11,9 @@ import "./index.css";
 import { apiGetJobs, apiAddJob, apiDeleteJob, apiSaveJob } from "src/lib/api_calls";
 import { getUserEmailSplit, supabase } from "../../lib/supabase";
 
-const userEmail = await getUserEmailSplit();
-const session = await supabase.auth.getSession();
-const accessToken = session.data.session?.access_token ?? null;
+// const userEmail = await getUserEmailSplit();
+// const session = await supabase.auth.getSession();
+// const accessToken = session.data.session?.access_token ?? null;
 
 
 const SimpleDashboard = () => {
@@ -24,6 +24,23 @@ const SimpleDashboard = () => {
   const [currentEditingJob, setCurrentEditingJob] = useState<Job | null>(defaultJob);
   const [isAddingNewJob, setIsAddingNewJob] = useState(false);
   const [isSlideoutOpen, setIsSlideoutOpen] = useState(false);
+  
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const initUser = async () => {
+      const emailSplit = await getUserEmailSplit();
+      const session = await supabase.auth.getSession();
+      setUserEmail(emailSplit);
+      setAccessToken(session.data.session?.access_token ?? null);
+      // optionally fetch jobs here once token is ready
+      if (session.data.session?.access_token) {
+        getAllJobs(session.data.session.access_token);
+      }
+    };
+    initUser();
+  }, []);
 
   /**
  * Fetch all jobs for the current user.
@@ -36,9 +53,10 @@ const SimpleDashboard = () => {
  * @example
  * const jobs = await getAllJobs();
  */
-  const getAllJobs = async () => {
+  const getAllJobs = async (token: string) => {
+    if (!token) return; // no token yet
     try {
-      const jobs = await apiGetJobs(accessToken);
+      const jobs = await apiGetJobs(token);
       setMasterJobList(jobs);
     } catch (error) {
       console.error(error);
@@ -58,6 +76,7 @@ const SimpleDashboard = () => {
  * await deleteJob(57);
  */
   const deleteJob = async (jobId: number) => {
+    if (!accessToken) return;
     try {
       await apiDeleteJob(jobId, accessToken);
       console.log(`Deleted job with id`);
@@ -80,6 +99,7 @@ const SimpleDashboard = () => {
  * await addJob({ company: 'ABC', job_title: 'Dev', ... });
  */
   const addJob = async (jobValues: Job) => {
+    if (!accessToken) return;
     jobValues.last_updated = new Date();
     try {
       const newJob = await apiAddJob(jobValues, accessToken);
@@ -104,6 +124,7 @@ const SimpleDashboard = () => {
  * await saveJob({ company: 'ABC', job_title: 'Dev', ... });
  */
   const saveJob = async (jobValues: Job) => {
+    if (!accessToken) return;
     jobValues.last_updated = new Date();
     try {
       await apiSaveJob(jobValues, accessToken);
@@ -134,10 +155,6 @@ const SimpleDashboard = () => {
   };
 
   useEffect(() => {
-    getAllJobs();
-  }, []);
-
-  useEffect(() => {
     if (selectedJobId == null) {
       setCurrentEditingJob(defaultJob);
       return;
@@ -158,7 +175,7 @@ const SimpleDashboard = () => {
           <div className="reactTrackerPage_buttonsInner">
             <Tooltip title="Refresh Applications">
               <button>
-                <RefreshIcon onClick={getAllJobs} />
+                <RefreshIcon onClick={()=>{getAllJobs(accessToken || "")}} />
               </button>
             </Tooltip>
             <Tooltip title="Add New Application">
