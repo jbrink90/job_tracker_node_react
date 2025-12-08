@@ -29,21 +29,6 @@ const modalStyle = {
   borderRadius: "7px",
 };
 
-interface JobRow {
-  id: number;
-  company: string;
-  job_title: string;
-  description: string;
-  location: string;
-  status: string;
-  applied?: string | null;
-  last_updated?: string | null;
-
-  // actions
-  onEdit: () => void;
-  onDelete: () => void;
-}
-
 const ReactTable: React.FC<ReactTableProps> = ({
   slideIn,
   jobs,
@@ -88,7 +73,7 @@ const ReactTable: React.FC<ReactTableProps> = ({
             >
               <td>{row ? row.company : ""}</td>
               <td>{row ? row.job_title : ""}</td>
-              <td>{row ? row.description.substring(0, 40) : ""}</td>
+              <td>{row ? row.description?.substring(0, 40) : ""}</td>
               <td>{row ? row.location : ""}</td>
               <td>{row ? row.status : ""}</td>
               <td>
@@ -100,7 +85,7 @@ const ReactTable: React.FC<ReactTableProps> = ({
                   : ""}
               </td>
               <td>
-                <Tooltip title={`Edit ${row.job_title.substring(0, 25)}`}>
+                <Tooltip title={`Edit ${row.job_title?.substring(0, 25)}`}>
                   <span
                     className="reactTracker_editButton"
                     onClick={(e) => {
@@ -113,7 +98,7 @@ const ReactTable: React.FC<ReactTableProps> = ({
                     <EditDocumentIcon sx={{ color: "#e1e1e1" }} />
                   </span>
                 </Tooltip>
-                <Tooltip title={`Delete ${row.job_title.substring(0, 25)}`}>
+                <Tooltip title={`Delete ${row.job_title?.substring(0, 25)}`}>
                   <span
                     className="reactTracker_delButton"
                     onClick={(e) => {

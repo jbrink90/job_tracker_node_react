@@ -5,9 +5,13 @@ meta {
 }
 
 patch {
-  url: {{base.url}}/jobs
+  url: {{api_url}}/jobs
   body: json
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer}}
 }
 
 body:json {
@@ -19,6 +23,7 @@ body:json {
     "location": "New Delhi, India",
     "status": "Applied",
     "applied": "2025-08-01",
-    "last_updated": "2025-09-10"
+    "last_updated": "2025-09-10",
+    "supabase_id": ""
   }
 }

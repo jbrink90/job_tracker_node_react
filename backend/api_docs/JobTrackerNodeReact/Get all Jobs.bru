@@ -5,7 +5,11 @@ meta {
 }
 
 get {
-  url: {{base.url}}/jobs
+  url: {{api_url}}/jobs
   body: none
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer}}
 }

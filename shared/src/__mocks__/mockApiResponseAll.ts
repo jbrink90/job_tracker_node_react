@@ -7,7 +7,8 @@ export const mockApiResponseAll = [
     location: "San Francisco, CA",
     status: "Applied",
     applied: new Date("2025-03-01"),
-    last_updated: new Date("2025-03-10")
+    last_updated: new Date("2025-03-10"),
+    supabase_id: "user_123"
   },
   {
     id: 2,
@@ -17,7 +18,8 @@ export const mockApiResponseAll = [
     location: "New York, NY",
     status: "Interview Scheduled",
     applied: new Date("2025-02-20"),
-    last_updated: new Date("2025-03-05")
+    last_updated: new Date("2025-03-05"),
+    supabase_id: "user_123"
   },
   {
     id: 3,
@@ -27,7 +29,8 @@ export const mockApiResponseAll = [
     location: "Austin, TX",
     status: "Rejected",
     applied: new Date("2025-01-15"),
-    last_updated: new Date("2025-02-01")
+    last_updated: new Date("2025-02-01"),
+    supabase_id: "user_123"
   },
   {
     id: 4,
@@ -37,6 +40,7 @@ export const mockApiResponseAll = [
     location: "Seattle, WA",
     status: "Offer Received",
     applied: new Date("2025-02-28"),
-    last_updated: new Date("2025-03-15")
+    last_updated: new Date("2025-03-15"),
+    supabase_id: "user_123"
   }
 ];
