@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.84.0",
+    "dotenv": "^17.2.3",
     "mapbox-gl": "^3.11.0",
     "react-map-gl": "^8.0.2",
     "simple-table-core": "^1.7.8"

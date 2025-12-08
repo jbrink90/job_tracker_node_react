@@ -11,6 +11,7 @@
 body {
   margin: 0 auto;
   padding: 0;
+  user-select: none;
 }
 #root {
   display: flex;

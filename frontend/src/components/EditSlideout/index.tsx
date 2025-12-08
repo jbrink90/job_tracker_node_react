@@ -43,6 +43,7 @@ const defaultJob: Job = {
   status: "",
   applied: new Date(),
   last_updated: new Date(),
+  supabase_id: "",
 };
 
 const modalStyle = {
