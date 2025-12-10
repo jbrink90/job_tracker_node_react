@@ -1,6 +1,5 @@
 .navBar_main {
   background-color: #333;
-  width: 100vw;
   display: flex;
   flex-direction: row;
   justify-content: end;

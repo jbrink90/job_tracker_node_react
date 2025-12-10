@@ -1,6 +1,12 @@
 // lib/api_calls.ts
 import { Job } from "@mytypes/Job";
+import isDev from "../lib/is_dev";
 
+const baseUrl =
+  (isDev()
+    ? import.meta.env.VITE_API_BASE_URL_DEV
+    : import.meta.env.VITE_API_BASE_URL_PROD) || "http://localhost:4444";
+    
 /**
  * Fetch all jobs for a specific user.
  *
@@ -14,7 +20,7 @@ import { Job } from "@mytypes/Job";
  * const jobs = await apiGetJobs('user-id-123');
  */
 export async function apiGetJobs(supabase_id: string | null): Promise<Job[]> {
-  const res = await fetch("/api/jobs", {
+  const res = await fetch(`${baseUrl}/jobs`, {
     method: "GET",
     headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
   });
@@ -36,7 +42,7 @@ export async function apiGetJobs(supabase_id: string | null): Promise<Job[]> {
  * const newJob = await apiAddJob({ company: 'Acme', job_title: 'Developer', ... }, 'user-id-123');
  */
 export async function apiAddJob(job: Job, supabase_id: string | null): Promise<Job> {
-  const res = await fetch("/api/jobs", {
+  const res = await fetch(`${baseUrl}/jobs`, {
     method: "POST",
     headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
     body: JSON.stringify(job),
@@ -59,7 +65,7 @@ export async function apiAddJob(job: Job, supabase_id: string | null): Promise<J
  * await apiDeleteJob(42, 'user-id-123');
  */
 export async function apiDeleteJob(jobId: number, supabase_id: string | null): Promise<void> {
-  const res = await fetch(`/api/jobs?id=${jobId}`, {
+  const res = await fetch(`${baseUrl}/jobs?id=${jobId}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
   });
@@ -80,7 +86,7 @@ export async function apiDeleteJob(jobId: number, supabase_id: string | null): P
  * await apiSaveJob({ id: 42, company: 'Acme', job_title: 'Senior Dev', ... }, 'user-id-123');
  */
 export async function apiSaveJob(job: Job, supabase_id: string | null): Promise<void> {
-  const res = await fetch("/api/jobs", {
+  const res = await fetch(`${baseUrl}/jobs`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
     body: JSON.stringify(job),

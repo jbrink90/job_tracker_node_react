@@ -167,10 +167,11 @@ const SimpleDashboard = () => {
 
   return (
     <div className="reactTrackerPage_main">
-      <div className="reactTrackerPage_leftPane">
-        <NavBar userEmailSplit={userEmail} />
+      <NavBar userEmailSplit={userEmail} />
 
+      <div className="reactTrackerPage_leftPane">
         <header className="reactTrackerPage_header">{userEmail ? userEmail + "'s" : 'Your'} Applications</header>
+
         <div className="reactTrackerPage_buttonsContainer">
           <div className="reactTrackerPage_buttonsInner">
             <Tooltip title="Refresh Applications">
@@ -185,8 +186,8 @@ const SimpleDashboard = () => {
             </Tooltip>
           </div>
         </div>
+
         <div className="reactTrackerPage_tableContainer">
-          
           <MuiTableTest
             jobs={masterJobList} 
             setIsSlideoutOpen={setIsSlideoutOpen}
@@ -195,8 +196,8 @@ const SimpleDashboard = () => {
             deleteJob={deleteJob}
             setIsAddingNewJob={setIsAddingNewJob}
           />
-
         </div>
+
       </div>
       <EditSlideout
         currentEditingJob={currentEditingJob ?? defaultJob}
@@ -207,6 +208,9 @@ const SimpleDashboard = () => {
         saveJob={saveJob}
         onSaveJob={onSaveJob}
       />
+      <div className="reactTrackerPage_footer">
+        © 2025 Jordan Brinkman. All rights reserved.
+      </div>
     </div>
 );
 };
