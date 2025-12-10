@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import sqlite3 from "sqlite3";
-import {insertJob, modifyJob, deleteJob, getAllJobsById} from "../utils/sql_functions";
+import {modifyJob, deleteJob} from "../utils/sql_functions";
 
 const filename = process.env.SQLITE_FILENAME || "./jobtracker.sqlite";
 const router = Router();

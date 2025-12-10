@@ -1,12 +1,13 @@
 .reactTrackerPage_main {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 .reactTrackerPage_leftPane {
   display: flex;
   width: 98vw;
   flex: 1;
   flex-direction: column;
+  margin: 0 auto;
 }
 .reactTrackerPage_toggleButton {
   height: 75px;
@@ -44,4 +45,9 @@
 }
 .reactTrackerPage_tableContainer {
   padding: 20px;
+}
+.reactTrackerPage_footer {
+  text-align: center;
+  padding: 10px;
+  font-size: 0.8vw;
 }

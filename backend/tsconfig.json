@@ -9,9 +9,10 @@
     "forceConsistentCasingInFileNames": true,
     "paths": {
       "@mytypes/*": ["../shared/src/types/*"],
-      "@mocks/*": ["../shared/src/__mocks__/*"]
+      "@mocks/*": ["../shared/src/__mocks__/*"],
+      "@reacttracker/shared/*": ["../shared/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/server.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

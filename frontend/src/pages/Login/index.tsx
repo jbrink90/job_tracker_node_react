@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
+import isDev from "../../lib/is_dev";
 import "./index.css";
+
+const frontEndUrl =
+  (isDev()
+    ? import.meta.env.VITE_FRONTEND_BASE_URL_DEV
+    : import.meta.env.VITE_FRONTEND_BASE_URL_PROD) || "http://localhost:5173";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +20,7 @@ const Login = () => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `http://localhost:5173/auth/callback`,
+        emailRedirectTo: frontEndUrl,
       },
     });
 

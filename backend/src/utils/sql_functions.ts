@@ -45,7 +45,7 @@ export const insertJob = (db: sqlite3.Database, jobData: Job, user_id: string) =
         jobData.status,
         jobData.applied,
         jobData.last_updated,
-        jobData.supabase_id = user_id
+        user_id
     ];
 
     return new Promise<Job>((resolve, reject) => {
@@ -84,7 +84,8 @@ export const modifyJob = (db: sqlite3.Database, jobData: Job, user_id: string) =
         jobData.status,
         jobData.applied,
         jobData.last_updated,
-        jobData.id
+        jobData.id,
+        user_id
     ];
 
     return new Promise<boolean>((resolve, reject) => {
