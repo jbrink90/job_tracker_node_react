@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { Job } from "@mytypes/Job"
+import { Job } from "../../../shared/src/types/Job"
 
 export const execute = (db: sqlite3.Database, sql: string) => {
     return new Promise<boolean>((resolve, reject) => {

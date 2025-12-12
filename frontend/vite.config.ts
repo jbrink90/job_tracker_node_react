@@ -9,6 +9,9 @@ export default (/* { mode } : ConfigEnv */) => {
 
   return defineConfig({
     plugins: [react(), tsconfigPaths()],
+    build: {
+      sourcemap: true
+    },
     // server: {
     //   proxy: {
     //     '/api': {

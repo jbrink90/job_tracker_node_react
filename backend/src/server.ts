@@ -3,8 +3,8 @@ import sqlite3 from "sqlite3";
 import cors from "cors";
 import jobRoutes from "./routes/jobs";
 import { execute } from "./utils/sql_functions";
-import { mockApiResponseAll } from "@mocks/mockApiResponseAll";
-import { Job } from "@mytypes/Job";
+import { mockApiResponseAll } from "../../shared/src/__mocks__/mockApiResponseAll";
+import { Job } from "../../shared/src/types/Job";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -28,7 +28,7 @@ app.use("/jobs", jobRoutes);
 // ---------------------------------------------------------------
 
 app.get("/createtables", async (req: Request, res: Response) => {
-  const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
+  const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
   const job_table = `
     CREATE TABLE IF NOT EXISTS jobs (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,26 +42,26 @@ app.get("/createtables", async (req: Request, res: Response) => {
       supabase_id TEXT
     );`;
 
-  const actions_table = `
-    CREATE TABLE IF NOT EXISTS actions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      action TEXT,
-      description TEXT,
-      date DATE
-    );`;
+  // const actions_table = `
+  //   CREATE TABLE IF NOT EXISTS actions (
+  //     id INTEGER PRIMARY KEY AUTOINCREMENT,
+  //     action TEXT,
+  //     description TEXT,
+  //     date DATE
+  //   );`;
 
-  const users_table = `
-    CREATE TABLE IF NOT EXISTS users (
-        id TEXT PRIMARY KEY,
-        email TEXT UNIQUE NOT NULL,
-        email_verified BOOLEAN DEFAULT 0,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );`;
+  // const users_table = `
+  //   CREATE TABLE IF NOT EXISTS users (
+  //       id TEXT PRIMARY KEY,
+  //       email TEXT UNIQUE NOT NULL,
+  //       email_verified BOOLEAN DEFAULT 0,
+  //       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  //   );`;
 
   try {
     await execute(db, job_table);
-    await execute(db, actions_table);
-    await execute(db, users_table);
+    // await execute(db, actions_table);
+    // await execute(db, users_table);
     res.json({ message: "Tables created successfully" });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -71,7 +71,7 @@ app.get("/createtables", async (req: Request, res: Response) => {
 });
 
 app.get("/resettables", async (req: Request, res: Response) => {
-  const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
+  const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
   const jobs_delete = `DELETE FROM jobs; DELETE FROM SQLITE_SEQUENCE WHERE NAME='jobs';`;
   const actions_delete = `DELETE FROM actions; DELETE FROM SQLITE_SEQUENCE WHERE NAME='actions';`;
   const data = JSON.parse("");
@@ -111,9 +111,7 @@ app.get("/resettables", async (req: Request, res: Response) => {
 });
 
 app.get("/mockdata", async (req: Request, res: Response) => {
-  const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
-  //const data = mockApiResponseAll;
-
+  const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
   const data: Job[] = mockApiResponseAll;
 
   const sql = `
@@ -151,5 +149,5 @@ app.get("/mockdata", async (req: Request, res: Response) => {
 // ---------------------------------------------------------------
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on port: ${port}`);
 });
