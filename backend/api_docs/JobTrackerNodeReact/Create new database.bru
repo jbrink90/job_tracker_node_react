@@ -1,0 +1,15 @@
+meta {
+  name: Create new database
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{api_url}}/jobs
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer}}
+}

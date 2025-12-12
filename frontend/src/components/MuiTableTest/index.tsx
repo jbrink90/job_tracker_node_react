@@ -1,7 +1,7 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import "@fontsource/roboto/400.css";
-import { Job } from "@mytypes/Job";
+import { Job } from "../../../../shared/src/types/Job";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import "./index.css";
