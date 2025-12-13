@@ -1,5 +1,5 @@
 // lib/api_calls.ts
-import { Job } from "../../../shared/src/types/Job";
+import { Job } from "../types/Job";
 import isDev from "../lib/is_dev";
 
 const baseUrl =

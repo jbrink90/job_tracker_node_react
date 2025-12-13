@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import sqlite3 from "sqlite3";
-import { Job } from "../../../shared/src/types/Job";
+import { Job } from "../types/Job";
 import {insertJob, modifyJob, deleteJob, getAllJobsById} from "../utils/sql_functions";
 import { supabaseAuthMiddleware } from "../utils/supabaseAuth";
 
