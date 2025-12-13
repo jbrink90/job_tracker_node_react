@@ -3,8 +3,8 @@ import sqlite3 from "sqlite3";
 import cors from "cors";
 import jobRoutes from "./routes/jobs";
 import { execute } from "./utils/sql_functions";
-import { mockApiResponseAll } from "../../shared/src/__mocks__/mockApiResponseAll";
-import { Job } from "../../shared/src/types/Job";
+import { MOCK_API_GET_ALL_JOBS } from "./mock_data/mockApiGetAllJobs";
+import { Job } from "./types/Job";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -112,7 +112,7 @@ app.get("/resettables", async (req: Request, res: Response) => {
 
 app.get("/mockdata", async (req: Request, res: Response) => {
   const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
-  const data: Job[] = mockApiResponseAll;
+  const data: Job[] = MOCK_API_GET_ALL_JOBS;
 
   const sql = `
     INSERT INTO jobs (company, job_title, description, location, status, applied, last_updated, supabase_id)

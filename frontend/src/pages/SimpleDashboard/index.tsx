@@ -3,7 +3,7 @@ import EditSlideout from "../../components/EditSlideout";
 import { NavBar } from "../../components";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
-import { Job } from "../../../../shared/src/types/Job";
+import { Job } from "../../types/Job";
 import Tooltip from "@mui/material/Tooltip";
 import { MuiTableTest } from "../../components/MuiTableTest";
 import "simple-table-core/styles.css";

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./index.css";
 import "@fontsource/ubuntu/400.css";
-import { Job } from "../../../../shared/src/types/Job";
+import { Job } from "../../types/Job";
 import dayjs from "dayjs";
 import EditDocumentIcon from "@mui/icons-material/EditDocument";
 import DeleteIcon from "@mui/icons-material/Delete";

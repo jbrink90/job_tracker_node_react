@@ -1,4 +1,4 @@
-export const mockApiResponseAll = [
+export const MOCK_API_GET_ALL_JOBS = [
   {
     id: 1,
     company: "TechCorp",
