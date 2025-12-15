@@ -1,8 +1,8 @@
 // Using Mapbox
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import Map, { Source, Layer} from 'react-map-gl/mapbox';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { SearchBox } from "@mapbox/search-js-react";
+// import { SearchBox } from "@mapbox/search-js-react";
 import type {FeatureCollection} from 'geojson';
 import "./index.css";
 
@@ -31,48 +31,48 @@ const circleLayer = {
 } as const;
 
 export default function SearchableMap() {
-  const [value, setValue] = useState('');
+  // const [value, setValue] = useState('');
   const [, setViewState] = useState({
     longitude: -86.529808,
     latitude: 39.166554,
     zoom: 3.5
   });
 
-  {/* @ts-expect-error- Work in progress */ }
-  const retrieveChange = (b) => {
-    console.log(b.features);
-    {/* @ts-expect-error- Work in progress */ }
-    b.features.forEach(result => {
-      console.log(`${result.geometry.coordinates} -> ${result.properties.full_address}`);
-    });
-  }
+  // {/* @ts-expect-error- Work in progress */ }
+  // const retrieveChange = (b) => {
+  //   console.log(b.features);
+  //   {/* @ts-expect-error- Work in progress */ }
+  //   b.features.forEach(result => {
+  //     console.log(`${result.geometry.coordinates} -> ${result.properties.full_address}`);
+  //   });
+  // }
 
-  const handleChange = (d:string) => {
-    setValue(d);
-  };
+  // const handleChange = (d:string) => {
+  //   setValue(d);
+  // };
 
   // View Map updates
   // React.useEffect(() => {
   //   console.log(viewState);
   // }, [viewState])
 
-  useEffect(() => {
-    console.log(value);
-  }, [value])
+  // useEffect(() => {
+  //   console.log(value);
+  // }, [value])
 
-  const theme = {
-    variables: {
-      position: 'absolute',
-      zIndex: '999',
-      padding: '20px',
-      left: '50%',
-    }
-  };
+  // const theme = {
+  //   variables: {
+  //     position: 'absolute',
+  //     zIndex: '999',
+  //     padding: '20px',
+  //     left: '50%',
+  //   }
+  // };
 
   return (
     <>
     <div className='searchableMap_searchDiv'>
-      {/* @ts-expect-error- App continues to work despite error: 'SearchBox' cannot be used as a JSX component.  */}
+      {/* @ts-expect-error- App continues to work despite error: 'SearchBox' cannot be used as a JSX component. 
       <SearchBox
         options={{
           proximity: {
@@ -85,7 +85,7 @@ export default function SearchableMap() {
         accessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
         onRetrieve={retrieveChange}
         theme={theme}
-      />
+      /> */}
     </div>
     <Map
       reuseMaps 

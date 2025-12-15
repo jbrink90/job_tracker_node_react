@@ -90,6 +90,7 @@ export const modifyJob = (db: sqlite3.Database, jobData: Job, user_id: string) =
 
     return new Promise<boolean>((resolve, reject) => {
         db.run(sql, sqlValues, (err) => {
+            console.log("sql:", sql);            
             if (err) {
                 reject(err);
             } else {

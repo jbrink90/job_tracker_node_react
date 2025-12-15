@@ -3,20 +3,15 @@
     "target": "ES2020",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "skipLibCheck": true,
-
-    /* Bundler mode */
     "moduleResolution": "bundler",
-    "isolatedModules": true,
-    "moduleDetection": "force",
     "jsx": "react-jsx",
-
-    /* Linting */
+    "types": ["vite/client", "react", "react-dom"],
     "strict": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]
 }
