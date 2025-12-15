@@ -6,9 +6,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { Job } from "../../types/Job";
 import Tooltip from "@mui/material/Tooltip";
 import { MuiTableTest } from "../../components/MuiTableTest";
-import "simple-table-core/styles.css";
 import "./index.css";
-import { apiGetJobs, apiAddJob, apiDeleteJob, apiSaveJob } from "src/lib/api_calls";
+import { apiGetJobs, apiAddJob, apiDeleteJob, apiSaveJob } from "../../lib/api_calls";
 import { getUserEmailSplit, supabase } from "../../lib/supabase";
 
 // const userEmail = await getUserEmailSplit();

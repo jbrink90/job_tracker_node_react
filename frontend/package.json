@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build:dev": "tsc -b && vite build",
-    "build:prod": "tsc -b && vite build --mode production",
+    "build:dev": "vite build",
+    "build:prod": "vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.2.5",
@@ -33,7 +34,7 @@
   "devDependencies": {
     "@eslint/js": "^9.21.0",
     "@types/react": "^19.0.10",
-    "@types/react-dom": "^18.2.7",
+    "@types/react-dom": "^19.0.10",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",

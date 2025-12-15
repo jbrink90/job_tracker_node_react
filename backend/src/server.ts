@@ -13,14 +13,28 @@ const filename = process.env.SQLITE_FILENAME || "./jobtracker.sqlite";
 const port = process.env.API_PORT || 4444;
 const app = express();
 
-app.use((req, res, next) => {
-  res.append("Access-Control-Allow-Origin", ["*"]);
-  res.append("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE");
-  res.append("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
+const allowedOrigins = [
+  "https://jobtrackr.online",
+  "http://localhost:5173",
+];
 
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow server-to-server & curl requests
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      callback(new Error("Not allowed by CORS"));
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.use("/jobs", jobRoutes);

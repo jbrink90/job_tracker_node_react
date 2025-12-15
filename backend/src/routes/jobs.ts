@@ -8,10 +8,19 @@ import { supabaseAuthMiddleware } from "../utils/supabaseAuth";
 const filename = process.env.SQLITE_FILENAME || "./jobtracker.sqlite";
 const router = Router();
 
+const decodeJwt = (token: string): any => {
+    const payloadBase64 = token.split('.')[1];
+    const payloadJson = Buffer.from(payloadBase64, 'base64').toString('utf-8');
+    return JSON.parse(payloadJson);
+}
+
 const getAuthBearer = (req: Request): string | null => {
     const authHeader = req.headers.authorization?.split(" ") || [];
+    const token = authHeader[1];
     if (authHeader[0] !== "Bearer") return null;
-    return authHeader[1] || null;
+    const payload = decodeJwt(token);
+    const user_id = payload.sub;
+    return user_id || null;
 };
 
 router.post('/', async (req: Request, res: Response) => {
@@ -36,6 +45,7 @@ router.post('/', async (req: Request, res: Response) => {
 
 router.patch('/', async (req: Request, res: Response) => {
     const user_id = getAuthBearer(req);
+
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { body: jobData } = req;
 
