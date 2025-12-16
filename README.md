@@ -16,15 +16,11 @@ A simple and efficient job tracking web app built using **React**, **Express (No
 
 #### 🛠️ Tech Stack
 
-- React + Vite
+- React + Vite + TypeScript
 
-- Express (Node.js)
+- Node.js + Express
 
 - SQLite
-
-- dayjs
-
-- TypeScript
 
 ---
 
