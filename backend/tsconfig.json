@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "ES2019",
     "module": "commonjs",
-    "outDir": "./dist",
+    "rootDir": "src",
+    "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "@mytypes/*": ["../shared/src/types/*"],
-      "@mocks/*": ["../shared/src/__mocks__/*"]
-    }
+    "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "src/server.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

@@ -51,3 +51,4 @@ jest.config.ts
 *.log
 *.lock
 *.cache
+docker-compose.yaml
