@@ -1,10 +1,8 @@
-🧠 Job Tracker (using Node & React)
-
----
+# Job Tracker
 
 A simple and efficient job tracking web app built using **React**, **Express (Node.js)**, and **SQLite**. This tool helps you keep track of your job applications, statuses, and updates in one clean interface.
 
-🚀 Features
+#### 🚀 Features
 
 - 📝 Add, edit, and delete job entries
 
@@ -16,7 +14,7 @@ A simple and efficient job tracking web app built using **React**, **Express (No
 
 ---
 
-🛠️ Tech Stack
+#### 🛠️ Tech Stack
 
 - React + Vite
 
@@ -30,7 +28,7 @@ A simple and efficient job tracking web app built using **React**, **Express (No
 
 ---
 
-📁 Project Structure
+#### 📁 Project Structure
 
 job_tracker_node_react/
 ├── backend/ # Express server + SQLite DB
@@ -39,55 +37,70 @@ job_tracker_node_react/
 ├── frontend/ # React UI
 │ └── components/ # Reusable UI components
 │ └── App.jsx # Main app logic
-├── package.json # Root config for scripts
 
 ---
 
-📦 Getting Started
+### 📦 Getting Started
 
 1. Clone the repo
 
-   git clone https://github.com/jbrink90/job_tracker_node_react.git
-   cd job_tracker_node_react
+```
+    git clone https://github.com/jbrink90/job_tracker_node_react.git
+    cd job_tracker_node_react
+```
 
 2. Install dependencies
 
-### Backend
-
-    cd backend
+```sh
     npm install
-
-### Frontend
-
-    cd ../frontend
-    npm install
+```
 
 3. Run the app
 
-   (from root) npm run dev
+```
+npm run dev
+```
 
 ---
 
-📬 API Endpoints
-Method Endpoint Description
-GET /jobs Fetch all job entries
-POST /jobs Add a new job entry
-PUT /jobs/:id Update an existing job
-DELETE /jobs/:id Delete a job entry
+### 📬 API Endpoints
+
+| Method | Endpoint | Description            |
+| ------ | -------- | ---------------------- |
+| GET    | /jobs    | Fetch all job entries  |
+| POST   | /jobs    | Add a new job entry    |
+| PATCH  | jobs     | Update an existing job |
+| DELETE | /jobs    | Delete a job entry     |
+
+**Payload**:
+
+```JSON
+  {
+    "id": 1,
+    "company": "Tester",
+    "job_title": "Modified Job Title",
+    "description": "Job Description changed",
+    "location": "New Delhi, India",
+    "status": "Denied",
+    "applied": "2025-08-01",
+    "last_updated": "2025-12-05T06:31:12.513Z",
+    "supabase_id": "269278e8-f504-4cb9-aea7-b917f235b255"
+  }
+```
 
 ---
 
-🧪 Future Enhancements
+### 🧪 Future Enhancements
 
-- ✅ Authentication for multi-user support
+- ✅ Authentication for multi-user support [Completed: branch (feature/user_id_integration)]
 
-- 🔍 Search & filter capabilities
+- 🔍 Search & filter capabilities [Completed: [commit](https://github.com/jbrink90/job_tracker_node_react/commit/2aab105ac46d58f165313835908c1bc0b2f76e3c "commit")]
 
 - ⏰ Reminders for follow-ups
 
 ---
 
-###Docker Compose Example
+### Docker Compose Example
 
 ```yaml
 services:
@@ -99,13 +112,13 @@ services:
     ports:
       - "4444:4444"
     environment:
-      MODE: production      
+      MODE: production
       NODE_ENV: production
       API_PORT: 4444
       SQLITE_FILENAME: /usr/src/app/data/jobtracker.sqlite
       SUPABASE_URL: https://yoursite.supabase.co
       SUPABASE_ANON: your_secret_key
-     
+
     volumes:
       - ./data:/usr/src/app/data
     restart: unless-stopped
