@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { Job } from "@mytypes/Job"
+import { Job } from "../types/Job"
 
 export const execute = (db: sqlite3.Database, sql: string) => {
     return new Promise<boolean>((resolve, reject) => {
@@ -45,7 +45,7 @@ export const insertJob = (db: sqlite3.Database, jobData: Job, user_id: string) =
         jobData.status,
         jobData.applied,
         jobData.last_updated,
-        jobData.supabase_id = user_id
+        user_id
     ];
 
     return new Promise<Job>((resolve, reject) => {
@@ -84,11 +84,13 @@ export const modifyJob = (db: sqlite3.Database, jobData: Job, user_id: string) =
         jobData.status,
         jobData.applied,
         jobData.last_updated,
-        jobData.id
+        jobData.id,
+        user_id
     ];
 
     return new Promise<boolean>((resolve, reject) => {
         db.run(sql, sqlValues, (err) => {
+            console.log("sql:", sql);            
             if (err) {
                 reject(err);
             } else {

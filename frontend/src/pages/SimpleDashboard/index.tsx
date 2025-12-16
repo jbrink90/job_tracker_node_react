@@ -3,12 +3,11 @@ import EditSlideout from "../../components/EditSlideout";
 import { NavBar } from "../../components";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
-import { Job } from "@mytypes/Job";
+import { Job } from "../../types/Job";
 import Tooltip from "@mui/material/Tooltip";
 import { MuiTableTest } from "../../components/MuiTableTest";
-import "simple-table-core/styles.css";
 import "./index.css";
-import { apiGetJobs, apiAddJob, apiDeleteJob, apiSaveJob } from "src/lib/api_calls";
+import { apiGetJobs, apiAddJob, apiDeleteJob, apiSaveJob } from "../../lib/api_calls";
 import { getUserEmailSplit, supabase } from "../../lib/supabase";
 
 // const userEmail = await getUserEmailSplit();
@@ -167,10 +166,11 @@ const SimpleDashboard = () => {
 
   return (
     <div className="reactTrackerPage_main">
-      <div className="reactTrackerPage_leftPane">
-        <NavBar userEmailSplit={userEmail} />
+      <NavBar userEmailSplit={userEmail} />
 
+      <div className="reactTrackerPage_leftPane">
         <header className="reactTrackerPage_header">{userEmail ? userEmail + "'s" : 'Your'} Applications</header>
+
         <div className="reactTrackerPage_buttonsContainer">
           <div className="reactTrackerPage_buttonsInner">
             <Tooltip title="Refresh Applications">
@@ -185,8 +185,8 @@ const SimpleDashboard = () => {
             </Tooltip>
           </div>
         </div>
+
         <div className="reactTrackerPage_tableContainer">
-          
           <MuiTableTest
             jobs={masterJobList} 
             setIsSlideoutOpen={setIsSlideoutOpen}
@@ -195,8 +195,8 @@ const SimpleDashboard = () => {
             deleteJob={deleteJob}
             setIsAddingNewJob={setIsAddingNewJob}
           />
-
         </div>
+
       </div>
       <EditSlideout
         currentEditingJob={currentEditingJob ?? defaultJob}
@@ -207,6 +207,9 @@ const SimpleDashboard = () => {
         saveJob={saveJob}
         onSaveJob={onSaveJob}
       />
+      <div className="reactTrackerPage_footer">
+        © 2025 Jordan Brinkman. All rights reserved.
+      </div>
     </div>
 );
 };

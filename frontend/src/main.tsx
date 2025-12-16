@@ -8,7 +8,7 @@ import { supabase } from "./lib/supabase";
 import { User } from "@supabase/supabase-js";
 import "./main.css";
 
-export function ProtectedRoute({ children }: { children: JSX.Element }) {
+export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
 
   useEffect(() => {
