@@ -78,7 +78,6 @@ const SimpleDashboard = () => {
     if (!accessToken) return;
     try {
       await apiDeleteJob(jobId, accessToken);
-      console.log(`Deleted job with id`);
       setMasterJobList(prev => prev.filter(job => job.id !== jobId));
     } catch (error) {
       console.error(error);
