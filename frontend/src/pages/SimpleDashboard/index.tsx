@@ -169,9 +169,9 @@ const SimpleDashboard = () => {
       <NavBar userEmailSplit={userEmail} />
 
       <div className="reactTrackerPage_leftPane">
-        <header className="reactTrackerPage_header">{userEmail ? userEmail + "'s" : 'Your'} Applications</header>
-
         <div className="reactTrackerPage_buttonsContainer">
+          
+          <header className="reactTrackerPage_header">{userEmail ? userEmail + "'s" : 'Your'} Applications</header>
           <div className="reactTrackerPage_buttonsInner">
             <Tooltip title="Refresh Applications">
               <button>
