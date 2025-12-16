@@ -11,12 +11,12 @@
   width: 150px;
   display: flex;
 }
-.reactTrackerPage_buttonsContainer {
+.reactTrackerPage_headerContainer {
   display: flex;
   justify-content: space-between;
   padding: 10px 20px 0px 20px;
 }
-.reactTrackerPage_buttonsContainer button {
+.reactTrackerPage_headerContainer button {
   background-color: #009ce8;
   color: white;
   border-radius: 5px;

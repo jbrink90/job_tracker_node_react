@@ -163,3 +163,17 @@
 .editSlideout_mdxeditor_toolbar {
   background-color: #009ce8 !important;
 }
+.editSlideout_deleteButton {
+  background-color: #e80000;
+  height: 7vh;
+  border-radius: 7px;
+  border: 1px solid #00000000;
+  font-size: 1.2em;
+  cursor: pointer;
+  margin-top: auto;
+}
+.editSlideout_headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

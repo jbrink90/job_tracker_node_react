@@ -21,9 +21,9 @@ import {
   InsertImage,
   ListsToggle,
   MDXEditorMethods,
-
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
+import { useTheme, useMediaQuery } from "@mui/material";
 
 interface EditSlideoutProps {
   isSlideoutOpen: boolean;
@@ -78,6 +78,8 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   const openSaveModal = () => setIsSaveModalVisible(true);
   const closeSaveModal = () => setIsSaveModalVisible(false);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const toggleLocalSlideout = () => {
     if (hasJobBeenModified) {
@@ -89,7 +91,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
 
   useEffect(() => {
     if (!isSlideoutOpen) return;
-  
+
     if (isAddingNewJob) {
       setJobValues(defaultJob);
       setMarkdownSource("");
@@ -98,22 +100,23 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       setMarkdownSource(currentEditingJob?.description || "");
     }
     setHasJobBeenModified(false);
-  }, [currentEditingJob, isAddingNewJob, isSlideoutOpen]);  
-  
+  }, [currentEditingJob, isAddingNewJob, isSlideoutOpen]);
 
-  const handleEditorMarkdownChange = (newMarkdown: string, isInitial: boolean) => {
+  const handleEditorMarkdownChange = (
+    newMarkdown: string,
+    isInitial: boolean
+  ) => {
     if (!isInitial) {
       setMarkdownSource(newMarkdown);
-  
-      setJobValues(prev => ({
+
+      setJobValues((prev) => ({
         ...prev,
         description: newMarkdown,
       }));
-  
+
       setHasJobBeenModified(true);
     }
   };
-  
 
   const discardChanges = () => {
     setJobValues({ ...currentEditingJob });
@@ -147,11 +150,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       }
     } else {
       try {
-        // setMasterJobList(
-        //   masterJobList.map((item) =>
-        //     item.id === jobValues.id ? jobValues : item
-        //   )
-        // );
         saveJob(jobValues);
         setHasJobBeenModified(false);
       } catch (error) {
@@ -160,10 +158,11 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     }
   };
 
-
   return (
     <>
-      <aside className={`editSlideout_container ${isSlideoutOpen ? 'slide-in-right' : 'slide-out-right'}`}>
+      <aside
+        className={`editSlideout_container ${isSlideoutOpen ? "slide-in-right" : "slide-out-right"}`}
+      >
         <div className="editSlideout_navRow">
           <CloseIcon
             fontSize="large"
@@ -173,10 +172,21 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           />
         </div>
         <div className="editSlideout_content">
-          <header className="editSlideout_header">
-            {isAddingNewJob ? "Add Job" : "Edit Job"}
-          </header>
-
+          <div className="editSlideout_headerContainer">
+            <header className="editSlideout_header">
+              {isAddingNewJob ? "Add Job" : "Edit Job"}
+            </header>
+            {isMobile && (
+              <button
+                className="editSlideout_deleteButton"
+                onClick={() => {
+                  // Implement delete functionality if needed
+                }}
+              >
+                Delete Job
+              </button>
+            )}
+          </div>
           <label>Company</label>
           <input
             type="text"
@@ -227,7 +237,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             ]}
           />
 
-
           <label>Location</label>
           <div className="editSlideout_locationDiv">
             <input
@@ -253,13 +262,12 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             value={jobValues ? dayjs(jobValues.applied?.toString()) : dayjs()}
             defaultValue={dayjs()}
             onChange={(value) => {
-              setJobValues(prev => ({
+              setJobValues((prev) => ({
                 ...prev,
-                applied: value ? value.toDate() : new Date()
+                applied: value ? value.toDate() : new Date(),
               }));
               setHasJobBeenModified(true);
             }}
-            
             slotProps={{
               textField: {
                 sx: {
@@ -283,7 +291,11 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
         </div>
 
         <div className="editSlideout_saveDiv">
-          <button className="editSlideout_saveButton" onClick={() => onSaveJob(jobValues)} disabled={!hasJobBeenModified}>
+          <button
+            className="editSlideout_saveButton"
+            onClick={() => onSaveJob(jobValues)}
+            disabled={!hasJobBeenModified}
+          >
             {isAddingNewJob ? "Add Job" : "Save Job"}
           </button>
         </div>
