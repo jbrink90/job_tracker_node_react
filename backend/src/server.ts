@@ -17,6 +17,7 @@ const allowedOrigins = [
   "https://jobtrackr.online",
   "http://localhost:5173",
   "http://192.168.1.14:5173",
+  "http://192.168.1.14:42000",
 ];
 
 app.use(
