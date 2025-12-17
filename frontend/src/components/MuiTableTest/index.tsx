@@ -1,13 +1,10 @@
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridColumnVisibilityModel } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import "@fontsource/roboto/400.css";
 import { Job } from "../../types/Job";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import "./index.css";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import CloseIcon from "@mui/icons-material/Close";
 import { useTheme, useMediaQuery } from "@mui/material";
 
 const darkTheme = createTheme({
@@ -18,16 +15,6 @@ const darkTheme = createTheme({
   },
 });
 
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "#3E3E3E",
-  border: "2px solid #000",
-  boxShadow: 24,
-  borderRadius: "7px",
-};
 
 interface ReactTableProps {
   selectedJobId: number | null;
@@ -36,45 +23,22 @@ interface ReactTableProps {
   jobs: Job[];
   deleteJob: (arg: number) => void;
   setIsAddingNewJob: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsDeleteModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
-export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpen, setIsAddingNewJob, selectedJobId, setSelectedJobId, deleteJob }) => {
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = React.useState(false);
-  const openDeleteModal = () => setIsDeleteModalVisible(true);
-  const closeDeleteModal = () => setIsDeleteModalVisible(false);
+export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpen, setIsAddingNewJob, setSelectedJobId, setIsDeleteModalVisible}) => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const mobileColumns: GridColDef[] = [
-    { field: "company", headerName: "Company", flex: 1, sortable: true, filterable: true },
-    { field: "job_title", headerName: "Title", flex: 1, sortable: true, filterable: true },
-    { field: "status", headerName: "Status", flex: 1, sortable: true, filterable: true },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      sortable: false,
-      filterable: false,
-      hideable: false,
-      align: 'center',
-      renderCell: (params) => (
-        <>
-        <button
-          style={{backgroundColor: '#00bffe', color: 'black', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer'}}
-          onClick={(e) => {
-            e.stopPropagation();
-            setSelectedJobId(params.row.id);
-            setIsAddingNewJob(false);
-            setIsSlideoutOpen(true);
-          }}
-        >
-          Edit
-        </button>
-        </>
-      )
-    },
-  ];
+  const [columnVisibilityModel, setColumnVisibilityModel] =
+  React.useState<GridColumnVisibilityModel>({
+    location: false,
+    applied: false,
+    last_updated: false,
+  });
+
   const desktopColumns: GridColDef[] = [
     { field: "company", headerName: "Company", flex: 1, sortable: true, filterable: true },
     { field: "job_title", headerName: "Job Title", flex: 1, sortable: true, filterable: true },
@@ -99,15 +63,15 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpe
     {
       field: 'actions',
       headerName: 'Actions',
-      minWidth: 150,
       sortable: false,
       filterable: false,
       hideable: false,
       align: 'center',
+      width: isMobile ? 70 : 150,
       renderCell: (params) => (
         <>
         <button
-          style={{backgroundColor: '#00bffe', color: 'black', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer'}}
+          className='muiTableTest_button'
           onClick={(e) => {
             e.stopPropagation();
             setSelectedJobId(params.row.id);
@@ -117,16 +81,17 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpe
         >
           Edit
         </button>
-        <button 
-          style={{backgroundColor: '#00bffe', color: 'black', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer', marginLeft: '10px'}}
+        { !isMobile && <button 
+          className='muiTableTest_button'
+          style={{ marginLeft: '10px' }}
           onClick={(e) => {
-            setSelectedJobId(params.row.id);
             e.stopPropagation();
-            openDeleteModal();
+            setSelectedJobId(params.row.id);
+            setIsDeleteModalVisible(true);
           }}
           >
             Delete
-          </button>
+          </button>}
         </>
       )
     },
@@ -145,30 +110,14 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpe
       <Paper elevation={12}>
         <DataGrid
           rows={formattedJobs}
-          columns={isMobile ? mobileColumns : desktopColumns}
+          columns={desktopColumns}
           sx={{ display: 'flex', flexDirection: 'column'}}
+          columnVisibilityModel={columnVisibilityModel}
+          onColumnVisibilityModelChange={setColumnVisibilityModel}
+          hideFooter={true}
         />
       </Paper>
     </ThemeProvider>
-    
-    <Modal open={isDeleteModalVisible} onClose={closeDeleteModal}>
-        <Box sx={modalStyle} style={{ padding: "10px" }}>
-          <CloseIcon fontSize="small" onClick={closeDeleteModal} />
-          <h2 className="editSlideout_modal-message">Are you sure you want to delete job with ID '{selectedJobId}'?</h2>
-          <button
-            className="editSlideout_modal-button"
-            onClick={() => selectedJobId && (deleteJob(selectedJobId), closeDeleteModal(), true)}
-          >
-            Yes
-          </button>
-          <button
-            className="editSlideout_modal-button"
-            onClick={closeDeleteModal}
-          >
-            Cancel
-          </button>
-        </Box>
-      </Modal>
     </>
 
   );

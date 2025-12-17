@@ -117,21 +117,6 @@
   animation: slideInFromRight 0.5s ease-out forwards;
 }
 
-.editSlideout_modal-button {
-  background-color: #4300af;
-  font-size: 0.85em;
-  color: white;
-  border-radius: 5px;
-  border: 0px;
-  padding: 10px;
-  margin: 5px;
-  min-width: 75px;
-  cursor: pointer;
-}
-.editSlideout_modal-message {
-  margin: 20px;
-  text-align: center;
-}
 .editSlideout_mapModal {
   position: "absolute";
   top: "50%";
