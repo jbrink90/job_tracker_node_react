@@ -33,6 +33,7 @@ interface EditSlideoutProps {
   addJob: (jobValues: Job) => void;
   saveJob: (jobValues: Job) => void;
   onSaveJob: (jobValues: Job) => void;
+  setIsDeleteModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultJob: Job = {
@@ -65,6 +66,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   addJob,
   saveJob,
   onSaveJob,
+  setIsDeleteModalVisible
 }) => {
   const [jobValues, setJobValues] = useState<Job>(defaultJob);
   const [hasJobBeenModified, setHasJobBeenModified] = useState(false);
@@ -176,11 +178,11 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             <header className="editSlideout_header">
               {isAddingNewJob ? "Add Job" : "Edit Job"}
             </header>
-            {isMobile && (
+            {(isMobile && !isAddingNewJob) && (
               <button
                 className="editSlideout_deleteButton"
                 onClick={() => {
-                  // Implement delete functionality if needed
+                  setIsDeleteModalVisible(true);
                 }}
               >
                 Delete Job
