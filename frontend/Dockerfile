@@ -22,6 +22,7 @@ RUN npm run build:prod
 # Stage 2: Serve with nginx
 # ==============================
 FROM nginx:alpine
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Remove default nginx html
 RUN rm -rf /usr/share/nginx/html/*
