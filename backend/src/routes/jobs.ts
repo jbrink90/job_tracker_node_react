@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
 import sqlite3 from "sqlite3";
 import { Job } from "../types/Job";
-import {insertJob, modifyJob, deleteJob, getAllJobsById} from "../utils/sql_functions";
+import {insertJob, modifyJob, deleteJob, getAllJobsById, execute, fetchAll} from "../utils/sql_functions";
 import { supabaseAuthMiddleware } from "../utils/supabaseAuth";
-
+import { MOCK_API_GET_ALL_JOBS } from "../mock_data/mockApiGetAllJobs";
 
 const filename = process.env.SQLITE_FILENAME || "./jobtracker.sqlite";
 const router = Router();
@@ -101,5 +101,98 @@ router.get('/', supabaseAuthMiddleware, async (req: Request, res: Response) => {
       db.close();
     }
 });
+
+router.get('/all', supabaseAuthMiddleware, async (req: Request, res: Response) => {
+    const user = (req as any).supabaseUser;
+    const db = new sqlite3.Database(filename, sqlite3.OPEN_READONLY);
+  
+    try {
+      const jobs: Job[] = await fetchAll(db);
+      res.json(jobs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    } finally {
+      db.close();
+    }
+});
+
+
+router.get("/createtable", async (req: Request, res: Response) => {
+    const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
+    const create_sql = `
+      CREATE TABLE IF NOT EXISTS jobs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        company TEXT,
+        job_title TEXT,
+        description TEXT,
+        location TEXT,
+        status TEXT,
+        applied DATE,
+        last_updated DATE,
+        supabase_id TEXT
+      );`;
+  
+    try {
+      await execute(db, create_sql);
+      res.json({ message: "jobs table created successfully" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    } finally {
+      db.close();
+    }
+  });
+  
+  router.get("/resettable", async (req: Request, res: Response) => {
+    const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
+  
+    try {
+      await execute(db, `DROP TABLE jobs; DELETE FROM SQLITE_SEQUENCE WHERE NAME='jobs';`);
+      res.json({ message: "jobs table reset successfully" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    } finally {
+      db.close();
+    }
+  });
+  
+  router.get("/mockdata", async (req: Request, res: Response) => {
+    const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
+  
+    try {
+      db.serialize(() => {
+        db.run("BEGIN TRANSACTION;");
+        const stmt = db.prepare(`
+          INSERT INTO jobs
+          (company, job_title, description, location, status, applied, last_updated, supabase_id)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        `);
+  
+        MOCK_API_GET_ALL_JOBS.forEach((job: Job) => {
+          stmt.run(
+            job.company,
+            job.job_title,
+            job.description,
+            job.location,
+            job.status,
+            job.applied?.toISOString(),
+            job.last_updated?.toISOString(),
+            job.supabase_id
+          );
+        });
+  
+        stmt.finalize();
+        db.run("COMMIT;");
+      });
+  
+      res.json({ message: "Successfully mocked data" });
+    } catch (err) {
+      res.status(500).json({ error: err });
+    } finally {
+      db.close();
+    }
+  });
+  
+  
+  // ---------------------------------------------------------------
 
 export default router;
