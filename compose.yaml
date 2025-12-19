@@ -1,0 +1,37 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: node_backend
+    ports:
+      - "4444:4444"
+    environment:
+      MODE: production
+      NODE_ENV: production
+      API_PORT: 4444
+      SQLITE_FILENAME: /usr/src/app/data/jobtracker.sqlite
+      SUPABASE_URL: https://yoursite.supabase.co
+      SUPABASE_ANON: your_secret_key
+
+    volumes:
+      - ./data:/usr/src/app/data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: react_frontend
+    ports:
+      - "42000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    environment:
+      VITE_SUPABASE_URL: https://yoursite.supabase.co
+      VITE_SUPABASE_ANON: your_secret_key
+      VITE_API_BASE_URL_DEV: http://localhost:4444
+      VITE_API_BASE_URL_PROD: https://api.jobtrackr.online
+      VITE_FRONTEND_BASE_URL_DEV: http://localhost:5173
+      VITE_FRONTEND_BASE_URL_PROD: https://jobtrackr.online
