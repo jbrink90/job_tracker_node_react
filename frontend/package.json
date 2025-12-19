@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
+    "build": "vite build --mode production",
     "build:dev": "vite build",
     "build:prod": "vite build --mode production",
-    "build": "vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview"
   },
