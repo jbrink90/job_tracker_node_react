@@ -23,7 +23,7 @@ const getAuthBearer = (req: Request): string | null => {
     return user_id || null;
 };
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', supabaseAuthMiddleware, async (req: Request, res: Response) => {
     const user_id = getAuthBearer(req);
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { body: jobData } = req;
@@ -43,9 +43,8 @@ router.post('/', async (req: Request, res: Response) => {
     }
 });
 
-router.patch('/', async (req: Request, res: Response) => {
+router.patch('/', supabaseAuthMiddleware, async (req: Request, res: Response) => {
     const user_id = getAuthBearer(req);
-
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { body: jobData } = req;
 
@@ -64,9 +63,8 @@ router.patch('/', async (req: Request, res: Response) => {
     }
 });
 
-router.delete('/', async (req: Request, res: Response) => {
+router.delete('/', supabaseAuthMiddleware, async (req: Request, res: Response) => {
     const user_id = getAuthBearer(req);
-
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { id } = req.query;
     
@@ -92,11 +90,9 @@ router.delete('/', async (req: Request, res: Response) => {
 
 router.get('/', supabaseAuthMiddleware, async (req: Request, res: Response) => {
     const user = (req as any).supabaseUser;
-
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READONLY);
   
     try {
-      //const jobs: Job[] = await fetchAll(db, sql);
       const jobs: Job[] = await getAllJobsById(db, user.id);
       res.json(jobs);
     } catch (err) {

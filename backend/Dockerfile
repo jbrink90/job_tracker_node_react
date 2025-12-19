@@ -1,23 +1,26 @@
 FROM node:20-alpine
 
-# Create app user/group
-RUN addgroup -S app && adduser -S app -G app
+# Create app user with fixed UID/GID (VERY IMPORTANT)
+RUN addgroup -g 10001 app \
+ && adduser -S -u 10001 -G app app
 
 WORKDIR /usr/src/app
 
+# Create data directory FIRST
+RUN mkdir -p /usr/src/app/data \
+ && chown -R app:app /usr/src/app
 
+# Copy package files
 COPY package*.json ./
 RUN npm install
 
+# Copy source
 COPY . .
 
-# Give ownership to app user
+# Ensure ownership after copy
 RUN chown -R app:app /usr/src/app
 
-RUN mkdir -p /usr/src/app/data \
- && chown -R app:app /usr/src/app/data
-
-# Drop root privileges
+# Drop root
 USER app
 
 RUN npm run build
