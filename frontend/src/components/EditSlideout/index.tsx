@@ -207,6 +207,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
 
           <label>Description</label>
           <MDXEditor
+            className="editSlideout_mdxeditor"
             ref={editorRef}
             key={`${isAddingNewJob ? "new" : jobValues.id}`}
             markdown={markdownSource}
