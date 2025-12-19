@@ -41,14 +41,14 @@ job_tracker_node_react/
 1. Clone the repo
 
 ```
-    git clone https://github.com/jbrink90/job_tracker_node_react.git
-    cd job_tracker_node_react
+git clone https://github.com/jbrink90/job_tracker_node_react.git
+cd job_tracker_node_react
 ```
 
 2. Install dependencies
 
 ```sh
-    npm install
+npm install
 ```
 
 3. Run the app
