@@ -27,12 +27,20 @@ A simple and efficient job tracking web app built using **React**, **Express (No
 #### 📁 Project Structure
 
 job_tracker_node_react/
-├── backend/ # Express server + SQLite DB
-│ └── db.js # SQLite schema and helpers
-│ └── routes/jobs.js # Job API endpoints
-├── frontend/ # React UI
-│ └── components/ # Reusable UI components
-│ └── App.jsx # Main app logic
+backend/
+api_docs/ # Contains Bruno/Postman collection
+src/
+routes/ # Contains the files used to define our API endpoints
+types/ # Contains the used types
+utils/ # Contains utility or library files
+frontend/
+nginx/ # Contains necessary files for Docker deployments
+src/
+assets/
+components/ # Contains reusable UI components
+lib/ # Contains utility or library files
+pages/ # Contains each renderable page
+types/ # Contains the used types
 
 ---
 
@@ -53,7 +61,7 @@ job_tracker_node_react/
 
 3. Run the app
 
-```
+```sh
 npm run dev
 ```
 
@@ -61,12 +69,12 @@ npm run dev
 
 ### 📬 API Endpoints
 
-| Method | Endpoint | Description            |
-| ------ | -------- | ---------------------- |
-| GET    | /jobs    | Fetch all job entries  |
-| POST   | /jobs    | Add a new job entry    |
-| PATCH  | jobs     | Update an existing job |
-| DELETE | /jobs    | Delete a job entry     |
+| Method | Endpoint | Description            | Request Payload | Response Payload |
+| ------ | -------- | ---------------------- | --------------- | ---------------- |
+| GET    | /jobs    | Fetch all job entries  | User ID         | Job[]            |
+| POST   | /jobs    | Add a new job entry    | Job             | JSON             |
+| PATCH  | /jobs    | Update an existing job | Job             | JSON             |
+| DELETE | /jobs    | Delete a job entry     | Job ID          | JSON             |
 
 **Payload**:
 
