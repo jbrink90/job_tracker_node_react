@@ -97,9 +97,15 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     if (isAddingNewJob) {
       setJobValues(defaultJob);
       setMarkdownSource("");
+      editorRef.current?.setMarkdown("");
+
     } else {
       setJobValues(currentEditingJob || defaultJob);
       setMarkdownSource(currentEditingJob?.description || "");
+    
+      editorRef.current?.setMarkdown(
+        currentEditingJob?.description || ""
+      );
     }
     setHasJobBeenModified(false);
   }, [currentEditingJob, isAddingNewJob, isSlideoutOpen]);
@@ -305,7 +311,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       </aside>
 
       <Modal open={isSaveModalVisible} onClose={closeSaveModal}>
-        <Box sx={modalStyle} style={{ padding: "10px" }}>
+        <Box sx={modalStyle} style={{ padding: "10px", width: "80%" }}>
           <CloseIcon fontSize="small" onClick={closeSaveModal} />
           <h2 className="editSlideout_modal-message">Save your changes?</h2>
           <button
