@@ -1,0 +1,149 @@
+.pageFooter_container {
+}
+/* =========================
+   Page Footer
+   ========================= */
+
+.pageFooter_container {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5vh;
+  background-color: #333;
+  margin-top: 40px;
+  color: #ffffff;
+  padding: 3rem 0;
+}
+
+.pageFooter_containerInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.pageFooter_grid {
+  display: grid;
+  gap: 2rem;
+}
+
+/* Desktop layout */
+@media (min-width: 768px) {
+  .pageFooter_grid {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+
+/* -------------------------
+     Brand Section
+     ------------------------- */
+
+.pageFooter_brand {
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .pageFooter_brand {
+    margin-bottom: 0;
+  }
+}
+
+.pageFooter_logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.pageFooter_logoImage {
+  height: 2.5rem;
+  width: auto;
+}
+
+.pageFooter_brandText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.pageFooter_description {
+  color: #7c8aa5; /* softened slate */
+  margin-bottom: 1rem;
+  max-width: 26rem;
+  line-height: 1.6;
+}
+
+.pageFooter_copyright {
+  color: #7c8aa5;
+  font-size: 0.875rem;
+}
+
+/* -------------------------
+     Link Groups
+     ------------------------- */
+
+.pageFooter_linksGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.pageFooter_title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+}
+
+.pageFooter_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pageFooter_list li {
+  margin-bottom: 0.5rem;
+}
+
+.pageFooter_link {
+  color: #7c8aa5;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.pageFooter_link:hover {
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+/* -------------------------
+     Mobile Adjustments
+     ------------------------- */
+
+@media (max-width: 768px) {
+  .pageFooter_containerInner {
+    padding: 0 16px;
+  }
+
+  .pageFooter_brandText {
+    font-size: 1rem;
+  }
+
+  .pageFooter_description {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageFooter_logoImage {
+    height: 2.2rem;
+  }
+
+  .pageFooter_brandText {
+    font-size: 0.95rem;
+  }
+
+  .pageFooter_link {
+    font-size: 0.85rem;
+  }
+}
