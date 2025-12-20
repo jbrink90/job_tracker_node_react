@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import MenuIcon from '@mui/icons-material/Menu';
 import "./index.css";
 
 interface NavBarProps {
@@ -35,7 +36,8 @@ const NavBar: FC<NavBarProps> = ({ userEmailSplit }) => {
             aria-expanded={open ? "true" : undefined}
             onClick={openMenu}
           >
-            {userEmailSplit ? `Welcome ${userEmailSplit}` : "Welcome Guest"}
+            {/* {userEmailSplit ? `Welcome ${userEmailSplit}` : "Welcome Guest"} */}
+            <MenuIcon />
           </Button>
           <Menu
             id="basic-menu"

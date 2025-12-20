@@ -17,6 +17,7 @@ import { getUserEmailSplit, supabase } from "../../lib/supabase";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
+import {PageFooter} from "../../components";
 
 const modalStyle = {
   position: "absolute",
@@ -192,13 +193,13 @@ const SimpleDashboard = () => {
   }, [selectedJobId, masterJobList]);
 
   return (
+    <>
     <div className="reactTrackerPage_main">
       <NavBar userEmailSplit={userEmail} />
-
       <div className="reactTrackerPage_leftPane">
         <div className="reactTrackerPage_headerContainer">
           <header className="reactTrackerPage_header">
-            {userEmail ? `${userEmail}'s Applications` : "Your Applications"}
+           Your Applications
           </header>
           <div className="reactTrackerPage_buttonsInner">
             <Tooltip title="Refresh Applications">
@@ -230,6 +231,7 @@ const SimpleDashboard = () => {
           />
         </div>
       </div>
+      <PageFooter />
       <EditSlideout
         currentEditingJob={currentEditingJob ?? defaultJob}
         isSlideoutOpen={isSlideoutOpen}
@@ -240,38 +242,34 @@ const SimpleDashboard = () => {
         onSaveJob={onSaveJob}
         setIsDeleteModalVisible={setIsDeleteModalVisible}
       />
-
-        <Modal
-          open={isDeleteModalVisible}
-          onClose={() => setIsDeleteModalVisible(false)}
-        >
-          <Box sx={modalStyle} style={{ padding: "10px" }}>
-            <CloseIcon
-              fontSize="small"
-              onClick={() => setIsDeleteModalVisible(false)}
-            />
-            <div className="deleteJob_modal-message">
-              {`Are you sure you want to delete your ${currentEditingJob?.job_title} application to ${currentEditingJob?.company}?`}
-            </div>
-            <button
-              className="deleteJob_modal-button"
-              onClick={() => selectedJobId && deleteJob(selectedJobId).then(() => setIsDeleteModalVisible(false))}
-            >
-              Yes
-            </button>
-            <button
-              className="deleteJob_modal-button"
-              onClick={() => setIsDeleteModalVisible(false)}
-            >
-              Cancel
-            </button>
-          </Box>
-        </Modal>
-
-      <div className="reactTrackerPage_footer">
-        © 2025 Jordan Brinkman. All rights reserved.
-      </div>
+      <Modal
+        open={isDeleteModalVisible}
+        onClose={() => setIsDeleteModalVisible(false)}
+      >
+        <Box sx={modalStyle} style={{ padding: "10px" }}>
+          <CloseIcon
+            fontSize="small"
+            onClick={() => setIsDeleteModalVisible(false)}
+          />
+          <div className="deleteJob_modal-message">
+            {`Are you sure you want to delete your ${currentEditingJob?.job_title} application to ${currentEditingJob?.company}?`}
+          </div>
+          <button
+            className="deleteJob_modal-button"
+            onClick={() => selectedJobId && deleteJob(selectedJobId).then(() => setIsDeleteModalVisible(false))}
+          >
+            Yes
+          </button>
+          <button
+            className="deleteJob_modal-button"
+            onClick={() => setIsDeleteModalVisible(false)}
+          >
+            Cancel
+          </button>
+        </Box>
+      </Modal>
     </div>
-  );
+    </>
+    );
 };
 export default SimpleDashboard;
