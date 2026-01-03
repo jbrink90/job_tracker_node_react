@@ -14,11 +14,11 @@ export default function PageFooter() {
               alt="Career Companion Logo"
               className="pageFooter_logoImage"
             />
-            <span className="pageFooter_brandText">Career Companion</span>
+            <span className="pageFooter_brandText">JobTrackr.online</span>
           </div>
           <p className="pageFooter_description">
             Your sidekick for tracking applications and landing
-            that dream gig with style.
+            that dream gig with ease.
           </p>
           <p className="pageFooter_copyright">
             © 2025 JobTrackr.online. All rights reserved.

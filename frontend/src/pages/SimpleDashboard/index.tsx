@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import EditSlideout from "../../components/EditSlideout";
-import { NavBar } from "../../components";
+import { NewNavBar } from "../../components";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import { Job } from "../../types/Job";
@@ -30,7 +30,12 @@ const modalStyle = {
   borderRadius: "7px",
 };
 
-const SimpleDashboard = () => {
+interface DashBoardProps {
+  siteTheme: "light" | "dark" | "system";
+  setSiteTheme: (theme: "light" | "dark" | "system") => void;
+}
+
+const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) => {
   const defaultJob: Job = {
     company: "",
     job_title: "",
@@ -195,7 +200,8 @@ const SimpleDashboard = () => {
   return (
     <>
     <div className="reactTrackerPage_main">
-      <NavBar userEmailSplit={userEmail} />
+      <NewNavBar siteTheme={siteTheme} setSiteTheme={setSiteTheme} />
+
       <div className="reactTrackerPage_leftPane">
         <div className="reactTrackerPage_headerContainer">
           <header className="reactTrackerPage_header">
