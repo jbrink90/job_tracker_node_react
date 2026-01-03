@@ -22,7 +22,7 @@ const Login = () => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: frontEndUrl,
+        emailRedirectTo: `${frontEndUrl}/dashboard`,
       },
     });
 
@@ -32,6 +32,17 @@ const Login = () => {
     }
 
     setSent(true);
+  };
+
+  const handleDemoLogin = async () => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: "demo@jobtrackr.online",
+      password: import.meta.env.VITE_DEMO_PASSWORD,
+    });
+
+    if (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -119,6 +130,7 @@ const Login = () => {
                   borderRadius: 2,
                   textTransform: "none",
                 }}
+                onClick={()=>handleDemoLogin()}
               >
                 Try the Demo Account
               </Button>
