@@ -1,0 +1,17 @@
+meta {
+  name: AWS (Get All Jobs (ALL))
+  type: http
+  seq: 10
+}
+
+post {
+  url: https://tcjnfxgur4.execute-api.us-east-1.amazonaws.com/job_tracker_stage
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "key1": "HelloWorld"
+  }
+}

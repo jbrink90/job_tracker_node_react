@@ -12,6 +12,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import ContrastIcon from '@mui/icons-material/Contrast';
+import Logout from '@mui/icons-material/Logout';
+import Link from "@mui/material/Link";
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -88,8 +91,8 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem component={Link} href="/account" onClick={handleMenuClose}>Account</MenuItem>
+      <MenuItem component={Link} href="/logout" onClick={handleMenuClose}>Logout</MenuItem>
     </Menu>
   );
 
@@ -109,8 +112,8 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
           </IconButton>
         <p>Change Theme</p>
       </MenuItem>
-      <MenuItem onClick={handleAccountMenuOpen}>
-        <IconButton
+      <MenuItem component={Link} href="/account" onClick={handleAccountMenuOpen}>
+      <IconButton
           size="large"
           aria-label="account of current user"
           aria-controls='primary-search-account-menu'
@@ -121,6 +124,18 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
         </IconButton>
         <p>Account</p>
       </MenuItem>
+        <MenuItem onClick={handleMenuClose} component={Link} href="/logout" >
+                <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls='primary-search-account-menu'
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <Logout />
+          </IconButton>
+            <p>Logout</p>
+          </MenuItem>
     </Menu>
   );
 
