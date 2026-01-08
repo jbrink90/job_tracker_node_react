@@ -5,7 +5,7 @@ import {insertJob, modifyJob, deleteJob, getAllJobsById, execute, fetchAll} from
 import { supabaseAuthMiddleware } from "../utils/supabaseAuth";
 import { MOCK_API_GET_ALL_JOBS } from "../mock_data/mockApiGetAllJobs";
 
-const filename = process.env.SQLITE_FILENAME || "./jobtracker.sqlite";
+const filename = process.env.SQLITE_FILENAME || "./job_data.sqlite";
 const router = Router();
 
 const decodeJwt = (token: string): any => {
@@ -192,7 +192,4 @@ router.get("/createtable", async (req: Request, res: Response) => {
     }
   });
   
-  
-  // ---------------------------------------------------------------
-
 export default router;

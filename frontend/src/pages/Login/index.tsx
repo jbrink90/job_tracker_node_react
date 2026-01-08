@@ -3,6 +3,7 @@ import { supabase } from "../../lib/supabase";
 import isDev from "../../lib/is_dev";
 import "./index.css";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 
 const frontEndUrl =
@@ -14,6 +15,9 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,13 +39,15 @@ const Login = () => {
   };
 
   const handleDemoLogin = async () => {
-    const { error } = await supabase.auth.signInWithPassword({
+    const {error} = await supabase.auth.signInWithPassword({
       email: "demo@jobtrackr.online",
       password: import.meta.env.VITE_DEMO_PASSWORD,
     });
 
     if (error) {
       console.error(error);
+    } else {
+      navigate("/dashboard", { replace: false });
     }
   };
 
@@ -117,23 +123,22 @@ const Login = () => {
             </form>
 
             <div className="or-divider">OR</div>
-              
-              <Button
-                type="submit"
-                variant="contained"
-                color="success"
-                fullWidth
-                sx={{
-                  padding: "12px",
-                  fontWeight: 600,
-                  fontSize: "1rem",
-                  borderRadius: 2,
-                  textTransform: "none",
-                }}
-                onClick={()=>handleDemoLogin()}
-              >
-                Try the Demo Account
-              </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="success"
+                  fullWidth
+                  sx={{
+                    padding: "12px",
+                    fontWeight: 600,
+                    fontSize: "1rem",
+                    borderRadius: 2,
+                    textTransform: "none",
+                  }}
+                  onClick={handleDemoLogin}
+                >
+                  Try the Demo Account
+                </Button>
             </>
           ) : (
             <div>

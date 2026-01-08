@@ -119,7 +119,7 @@ services:
       MODE: production
       NODE_ENV: production
       API_PORT: 4444
-      SQLITE_FILENAME: /usr/src/app/data/jobtracker.sqlite
+      SQLITE_FILENAME: /usr/src/app/data/job_data.sqlite
       SUPABASE_URL: https://yoursite.supabase.co
       SUPABASE_ANON: your_secret_key
 

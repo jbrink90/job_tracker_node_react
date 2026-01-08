@@ -1,6 +1,8 @@
 import React from "react";
 import "./index.css";
 
+const logo_src = "search.png";
+
 export default function PageFooter() {
   return (
     <footer className="pageFooter_container">
@@ -10,8 +12,8 @@ export default function PageFooter() {
         <div className="pageFooter_brand">
           <div className="pageFooter_logo">
             <img
-              src={"favicon.ico"}
-              alt="Career Companion Logo"
+              src={logo_src}
+              alt="JobTrackr Logo"
               className="pageFooter_logoImage"
             />
             <span className="pageFooter_brandText">JobTrackr.online</span>
