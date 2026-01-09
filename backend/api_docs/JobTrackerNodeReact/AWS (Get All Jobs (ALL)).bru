@@ -1,0 +1,15 @@
+meta {
+  name: AWS (Get All Jobs (ALL))
+  type: http
+  seq: 10
+}
+
+get {
+  url: https://tcjnfxgur4.execute-api.us-east-1.amazonaws.com/job_tracker_stage/jobs
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer}}
+}

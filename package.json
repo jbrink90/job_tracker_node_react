@@ -1,23 +1,17 @@
 {
   "name": "job_tracker_node_react",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "description": "A job tracking application with a Node.js backend and React frontend.",
   "scripts": {
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run dev --workspace=backend",
     "dev": "concurrently --kill-others-on-fail \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "build": "npm run build:prod --workspace=frontend && npm run build --workspace=backend",
+    "build": "npm run build --workspace=frontend && npm run build --workspace=backend",
     "lint": "eslint \"{frontend,backend}/**/*.{ts,tsx,js,jsx}\" --fix",
-    "format": "prettier --write \"{frontend,backend}/**/*.{ts,tsx,js,jsx,json,md}\""
+    "format": "prettier --write \"{frontend,backend}/**/*.{ts,tsx,js,jsx,json,md}\"",
+    "modclean": "modclean -r"
   },
-  "author": "",
-  "license": "ISC",
-  "private": true,
-  "workspaces": [
-    "frontend",
-    "backend"
-  ],
   "devDependencies": {
     "@eslint/js": "^9.15.0",
     "concurrently": "^9.1.2",
@@ -27,12 +21,8 @@
     "tsc-alias": "^1.8.16",
     "typescript": "~5.6.2"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.84.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "mapbox-gl": "^3.11.0",
-    "react-map-gl": "^8.0.2",
-    "simple-table-core": "^1.7.8"
-  }
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
 }

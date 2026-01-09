@@ -1,8 +1,10 @@
+// Description: A 'todo' file for account modification/deletion from Supabase.
+
 import { Router, Request, Response } from 'express';
 import sqlite3 from "sqlite3";
 import {modifyJob, deleteJob} from "../utils/sql_functions";
 
-const filename = process.env.SQLITE_FILENAME || "./jobtracker.sqlite";
+const filename = process.env.SQLITE_FILENAME || "./job_data.sqlite";
 const router = Router();
 
 const getAuthBearer = (req: Request): string | null => {

@@ -6,13 +6,6 @@ export default function Home() {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const bgColor = theme.palette.mode === "dark"
-    ? theme.palette.background.default
-    : theme.palette.primary.light;
-  const textColor = theme.palette.mode === "dark"
-    ? theme.palette.text.primary
-    : theme.palette.primary.contrastText;
-
   const panels = [
     {
       title: "Update with Markdown ✍️",
@@ -38,8 +31,8 @@ export default function Home() {
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundColor: bgColor,
-        color: textColor,
+        bgcolor: "primary.light",
+        color: "primary.contrastText",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -83,7 +76,6 @@ export default function Home() {
                 maxWidth: 360,
                 minWidth: 280,
                 p: 4,
-                m: 2,
                 textAlign: "center",
                 borderRadius: 3,
                 transition: "transform 0.3s ease",
