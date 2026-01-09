@@ -17,6 +17,8 @@ app.use(
   })
 );
 
+app.options("*", cors());
+
 app.use(express.json());
 app.use("/jobs", jobRoutes);
 createDatabase();
