@@ -34,24 +34,21 @@
   justify-content: flex-end;
   align-self: center;
   padding: 50px 0px 0px 0px;
+  flex-shrink: 0;
 }
 .reactTrackerPage_header {
   display: flex;
-  font-size: 2vh;
+  font-size: 3vh;
   margin-right: auto;
-  padding: 20px 0px 5px 15px;
+  padding: 20px 0px 10px 15px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.53);
   align-self: flex-end;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .reactTrackerPage_tableContainer {
   padding: 0px 20px 20px 20px;
 }
-.reactTrackerPage_footer {
-  text-align: center;
-  padding: 10px;
-  font-size: 1.5vh;
-}
-
 .deleteJob_modal-button {
   background-color: #009ce8;
   border-radius: 5px;

@@ -7,7 +7,6 @@ export default function AuthCallback() {
 
   useEffect(() => {
     const doCallback = async () => {
-      // 1️⃣ Check hash parameters
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
       const queryParams = new URLSearchParams(window.location.search);
 
@@ -17,7 +16,6 @@ export default function AuthCallback() {
       const redirectTo = hashParams.get("redirect") || queryParams.get("redirect") || "/dashboard";
 
       try {
-        // 2️⃣ Magic link / access_token flow
         if (access_token && refresh_token) {
           const { error } = await supabase.auth.setSession({ access_token, refresh_token });
           if (error) throw error;
@@ -26,7 +24,6 @@ export default function AuthCallback() {
           return;
         }
 
-        // 3️⃣ OAuth code flow
         if (code) {
           const { error } = await supabase.auth.exchangeCodeForSession(code);
           if (error) throw error;
@@ -35,7 +32,6 @@ export default function AuthCallback() {
           return;
         }
 
-        // 4️⃣ Fallback: already logged in?
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           navigate(redirectTo, { replace: true });

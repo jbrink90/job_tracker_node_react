@@ -2,19 +2,9 @@ import { DataGrid, GridColDef, GridColumnVisibilityModel } from "@mui/x-data-gri
 import Paper from "@mui/material/Paper";
 import "@fontsource/roboto/400.css";
 import { Job } from "../../types/Job";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import "./index.css";
 import { useTheme, useMediaQuery } from "@mui/material";
-
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-    primary: { main: "#90caf9" },
-    background: { default: "#121212", paper: "#1d1d1d" },
-  },
-});
-
 
 interface ReactTableProps {
   selectedJobId: number | null;
@@ -26,9 +16,7 @@ interface ReactTableProps {
   setIsDeleteModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-
 export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpen, setIsAddingNewJob, setSelectedJobId, setIsDeleteModalVisible}) => {
-
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -106,7 +94,6 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpe
 
   return (
     <>
-    <ThemeProvider theme={darkTheme}>
       <Paper elevation={12}>
         <DataGrid
           rows={formattedJobs}
@@ -117,7 +104,6 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpe
           hideFooter={true}
         />
       </Paper>
-    </ThemeProvider>
     </>
 
   );

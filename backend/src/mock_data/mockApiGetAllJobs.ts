@@ -20,7 +20,7 @@ const greet = (name: string) => \`Hello, \${name}!\`;
     status: "Applied",
     applied: new Date("2025-03-01"),
     last_updated: new Date("2025-03-10"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 2,
@@ -43,7 +43,7 @@ Analyze large datasets to extract business insights and provide actionable recom
     status: "Interview Scheduled",
     applied: new Date("2025-02-20"),
     last_updated: new Date("2025-03-05"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 3,
@@ -67,7 +67,7 @@ Design intuitive user interfaces and craft seamless experiences.
     status: "Rejected",
     applied: new Date("2025-01-15"),
     last_updated: new Date("2025-02-01"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 4,
@@ -89,7 +89,7 @@ Focus on **security** and **scalability**.
     status: "Offer Received",
     applied: new Date("2025-02-28"),
     last_updated: new Date("2025-03-15"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 5,
@@ -107,7 +107,7 @@ Automate deployment pipelines and manage cloud infrastructure.
     status: "Applied",
     applied: new Date("2025-04-01"),
     last_updated: new Date("2025-04-05"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 6,
@@ -127,7 +127,7 @@ Work across front-end and back-end to deliver patient management tools.
     status: "Interview Scheduled",
     applied: new Date("2025-03-12"),
     last_updated: new Date("2025-03-20"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 7,
@@ -146,7 +146,7 @@ Lead development of educational platforms.
     status: "Applied",
     applied: new Date("2025-05-01"),
     last_updated: new Date("2025-05-03"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 8,
@@ -169,7 +169,7 @@ nmap -sV 192.168.1.0/24
     status: "Applied",
     applied: new Date("2025-03-25"),
     last_updated: new Date("2025-03-28"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 9,
@@ -187,7 +187,7 @@ Develop firmware and cloud connectivity for smart devices.
     status: "Rejected",
     applied: new Date("2025-02-15"),
     last_updated: new Date("2025-02-20"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 10,
@@ -205,7 +205,7 @@ Perform complex financial modeling and risk assessment.
     status: "Interview Scheduled",
     applied: new Date("2025-01-28"),
     last_updated: new Date("2025-02-05"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 11,
@@ -223,7 +223,7 @@ Create immersive game experiences with Unity and Unreal Engine.
     status: "Applied",
     applied: new Date("2025-03-05"),
     last_updated: new Date("2025-03-12"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 12,
@@ -241,7 +241,7 @@ Design and implement machine learning models for real-world applications.
     status: "Offer Received",
     applied: new Date("2025-04-10"),
     last_updated: new Date("2025-04-15"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 13,
@@ -259,7 +259,7 @@ Develop travel apps for iOS and Android platforms.
     status: "Applied",
     applied: new Date("2025-02-10"),
     last_updated: new Date("2025-02-15"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 14,
@@ -277,7 +277,7 @@ Conduct experiments and analyze biological data.
     status: "Rejected",
     applied: new Date("2025-01-20"),
     last_updated: new Date("2025-01-30"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   },
   {
     id: 15,
@@ -295,6 +295,6 @@ Design and implement robotic systems for industrial applications.
     status: "Applied",
     applied: new Date("2025-03-18"),
     last_updated: new Date("2025-03-22"),
-    supabase_id: "user_123"
+    supabase_id: "3c874ab2-8eb2-4b2c-95e9-0559e63f9666"
   }
 ];

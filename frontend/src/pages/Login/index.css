@@ -1,0 +1,24 @@
+.or-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+  color: #64748b; /* optional text color */
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.or-divider::before,
+.or-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #64748b; /* line color */
+}
+
+.or-divider::before {
+  margin-right: 0.75rem;
+}
+
+.or-divider::after {
+  margin-left: 0.75rem;
+}
