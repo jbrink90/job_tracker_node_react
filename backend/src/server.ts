@@ -8,16 +8,14 @@ dotenv.config();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: true, 
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: false,
+};
 
-app.options("*", cors());
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
 app.use("/jobs", jobRoutes);
