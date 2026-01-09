@@ -4,14 +4,12 @@ meta {
   seq: 10
 }
 
-post {
-  url: https://tcjnfxgur4.execute-api.us-east-1.amazonaws.com/job_tracker_stage
-  body: json
-  auth: none
+get {
+  url: https://tcjnfxgur4.execute-api.us-east-1.amazonaws.com/job_tracker_stage/jobs
+  body: none
+  auth: bearer
 }
 
-body:json {
-  {
-    "key1": "HelloWorld"
-  }
+auth:bearer {
+  token: {{bearer}}
 }

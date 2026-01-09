@@ -8,7 +8,11 @@
     "dev": "nodemon ./src/server.ts",
     "dev2": "nodemon --exec ts-node -r tsconfig-paths/register ./src/server.ts",
     "prod": "npx ts-node -r tsconfig-paths/register ./dist/backend/src/server.js",
-    "build": "tsc"
+    "build": "tsc",
+    "prep": "npm run clean:modules && npm run move:modules",
+    "zip": "zip -r -9 ./lambda.zip ./dist",
+    "clean:modules": "npx modclean -r node_modules",
+    "move:modules": "rm -rf dist/node_modules && mkdir -p dist && mv node_modules dist/"
   },
   "keywords": [],
   "author": "",

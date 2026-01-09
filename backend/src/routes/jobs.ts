@@ -4,6 +4,7 @@ import { Job } from "../types/Job";
 import {insertJob, modifyJob, deleteJob, getAllJobsById, execute, fetchAll} from "../utils/sql_functions";
 import { supabaseAuthMiddleware } from "../utils/supabaseAuth";
 import { MOCK_API_GET_ALL_JOBS } from "../mock_data/mockApiGetAllJobs";
+const fs = require('fs');
 
 const filename = process.env.SQLITE_FILENAME || "./job_data.sqlite";
 const router = Router();
@@ -16,11 +17,66 @@ const decodeJwt = (token: string): any => {
 
 const getAuthBearer = (req: Request): string | null => {
     const authHeader = req.headers.authorization?.split(" ") || [];
-    const token = authHeader[1];
     if (authHeader[0] !== "Bearer") return null;
+    const token = authHeader[1];
     const payload = decodeJwt(token);
     const user_id = payload.sub;
     return user_id || null;
+};
+
+export const createDatabase = async () => {
+  if (fs.existsSync(filename)) {
+    return ({ message: "Database already exists" });
+  } else {
+    const db = new sqlite3.Database(filename, sqlite3.OPEN_CREATE, (err) => { 
+      if (err) {
+        return ({ error: err.message });
+      } else {
+        return ({ message: "Database created successfully" });
+      }
+    });
+  }
+};
+
+export const createTables = async () => {
+      const create_sql = `
+      CREATE TABLE IF NOT EXISTS jobs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        company TEXT,
+        job_title TEXT,
+        description TEXT,
+        location TEXT,
+        status TEXT,
+        applied DATE,
+        last_updated DATE,
+        supabase_id TEXT
+      );`;
+
+      const db = new sqlite3.Database(
+        filename,
+        sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
+        (err) => {
+          if (err) {
+            return err;
+          }
+        }
+      );
+
+      try {
+        execute(db, create_sql);
+        return ({ message: "Tables created successfully" });
+
+      } catch (error: any) {
+        return ({ error: error.message });
+
+      } finally {
+        db.close((closeErr) => {
+          if (closeErr) {
+            return ({ error: closeErr });
+          }
+        });
+
+      }
 };
 
 router.post('/', supabaseAuthMiddleware, async (req: Request, res: Response) => {
@@ -117,32 +173,14 @@ router.get('/all', supabaseAuthMiddleware, async (req: Request, res: Response) =
 });
 
 
-router.get("/createtable", async (req: Request, res: Response) => {
-    const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
-    const create_sql = `
-      CREATE TABLE IF NOT EXISTS jobs (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        company TEXT,
-        job_title TEXT,
-        description TEXT,
-        location TEXT,
-        status TEXT,
-        applied DATE,
-        last_updated DATE,
-        supabase_id TEXT
-      );`;
+router.get("/createdatabase", supabaseAuthMiddleware, async (req: Request, res: Response) => {
+  res.json(await createDatabase());
+});
+router.get("/createtable", supabaseAuthMiddleware, async (req: Request, res: Response) => {
+  res.json(await createTables());
+});
   
-    try {
-      await execute(db, create_sql);
-      res.json({ message: "jobs table created successfully" });
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
-    } finally {
-      db.close();
-    }
-  });
-  
-  router.get("/resettable", async (req: Request, res: Response) => {
+router.get("/resettable", supabaseAuthMiddleware, async (req: Request, res: Response) => {
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
   
     try {
@@ -153,9 +191,9 @@ router.get("/createtable", async (req: Request, res: Response) => {
     } finally {
       db.close();
     }
-  });
+});
   
-  router.get("/mockdata", async (req: Request, res: Response) => {
+  router.get("/mockdata", supabaseAuthMiddleware, async (req: Request, res: Response) => {
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
   
     try {
@@ -190,6 +228,6 @@ router.get("/createtable", async (req: Request, res: Response) => {
     } finally {
       db.close();
     }
-  });
+});
   
 export default router;
