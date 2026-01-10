@@ -62,7 +62,7 @@ export const createDatabase = (): Promise<{ message: string }> => {
 };
 
 
-export const createTables = async (next?: NextFunction) => {
+export const createTables = async () => {
   return new Promise(async (resolve, reject) => {
 
     let db: sqlite3.Database | null = null;
@@ -97,11 +97,9 @@ export const createTables = async (next?: NextFunction) => {
   });
   };
 
-export const addDemoData = async (next?: NextFunction) => {
-  let db: sqlite3.Database | null = null;
-
-  //const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
-  
+export const addDemoData = async () => {
+  return new Promise(async (resolve, reject) => {
+    let db: sqlite3.Database | null = null;
     try {
       db = await openDatabase();
 
@@ -136,12 +134,7 @@ export const addDemoData = async (next?: NextFunction) => {
   
       return ({ message: "Successfully mocked data" });
     } catch (err: any) {
-      const httpErr = new HttpError(500, err.message);
-      if (next) {
-        next(httpErr);
-      } else {
-        throw httpErr;
-      }
+      reject(new HttpError(500, err.message));
     } finally {
       if (db) {
         db.close((err) => {
@@ -149,6 +142,7 @@ export const addDemoData = async (next?: NextFunction) => {
         });
       }
     }
+  });
 };
 
 router.post('/', supabaseAuthMiddleware, async (req: Request, res: Response) => {
@@ -247,11 +241,11 @@ router.get('/all', supabaseAuthMiddleware, async (req: Request, res: Response, n
 router.get("/createdatabase", supabaseAuthMiddleware, async (req: Request, res: Response) => {
   res.json(await createDatabase());
 });
-router.get("/createtable", supabaseAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
-  res.json(await createTables(next));
+router.get("/createtable", supabaseAuthMiddleware, async (req: Request, res: Response) => {
+  res.json(await createTables());
 });
-router.get("/mockdata", supabaseAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
-  res.json(await addDemoData(next));
+router.get("/mockdata", supabaseAuthMiddleware, async (req: Request, res: Response) => {
+  res.json(await addDemoData());
 });
   
 router.get("/resettable", supabaseAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
