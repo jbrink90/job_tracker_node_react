@@ -1,7 +1,25 @@
 import sqlite3 from "sqlite3";
 import { Job } from "../types/Job"
 
-export const execute = (db: sqlite3.Database, sql: string) => {
+const filename = process.env.SQLITE_FILENAME || "./job_data.sqlite";
+
+export const openDatabase = (): Promise<sqlite3.Database> => {
+    return new Promise((resolve, reject) => {
+        const db = new sqlite3.Database(
+            filename,
+            sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
+            (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(db);
+                }
+            }
+        );
+    });
+};
+
+export const execute = (db: sqlite3.Database, sql: string): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {
         db.exec(sql, (err) => {
             if (err) {
