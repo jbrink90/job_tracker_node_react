@@ -26,35 +26,45 @@ const getAuthBearer = (req: Request): string | null => {
 };
 
 
-export const createDatabase = async (next?: NextFunction): Promise<{ message: string } | void> => {
-  try {
-    if (fs.existsSync(filename)) {
-      return { message: "Database already exists" };
-    }
+export const createDatabase = (): Promise<{ message: string }> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (fs.existsSync(filename)) {
+        return resolve({ message: "Database already exists" });
+      }
 
-    await new Promise<void>((resolve, reject) => {
-      const db = new sqlite3.Database(filename, sqlite3.OPEN_CREATE, (err) => {
-        if (err) return reject(err);
-        db.close((closeErr) => {
-          if (closeErr) return reject(closeErr);
-          resolve();
+      // open the database
+      const db = await new Promise<sqlite3.Database>((res, rej) => {
+        const instance = new sqlite3.Database(
+          filename,
+          sqlite3.OPEN_CREATE | sqlite3.OPEN_READWRITE,
+          (err) => {
+            if (err) return rej(err);
+            res(instance);
+          }
+        );
+      });
+
+      // close the database
+      await new Promise<void>((res, rej) => {
+        db.close((err) => {
+          if (err) return rej(err);
+          res();
         });
       });
-    });
 
-    return { message: "Database created successfully" };
+      resolve({ message: "Database created successfully" });
 
-  } catch (err: any) {
-    const httpErr = new HttpError(500, err.message);
-    if (next) {
-      next(httpErr);
-    } else {
-      throw httpErr;
+    } catch (err: any) {
+      reject(new HttpError(500, err.message));
     }
-  }
+  });
 };
 
+
 export const createTables = async (next?: NextFunction) => {
+  return new Promise(async (resolve, reject) => {
+
     let db: sqlite3.Database | null = null;
     const create_sql = `
     CREATE TABLE IF NOT EXISTS jobs (
@@ -73,15 +83,10 @@ export const createTables = async (next?: NextFunction) => {
       db = await openDatabase();
       await execute(db, create_sql);
   
-      return { message: "Tables created successfully" };
+      resolve({ message: "Tables created successfully" });
   
     } catch (err: any) {
-      const httpErr = new HttpError(500, err.message);
-      if (next) {
-        next(httpErr);
-      } else {
-        throw httpErr;
-      }
+      reject(new HttpError(500, err.message));
     } finally {
       if (db) {
         db.close((err) => {
@@ -89,6 +94,7 @@ export const createTables = async (next?: NextFunction) => {
         });
       }
     }
+  });
   };
 
 export const addDemoData = async (next?: NextFunction) => {
@@ -238,8 +244,8 @@ router.get('/all', supabaseAuthMiddleware, async (req: Request, res: Response, n
 });
 
 
-router.get("/createdatabase", supabaseAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
-  res.json(await createDatabase(next));
+router.get("/createdatabase", supabaseAuthMiddleware, async (req: Request, res: Response) => {
+  res.json(await createDatabase());
 });
 router.get("/createtable", supabaseAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   res.json(await createTables(next));

@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import jobRoutes from "./routes/jobs";
 import dotenv from "dotenv";
-import { createDatabase, addDemoData } from "./routes/jobs";
+import { createDatabase, addDemoData, createTables } from "./routes/jobs";
 
 dotenv.config();
 
@@ -18,8 +18,28 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/jobs", jobRoutes);
 
-createDatabase();
-addDemoData();
+const initDatabase = async () => {
+  try {
+    const dbResult = await createDatabase();
+    const tablesResult = await createTables();
+    const demoResult = await addDemoData();
+
+    return {
+      db: dbResult,
+      tables: tablesResult,
+      demo: demoResult,
+    };
+  } catch (error) {
+    console.error("Database initialization failed:", error);
+    throw error;
+  }
+};
+
+initDatabase().then((results) => {
+  console.log("Database setup complete:", results);
+}).catch((error) => {
+  console.error("Error during database setup:", error);
+});
 
 if (process.env.NODE_ENV !== "lambda" && process.env.NODE_ENV !== "production") {
   const port = process.env.API_PORT || 4444;
