@@ -112,7 +112,7 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
           </IconButton>
         <p>Change Theme</p>
       </MenuItem>
-      <MenuItem component={Link} href="/account" onClick={handleAccountMenuOpen}>
+      <MenuItem component={Link} href="/account">
       <IconButton
           size="large"
           aria-label="account of current user"
