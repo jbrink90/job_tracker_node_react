@@ -41,7 +41,7 @@ initDatabase().then((results) => {
   console.error("Error during database setup:", error);
 });
 
-if (process.env.NODE_ENV !== "lambda" && process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== "lambda") {
   const port = process.env.API_PORT || 4444;
   app.listen(port, () => {
     console.log(`Job Trackr backend running on port: ${port}`);
