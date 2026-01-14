@@ -60,7 +60,8 @@ const Logout = () => {
 
             {status === "done" && (
               <p style={{ marginTop: 12, color: "#4caf50", fontWeight: 500 }}>
-                ✔ You're logged out! Taking you to the login page…
+                ✔ You're logged out! <br /> 
+                Taking you to the login page…
               </p>
             )}
 

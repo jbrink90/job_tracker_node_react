@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
-import { getCurrentUser, supabase } from "../../lib/supabase";
+import { getCurrentUser } from "../../lib/supabase";
 import {
   Box,
   Typography,
@@ -10,10 +10,10 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-const AccountPage = () => {
+const Account = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [deleting, setDeleting] = useState(false);
+  // const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -47,21 +47,21 @@ const AccountPage = () => {
     });
   };
 
-  const handleDeleteAccount = async () => {
-    setDeleting(true);
+  // const handleDeleteAccount = async () => {
+  //   setDeleting(true);
 
-    // Requires RPC you define (security definer)
-    const { error } = await supabase.rpc("delete_user_self");
+  //   // Requires RPC you define (security definer)
+  //   const { error } = await supabase.rpc("delete_user_self");
 
-    setDeleting(false);
+  //   setDeleting(false);
 
-    if (error) {
-      alert("Error deleting account: " + error.message);
-    } else {
-      await supabase.auth.signOut();
-      window.location.href = "/";
-    }
-  };
+  //   if (error) {
+  //     alert("Error deleting account: " + error.message);
+  //   } else {
+  //     await supabase.auth.signOut();
+  //     window.location.href = "/";
+  //   }
+  // };
 
   if (loading) {
     return (
@@ -124,7 +124,7 @@ const AccountPage = () => {
             <Typography>{formatDateTime(user.last_sign_in_at)}</Typography>
           </Box>
 
-          <Button
+          {/* <Button
             variant="contained"
             color="error"
             onClick={handleDeleteAccount}
@@ -132,11 +132,11 @@ const AccountPage = () => {
             sx={{ mt: 2 }}
           >
             {deleting ? "Deleting..." : "Delete My Account"}
-          </Button>
+          </Button> */}
         </Stack>
       </Paper>
     </Box>
   );
 };
 
-export default AccountPage;
+export default Account;

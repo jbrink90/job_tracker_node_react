@@ -5,13 +5,14 @@
 }
 
 .editSlideout_container {
+  height: 100vh;
+  top: 0;
   transform: translateX(100%);
   display: flex;
   margin: 0;
   padding: 7px;
   background-color: #333;
   width: 40vw;
-  height: 100vh;
   position: fixed;
   right: 0;
   opacity: 0;
@@ -19,6 +20,8 @@
   z-index: 999;
   /* border-left: 2px solid black; */
   box-shadow: -5px 0px 10px #00000057;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 @media screen and (max-width: 850px) {
   .editSlideout_container {
@@ -40,10 +43,11 @@
   margin: 10px;
   font-family: "Ubuntu";
   flex: 1 auto;
+  min-height: 200;
 }
 .editSlideout_saveDiv {
   display: flex;
-  height: 100vh;
+  /* height: 100vh; */
   flex-direction: column;
   margin: 10px;
   line-height: 0.8;
@@ -139,11 +143,17 @@
   display: flex;
   flex: 1;
 }
+.editSlideout_mdxeditor {
+  max-height: 200px;
+  border-radius: 7px;
+}
 .editSlideout_mdxeditor_text {
   background-color: #2b2b2b;
   border-radius: 10px;
   color: white !important;
   padding: 1px 5px 1px 5px !important;
+  min-height: 0;
+  overflow-y: auto;
 }
 .editSlideout_mdxeditor_toolbar {
   background-color: #009ce8 !important;
@@ -161,12 +171,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-.editSlideout_mdxeditor {
-  max-height: 200px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  border-radius: 7px;
 }
 .editSlideout_modal-button {
   background-color: #009ce8;
