@@ -1,0 +1,38 @@
+meta {
+  name: Login to Supabase
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{SUPABASE_URL}}/auth/v1/token?grant_type=password
+  body: json
+  auth: none
+}
+
+params:query {
+  grant_type: password
+}
+
+headers {
+  apikey: {{SUPABASE_ANON_KEY}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "email": "{{SUPABASE_EMAIL}}",
+    "password": "{{SUPABASE_PASSWORD}}"
+  }
+  
+}
+
+tests {
+  const body = res.getBody();
+  
+  bru.setEnvVar("access_token", body.access_token);
+  bru.setEnvVar("refresh_token", body.refresh_token);
+  
+  console.log("✅ Supabase tokens saved");
+  
+}
