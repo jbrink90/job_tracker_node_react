@@ -22,6 +22,12 @@
   box-shadow: -5px 0px 10px #00000057;
   overflow-y: auto;
   overflow-x: hidden;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+.editSlideout_container.open {
+  transform: translateX(0);
+  opacity: 1;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
 @media screen and (max-width: 850px) {
   .editSlideout_container {
@@ -131,20 +137,26 @@
   padding: 4px;
 }
 .editSlideout_locationDiv {
-  display: flex;
+  position: relative;
+  width: 100%;
 }
 .editSlideout_mapIcon {
-  display: flex;
-  align-self: center;
-  margin: 10px;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+
   cursor: pointer;
+  color: #aaa;
+}
+.editSlideout_mapIcon:hover {
+  color: #429dff;
 }
 .editSlideout_locationInput {
-  display: flex;
-  flex: 1;
+  width: 100%;
+  padding-right: 40px; /* space for the icon */
 }
 .editSlideout_mdxeditor {
-  max-height: 200px;
   border-radius: 7px;
 }
 .editSlideout_mdxeditor_text {

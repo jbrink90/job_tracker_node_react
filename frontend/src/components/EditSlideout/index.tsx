@@ -169,7 +169,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   return (
     <>
       <aside
-        className={`editSlideout_container ${isSlideoutOpen ? "slide-in-right" : "slide-out-right"}`}
+        className={`editSlideout_container ${isSlideoutOpen ? "open" : ""}`}
       >
         <div className="editSlideout_navRow">
           <CloseIcon
@@ -184,7 +184,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             <header className="editSlideout_header">
               {isAddingNewJob ? "Add Job" : "Edit Job"}
             </header>
-            {(isMobile && !isAddingNewJob) && (
+            {isMobile && !isAddingNewJob && (
               <button
                 className="editSlideout_deleteButton"
                 onClick={() => {
@@ -255,7 +255,13 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               onChange={handleInputChange}
               className="editSlideout_locationInput"
             />
-            <MapIcon className="editSlideout_mapIcon" onClick={openMapModal} />
+            <MapIcon
+              className="editSlideout_mapIcon"
+              onClick={openMapModal}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === "Enter" && openMapModal()}
+            />
           </div>
 
           <label>Status</label>
@@ -269,7 +275,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <label>Date Applied</label>
           <DatePicker
             value={jobValues ? dayjs(jobValues.applied?.toString()) : dayjs()}
-            defaultValue={dayjs()}
             onChange={(value) => {
               setJobValues((prev) => ({
                 ...prev,
@@ -279,13 +284,20 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             }}
             slotProps={{
               textField: {
+                fullWidth: true,
                 sx: {
-                  "& .MuiInputAdornment-root .MuiIconButton-root": {
+                  "& .MuiInputBase-root": {
+                    paddingRight: "40px", // room for icon
+                  },
+                  "& .MuiInputAdornment-root": {
+                    position: "absolute",
+                    right: 8,
+                  },
+                  "& .MuiIconButton-root": {
                     color: "white",
                   },
                   input: {
                     color: "white",
-                    borderColor: "grey",
                   },
                 },
               },
