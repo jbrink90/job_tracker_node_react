@@ -18,6 +18,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import {PageFooter} from "../../components";
+import { Button } from '@mui/material';
 
 const modalStyle = {
   position: "absolute",
@@ -213,18 +214,27 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
           </header>
           <div className="reactTrackerPage_buttonsInner">
             <Tooltip title="Refresh Applications">
-              <button 
-                  onClick={() => {
-                    setIsDataLoading(true);
-                    getAllJobs(accessToken || "").then(() => setIsDataLoading(false));
-                  }}>
-                <RefreshIcon />
-              </button>
+              <Button 
+                variant="contained"
+                color="primary"
+                startIcon={<RefreshIcon />}
+                sx={{ alignItems: "center" }}
+                onClick={() => {
+                  setIsDataLoading(true);
+                  getAllJobs(accessToken || "").then(() => setIsDataLoading(false));
+                }}>
+                  Refresh
+              </Button>
             </Tooltip>
             <Tooltip title="Add New Application">
-              <button onClick={slideoutNewJob} >
-                <AddIcon/>
-              </button>
+              <Button 
+                variant="contained"
+                color="primary"
+                startIcon={<AddIcon />}
+                sx={{ marginLeft: "10px", alignItems: "center" }}
+                onClick={slideoutNewJob}>
+                 Add Job
+              </Button>
             </Tooltip>
           </div>
         </div>
