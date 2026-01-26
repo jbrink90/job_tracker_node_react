@@ -13,7 +13,7 @@ import {
   apiDeleteJob,
   apiSaveJob,
 } from "../../lib/api_calls";
-import { getUserEmailSplit, supabase } from "../../lib/supabase";
+import { supabase } from "../../lib/supabase";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
@@ -31,8 +31,8 @@ const modalStyle = {
 };
 
 interface DashBoardProps {
-  siteTheme: "light" | "dark" | "system";
-  setSiteTheme: (theme: "light" | "dark" | "system") => void;
+  siteTheme: "light" | "dark";
+  setSiteTheme: (theme: "light" | "dark") => void;
 }
 
 const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) => {
@@ -55,19 +55,17 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
   const [isAddingNewJob, setIsAddingNewJob] = useState(false);
   const [isSlideoutOpen, setIsSlideoutOpen] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isDataLoading, setIsDataLoading] = useState(true);
 
-  const [userEmail, setUserEmail] = useState<string | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   useEffect(() => {
     const initUser = async () => {
-      const emailSplit = await getUserEmailSplit();
       const session = await supabase.auth.getSession();
-      setUserEmail(emailSplit);
       setAccessToken(session.data.session?.access_token ?? null);
       // optionally fetch jobs here once token is ready
       if (session.data.session?.access_token) {
-        getAllJobs(session.data.session.access_token);
+        await getAllJobs(session.data.session.access_token);
       }
     };
     initUser();
@@ -87,8 +85,10 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
   const getAllJobs = async (token: string) => {
     if (!token) return; // no token yet
     try {
+      setIsDataLoading(true);
       const jobs = await apiGetJobs(token);
       setMasterJobList(jobs);
+      setIsDataLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -109,9 +109,11 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
   const deleteJob = async (jobId: number) => {
     if (!accessToken) return;
     try {
+      setIsDataLoading(true);
       await apiDeleteJob(jobId, accessToken);
       setMasterJobList((prev) => prev.filter((job) => job.id !== jobId));
       setIsSlideoutOpen(false);
+      setIsDataLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -133,11 +135,13 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
     if (!accessToken) return;
     jobValues.last_updated = new Date();
     try {
+      setIsDataLoading(true);
       const newJob = await apiAddJob(jobValues, accessToken);
       setMasterJobList((prev) => [...prev, newJob]);
       setIsSlideoutOpen(false);
       setIsDeleteModalVisible(false);
       setSelectedJobId(null);
+      setIsDataLoading(false);
     } catch (error) {
       console.error(error);
       alert("Failed to add job. Please try again.");
@@ -209,17 +213,17 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
           </header>
           <div className="reactTrackerPage_buttonsInner">
             <Tooltip title="Refresh Applications">
-              <button>
-                <RefreshIcon
+              <button 
                   onClick={() => {
-                    getAllJobs(accessToken || "");
-                  }}
-                />
+                    setIsDataLoading(true);
+                    getAllJobs(accessToken || "").then(() => setIsDataLoading(false));
+                  }}>
+                <RefreshIcon />
               </button>
             </Tooltip>
             <Tooltip title="Add New Application">
-              <button>
-                <AddIcon onClick={slideoutNewJob} />
+              <button onClick={slideoutNewJob} >
+                <AddIcon/>
               </button>
             </Tooltip>
           </div>
@@ -234,6 +238,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
             deleteJob={deleteJob}
             setIsAddingNewJob={setIsAddingNewJob}
             setIsDeleteModalVisible={setIsDeleteModalVisible}
+            isDataLoading={isDataLoading}
           />
         </div>
       </div>
