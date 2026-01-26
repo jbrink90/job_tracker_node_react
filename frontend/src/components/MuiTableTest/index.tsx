@@ -14,9 +14,10 @@ interface ReactTableProps {
   deleteJob: (arg: number) => void;
   setIsAddingNewJob: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDeleteModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isDataLoading: boolean;
 }
 
-export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpen, setIsAddingNewJob, setSelectedJobId, setIsDeleteModalVisible}) => {
+export const MuiTableTest: React.FC<ReactTableProps> = ({jobs, setIsSlideoutOpen, setIsAddingNewJob, setSelectedJobId, setIsDeleteModalVisible, isDataLoading}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -102,6 +103,13 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({ jobs, setIsSlideoutOpe
           columnVisibilityModel={columnVisibilityModel}
           onColumnVisibilityModelChange={setColumnVisibilityModel}
           hideFooter={true}
+          loading={isDataLoading}
+          slotProps={{
+            loadingOverlay: {
+              variant: 'skeleton',
+              noRowsVariant: 'skeleton',
+            },
+          }}
         />
       </Paper>
     </>

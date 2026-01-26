@@ -7,7 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { supabase } from "./lib/supabase";
 import { User } from "@supabase/supabase-js";
 import "./main.css";
-import { ThemeProvider, createTheme, CssBaseline, useMediaQuery } from "@mui/material";
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
@@ -29,21 +29,26 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function AppWrapper() {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
-  const [siteTheme, setSiteTheme] = useState<"light" | "dark" | "system">("system");
+  type Theme = "light" | "dark";
+  //type ThemeSource = "user" | "system";
+
+  const [siteTheme, setSiteTheme] = useState<Theme>(() => {
+    return (localStorage.getItem("theme") as Theme) ?? "light";
+  });
   
-  const resolvedMode =
-  siteTheme === "system" ? (prefersDarkMode ? "dark" : "light") : siteTheme;
-  
+  useEffect(() => {
+    localStorage.setItem("theme", siteTheme);
+  }, [siteTheme]);
+
   const theme = useMemo(
     () =>
       createTheme({
         palette: {
-          mode: resolvedMode,
+          mode: siteTheme,
           background: {
-            default: resolvedMode === "dark" ? "#242424" : "#f5f5f5",
-            paper: resolvedMode === "dark" ? "#3a3a3a" : "#ffffff",
+            default: siteTheme === "dark" ? "#242424" : "#f5f5f5",
+            paper: siteTheme === "dark" ? "#3a3a3a" : "#ffffff",
           },
           primary: { main: "#1976d2" },
           success: { main: "#24b14f" },
@@ -51,7 +56,7 @@ function AppWrapper() {
         shape: { borderRadius: 7 },
         typography: { button: { textTransform: "none" } },
       }),
-    [resolvedMode]
+    [siteTheme]
   );
   
 
