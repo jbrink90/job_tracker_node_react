@@ -22,12 +22,12 @@ const initDatabase = async () => {
   try {
     const dbResult = await createDatabase();
     const tablesResult = await createTables();
-    const demoResult = await addDemoData();
+    //const demoResult = await addDemoData();
 
     return {
       db: dbResult,
       tables: tablesResult,
-      demo: demoResult,
+      //demo: demoResult,
     };
   } catch (error) {
     console.error("Database initialization failed:", error);
