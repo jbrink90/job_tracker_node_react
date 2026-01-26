@@ -1,10 +1,12 @@
-import { DataGrid, GridColDef, GridColumnVisibilityModel } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridColumnVisibilityModel, GridRenderCellParams } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import "@fontsource/roboto/400.css";
 import { Job } from "../../types/Job";
 import React from "react";
 import "./index.css";
 import { useTheme, useMediaQuery } from "@mui/material";
+import { Button } from '@mui/material';
+import Chip from '@mui/material/Chip';
 
 interface ReactTableProps {
   selectedJobId: number | null;
@@ -15,6 +17,26 @@ interface ReactTableProps {
   setIsAddingNewJob: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDeleteModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isDataLoading: boolean;
+}
+
+function applyChipsToStatus(params: GridRenderCellParams) {
+    switch (params.value) {
+      case "Applied":
+        return <Chip label="Applied" color="primary" sx={{height: 25}}/>;
+        break;
+      case "Interview Scheduled":
+        return <Chip label="Interview Scheduled" color="warning" sx={{height: 25}}/>;
+        break;
+      case "Offer Received":
+        return <Chip label="Offer Received" color="success" sx={{height: 25}}/>;
+        break;
+      case "Rejected":
+        return <Chip label="Rejected" color="error" sx={{height: 25}}/>;
+        break;
+      default:
+        return <Chip label={params.value} sx={{height: 25}}/>;
+        break;
+    }
 }
 
 export const MuiTableTest: React.FC<ReactTableProps> = ({jobs, setIsSlideoutOpen, setIsAddingNewJob, setSelectedJobId, setIsDeleteModalVisible, isDataLoading}) => {
@@ -32,7 +54,15 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({jobs, setIsSlideoutOpen
     { field: "company", headerName: "Company", flex: 1, sortable: true, filterable: true },
     { field: "job_title", headerName: "Job Title", flex: 1, sortable: true, filterable: true },
     { field: "location", headerName: "Location", flex: 1, sortable: true, filterable: true },
-    { field: "status", headerName: "Status", flex: 1, sortable: true, filterable: true },
+    { field: "status",
+      headerName: "Status",
+      flex: 1,
+      sortable: true,
+      filterable: true,
+      renderCell: (params) => (
+        applyChipsToStatus(params)
+      ),
+    },
     {
       field: "applied",
       headerName: "Applied",
@@ -56,11 +86,13 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({jobs, setIsSlideoutOpen
       filterable: false,
       hideable: false,
       align: 'center',
-      width: isMobile ? 70 : 150,
+      width: isMobile ? 90 : 180,
       renderCell: (params) => (
         <>
-        <button
-          className='muiTableTest_button'
+        <Button
+          color='primary'
+          variant={'contained'}
+          sx={{ maxHeight: '30px', padding: '5px', borderRadius: '4px' }}
           onClick={(e) => {
             e.stopPropagation();
             setSelectedJobId(params.row.id);
@@ -69,10 +101,11 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({jobs, setIsSlideoutOpen
           }}
         >
           Edit
-        </button>
-        { !isMobile && <button 
-          className='muiTableTest_button'
-          style={{ marginLeft: '10px' }}
+        </Button>
+        { !isMobile && <Button 
+          color='error'
+          variant={'contained'}
+          sx={{ maxHeight: '30px', padding: '5px', marginLeft: '10px', borderRadius: '4px' }}
           onClick={(e) => {
             e.stopPropagation();
             setSelectedJobId(params.row.id);
@@ -80,7 +113,7 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({jobs, setIsSlideoutOpen
           }}
           >
             Delete
-          </button>}
+          </Button>}
         </>
       )
     },

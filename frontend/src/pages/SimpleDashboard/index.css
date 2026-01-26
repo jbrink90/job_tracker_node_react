@@ -20,7 +20,7 @@ body {
   justify-content: space-between;
   padding: 10px 20px 0px 20px;
 }
-.reactTrackerPage_headerContainer button {
+/* .reactTrackerPage_headerContainer button {
   background-color: #009ce8;
   color: white;
   border-radius: 5px;
@@ -32,26 +32,26 @@ body {
     0px 7px 8px -4px rgba(0, 0, 0, 0.2),
     0px 12px 17px 2px rgba(0, 0, 0, 0.14),
     0px 5px 22px 4px rgba(0, 0, 0, 0.12);
-}
+} */
 .reactTrackerPage_buttonsInner {
   display: flex;
   justify-content: flex-end;
   align-self: center;
-  padding: 50px 0px 0px 0px;
+  padding: 50px 0px 10px 0px;
   flex-shrink: 0;
 }
 .reactTrackerPage_header {
   display: flex;
-  font-size: 3vh;
+  font-size: 2vh;
   margin-right: auto;
   padding: 20px 0px 10px 15px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.53);
   align-self: flex-end;
   min-width: 0;
   overflow-wrap: anywhere;
 }
 .reactTrackerPage_tableContainer {
   padding: 0px 20px 20px 20px;
+  margin-bottom: 40px;
 }
 .deleteJob_modal-button {
   background-color: #009ce8;

@@ -17,7 +17,6 @@ const Logout = () => {
 
     setStatus("done");
 
-    // Give the UI a moment to show the message
     setTimeout(() => {
       window.location.href = "/";
     }, 1200);

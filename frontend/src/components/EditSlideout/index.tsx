@@ -24,6 +24,8 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import { useTheme, useMediaQuery } from "@mui/material";
+import { Button } from '@mui/material';
+
 
 interface EditSlideoutProps {
   isSlideoutOpen: boolean;
@@ -185,17 +187,20 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               {isAddingNewJob ? "Add Job" : "Edit Job"}
             </header>
             {isMobile && !isAddingNewJob && (
-              <button
+              <Button
+                color='error'
+                variant="contained"
+                sx={{ minWidth: '100px', height: '55px' }}
                 className="editSlideout_deleteButton"
                 onClick={() => {
                   setIsDeleteModalVisible(true);
                 }}
               >
                 Delete Job
-              </button>
+              </Button>
             )}
           </div>
-          <label>Company</label>
+          <label htmlFor="company">Company</label>
           <input
             type="text"
             name="company"
@@ -203,7 +208,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             onChange={handleInputChange}
           />
 
-          <label>Position</label>
+          <label htmlFor="job_title">Position</label>
           <input
             type="text"
             name="job_title"
@@ -246,7 +251,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             ]}
           />
 
-          <label>Location</label>
+          <label htmlFor="location">Location</label>
           <div className="editSlideout_locationDiv">
             <input
               type="text"
@@ -264,7 +269,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             />
           </div>
 
-          <label>Status</label>
+          <label htmlFor="status">Status</label>
           <input
             type="text"
             name="status"
@@ -272,8 +277,9 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             onChange={handleInputChange}
           />
 
-          <label>Date Applied</label>
+          <label htmlFor="date-applied">Date Applied</label>
           <DatePicker
+            name="date-applied"
             value={jobValues ? dayjs(jobValues.applied?.toString()) : dayjs()}
             onChange={(value) => {
               setJobValues((prev) => ({
@@ -303,12 +309,16 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               },
             }}
           />
+
           <label>Last Update</label>
-          <span className="editSlideout_span">
-            {jobValues?.last_updated
+          <input 
+            type="text"
+            name="last-updated"
+            className="editSlideout_span"
+            disabled
+          value={jobValues?.last_updated
               ? dayjs(jobValues.last_updated).format("MM/DD/YYYY")
-              : ""}
-          </span>
+              : ""}/>
         </div>
 
         <div className="editSlideout_saveDiv">
