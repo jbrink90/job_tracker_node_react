@@ -56,8 +56,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 interface NewNavBarProps {
-  siteTheme: "light" | "dark" | "system";
-  setSiteTheme: (theme: "light" | "dark" | "system") => void;
+  siteTheme: "light" | "dark";
+  setSiteTheme: (theme: "light" | "dark") => void;
 }
 
 const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
@@ -74,7 +74,7 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => setMobileMoreAnchorEl(event.currentTarget);
 
   const toggleTheme = () => {
-    if (siteTheme === "light" || siteTheme === "system") {
+    if (siteTheme === "light") {
       setSiteTheme("dark");
     } else {
       setSiteTheme("light");
