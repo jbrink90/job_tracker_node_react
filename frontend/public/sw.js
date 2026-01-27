@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const CACHE_NAME = `jobtrackr-cache-${CACHE_VERSION}`;
 
 const urlsToCache = [
@@ -74,6 +74,11 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
 
   if (request.method !== 'GET') return;
+
+  // no cachey cachey for Mr. API plz
+  if (request.url.includes('/api/')) {
+    return;
+  }
 
   if (request.mode === 'navigate') {
     event.respondWith(
