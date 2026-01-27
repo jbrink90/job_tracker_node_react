@@ -1,15 +1,21 @@
-import React from "react";
+import {useState} from "react";
 import "./index.css";
+import { NavLink } from "react-router-dom";
 
-const logo_src = "search.png";
+export default function PageFooter({ onInstallClick }: { onInstallClick: () => Promise<void> | void }) {
+  const logo_src = "search.png";
 
-export default function PageFooter() {
+  const [year] = useState<number>(new Date().getFullYear());
+
   return (
     <footer className="pageFooter_container">
     <div className="pageFooter_containerInner">
       <div className="pageFooter_grid">
         {/* ------------------- Brand Section ------------------- */}
         <div className="pageFooter_brand">
+        <NavLink
+        style={{ textDecoration: 'none' }}
+          to="/">
           <div className="pageFooter_logo">
             <img
               src={logo_src}
@@ -18,12 +24,14 @@ export default function PageFooter() {
             />
             <span className="pageFooter_brandText">JobTrackr.online</span>
           </div>
+          </NavLink>
+
           <p className="pageFooter_description">
             Your sidekick for tracking applications and landing
             that dream gig with ease.
           </p>
           <p className="pageFooter_copyright">
-            © 2025 JobTrackr.online. All rights reserved.
+            © {year} JobTrackr.online. All rights reserved.
           </p>
         </div>
 
@@ -32,19 +40,22 @@ export default function PageFooter() {
           <h3 className="pageFooter_title">Learn More</h3>
           <ul className="pageFooter_list">
             <li>
-              <a href="#features" className="pageFooter_link">
-                Features
-              </a>
+              <NavLink
+                className="pageFooter_link"
+                to="/features">
+                  Features
+                </NavLink>
             </li>
             <li>
-              <a href="#pricing" className="pageFooter_link">
-                Pricing
-              </a>
-            </li>
-            <li>
-              <a href="#app" className="pageFooter_link">
-                Mobile App
-              </a>
+              <NavLink
+                onClick={async (ev) => {
+                  ev.preventDefault();
+                  await onInstallClick();
+                }}
+                className="pageFooter_link"
+                to="#">
+                Install Anywhere
+              </NavLink>
             </li>
           </ul>
         </div>

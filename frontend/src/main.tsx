@@ -28,10 +28,29 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return children;
 }
 
-function AppWrapper() {
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('/sw.js');
+      console.log('Service worker registered:', reg);
 
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker?.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            // a new servicewroker is available; prompt the user to refresh and
+            // call navigator.serviceWorker.controller.postMessage({type: 'SKIP_WAITING'})
+          }
+        });
+      });
+    } catch (err) {
+      console.error('SW registration failed:', err);
+    }
+  });
+}
+
+function AppWrapper() {
   type Theme = "light" | "dark";
-  //type ThemeSource = "user" | "system";
 
   const [siteTheme, setSiteTheme] = useState<Theme>(() => {
     return (localStorage.getItem("theme") as Theme) ?? "light";
@@ -59,7 +78,6 @@ function AppWrapper() {
     [siteTheme]
   );
   
-
 return (
   <ThemeProvider theme={theme}>
     <CssBaseline />
