@@ -61,8 +61,8 @@
   font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 0.02em;
+  padding: 10px;
 }
-
 .pageFooter_description {
   color: #7c8aa5; /* softened slate */
   margin-bottom: 1rem;

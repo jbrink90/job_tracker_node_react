@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import EditSlideout from "../../components/EditSlideout";
 import { NewNavBar } from "../../components";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -36,6 +36,25 @@ interface DashBoardProps {
   setSiteTheme: (theme: "light" | "dark") => void;
 }
 
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: "accepted" | "dismissed";
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
+
+declare global {
+  interface BeforeInstallPromptEvent extends Event {
+    prompt(): Promise<void>;
+    userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+  }
+}
+export {};
+
+
+
 const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) => {
   const defaultJob: Job = {
     company: "",
@@ -57,8 +76,45 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
   const [isSlideoutOpen, setIsSlideoutOpen] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
-
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null);
+
+  async function onInstallClick() {
+    const promptEvent = deferredPrompt.current;
+    console.log('onInstallClick called, promptEvent=', promptEvent);
+  
+    if (!promptEvent) {
+      console.log('No saved beforeinstallprompt event — cannot prompt');
+      return;
+    }
+  
+    try {
+      await promptEvent.prompt();
+      const choice = await promptEvent.userChoice;
+      console.log('userChoice', choice);
+      if (choice.outcome === 'accepted') {
+        console.log('User accepted install');
+      } else {
+        console.log('User dismissed install');
+        localStorage.setItem('pwa-install-dismissed', '1');
+      }
+    } finally {
+      deferredPrompt.current = null;
+    }
+  }
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      deferredPrompt.current = e as BeforeInstallPromptEvent;
+      console.log('beforeinstallprompt saved', deferredPrompt.current);
+    };
+  
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
 
   useEffect(() => {
     const initUser = async () => {
@@ -71,6 +127,16 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
     };
     initUser();
   }, []);
+
+  useEffect(() => {
+    if (selectedJobId == null) {
+      setCurrentEditingJob(defaultJob);
+      return;
+    }
+
+    const job = masterJobList.find((j) => j.id === selectedJobId);
+    setCurrentEditingJob(job ?? defaultJob);
+  }, [selectedJobId, masterJobList]);
 
   /**
    * Fetch all jobs for the current user.
@@ -192,15 +258,6 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
     setIsSlideoutOpen(true);
   };
 
-  useEffect(() => {
-    if (selectedJobId == null) {
-      setCurrentEditingJob(defaultJob);
-      return;
-    }
-
-    const job = masterJobList.find((j) => j.id === selectedJobId);
-    setCurrentEditingJob(job ?? defaultJob);
-  }, [selectedJobId, masterJobList]);
 
   return (
     <>
@@ -252,7 +309,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
           />
         </div>
       </div>
-      <PageFooter />
+      <PageFooter onInstallClick={onInstallClick} />
       <EditSlideout
         currentEditingJob={currentEditingJob ?? defaultJob}
         isSlideoutOpen={isSlideoutOpen}
