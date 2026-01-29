@@ -65,19 +65,25 @@ export default function PageFooter({ onInstallClick }: { onInstallClick: () => P
           <h3 className="pageFooter_title">Support</h3>
           <ul className="pageFooter_list">
             <li>
-              <a href="privacy.html" className="pageFooter_link">
-                Privacy Policy
-              </a>
+              <NavLink
+                className="pageFooter_link"
+                to="/privacy">
+                  Privacy Policy
+              </NavLink>
             </li>
             <li>
-              <a href="terms.html" className="pageFooter_link">
+              <NavLink
+                className="pageFooter_link"
+                to="/terms">
                 Terms &amp; Conditions
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a href="#contact" className="pageFooter_link">
+            <NavLink
+                className="pageFooter_link"
+                to="/contact">
                 Contact Us
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>

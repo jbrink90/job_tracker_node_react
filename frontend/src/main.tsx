@@ -1,13 +1,14 @@
 import { useEffect, useState, useMemo } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { Home, SimpleDashboard, Map, Login, Logout, AuthCallback, Account } from "./pages";
+import { Home, SimpleDashboard, Map, Login, Logout, AuthCallback, Account, PrivacyPolicy, Terms } from "./pages";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { supabase } from "./lib/supabase";
 import { User } from "@supabase/supabase-js";
 import "./main.css";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+import { SnackbarProvider } from 'notistack';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
@@ -82,6 +83,7 @@ return (
   <ThemeProvider theme={theme}>
     <CssBaseline />
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <SnackbarProvider maxSnack={3}>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -95,6 +97,8 @@ return (
           />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="/map" element={<Map />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route
@@ -107,6 +111,7 @@ return (
           />
         </Routes>
       </Router>
+      </SnackbarProvider>
     </LocalizationProvider>
   </ThemeProvider>
 );
