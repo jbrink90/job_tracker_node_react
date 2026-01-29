@@ -17,8 +17,10 @@ import { supabase } from "../../lib/supabase";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
+import BreakfastDiningIcon from '@mui/icons-material/BreakfastDining';
 import {PageFooter} from "../../components";
 import { Button } from '@mui/material';
+import { useSnackbar } from 'notistack';
 
 const modalStyle = {
   position: "absolute",
@@ -53,9 +55,9 @@ declare global {
 }
 export {};
 
-
-
 const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) => {
+  const [masterJobList, setMasterJobList] = useState<Job[]>([]);
+  const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
   const defaultJob: Job = {
     company: "",
     job_title: "",
@@ -66,9 +68,6 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
     last_updated: new Date(),
     supabase_id: "",
   };
-
-  const [masterJobList, setMasterJobList] = useState<Job[]>([]);
-  const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
   const [currentEditingJob, setCurrentEditingJob] = useState<Job | null>(
     defaultJob
   );
@@ -79,12 +78,14 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   async function onInstallClick() {
     const promptEvent = deferredPrompt.current;
     console.log('onInstallClick called, promptEvent=', promptEvent);
   
     if (!promptEvent) {
-      console.log('No saved beforeinstallprompt event — cannot prompt');
+      //console.log('No saved beforeinstallprompt event — cannot prompt');
       return;
     }
   
@@ -107,7 +108,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       deferredPrompt.current = e as BeforeInstallPromptEvent;
-      console.log('beforeinstallprompt saved', deferredPrompt.current);
+      //console.log('beforeinstallprompt saved', deferredPrompt.current);
     };
   
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -158,6 +159,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
       setIsDataLoading(false);
     } catch (error) {
       console.error(error);
+      showToast("Failed to fetch jobs. Please try again.", 'error')();
     }
   };
 
@@ -176,13 +178,16 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
   const deleteJob = async (jobId: number) => {
     if (!accessToken) return;
     try {
-      setIsDataLoading(true);
+      //setIsDataLoading(true);
       await apiDeleteJob(jobId, accessToken);
       setMasterJobList((prev) => prev.filter((job) => job.id !== jobId));
       setIsSlideoutOpen(false);
-      setIsDataLoading(false);
+      //setIsDataLoading(false);
+      showToast("Job deleted successfully.", 'success')();
     } catch (error) {
       console.error(error);
+      showToast("Failed to delete job. Please try again.", 'error')();
+      //setIsDataLoading(false);
     }
   };
 
@@ -202,16 +207,17 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
     if (!accessToken) return;
     jobValues.last_updated = new Date();
     try {
-      setIsDataLoading(true);
+      //setIsDataLoading(true);
       const newJob = await apiAddJob(jobValues, accessToken);
       setMasterJobList((prev) => [...prev, newJob]);
       setIsSlideoutOpen(false);
       setIsDeleteModalVisible(false);
       setSelectedJobId(null);
-      setIsDataLoading(false);
+      //setIsDataLoading(false);
+      showToast("Job added successfully.", 'success')();
     } catch (error) {
       console.error(error);
-      alert("Failed to add job. Please try again.");
+      showToast("Failed to add job. Please try again.", 'error')();
     }
   };
 
@@ -238,9 +244,10 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
         )
       );
       setIsSlideoutOpen(false);
+      showToast("Job saved successfully.", 'success')();
     } catch (error) {
       console.error(error);
-      alert("Failed to save job. Please try again.");
+      showToast("Failed to save job. Please try again.", 'error')();
     }
   };
 
@@ -258,6 +265,9 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
     setIsSlideoutOpen(true);
   };
 
+  const showToast = (message: string, variant: "default" | "error" | "success" | "warning" | "info" | undefined) => () => {
+    enqueueSnackbar(`${message}`, { variant } );
+  };
 
   return (
     <>
@@ -275,7 +285,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
                 variant="contained"
                 color="primary"
                 startIcon={<RefreshIcon />}
-                sx={{ alignItems: "center" }}
+                sx={{ marginLeft: "10px", alignItems: "center" }}
                 onClick={() => {
                   setIsDataLoading(true);
                   getAllJobs(accessToken || "").then(() => setIsDataLoading(false));
