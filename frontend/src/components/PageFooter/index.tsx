@@ -79,7 +79,7 @@ export default function PageFooter({ onInstallClick }: { onInstallClick: () => P
               </NavLink>
             </li>
             <li>
-            <NavLink
+              <NavLink
                 className="pageFooter_link"
                 to="/contact">
                 Contact Us
