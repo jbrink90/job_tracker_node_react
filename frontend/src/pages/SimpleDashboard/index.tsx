@@ -14,23 +14,27 @@ import {
   apiSaveJob,
 } from "../../lib/api_calls";
 import { supabase } from "../../lib/supabase";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
-import BreakfastDiningIcon from '@mui/icons-material/BreakfastDining';
 import {PageFooter} from "../../components";
 import { Button } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import {
+  Box,
+  Typography,
+  IconButton,
+  Modal,
+} from "@mui/material";
 
 const modalStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  bgcolor: "#3E3E3E",
-  border: "2px solid #000",
+  bgcolor: "#333",
+  border: "1px solid #000",
   boxShadow: 24,
   borderRadius: "7px",
+  textAlign: 'center',
 };
 
 interface DashBoardProps {
@@ -334,28 +338,53 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
         open={isDeleteModalVisible}
         onClose={() => setIsDeleteModalVisible(false)}
       >
-        <Box sx={modalStyle} style={{ padding: "10px" }}>
-          <CloseIcon
-            fontSize="small"
-            onClick={() => setIsDeleteModalVisible(false)}
-          />
-          <div className="deleteJob_modal-message">
-            {`Are you sure you want to delete your ${currentEditingJob?.job_title} application to ${currentEditingJob?.company}?`}
-          </div>
-          <button
-            className="deleteJob_modal-button"
-            onClick={() => selectedJobId && deleteJob(selectedJobId).then(() => setIsDeleteModalVisible(false))}
-          >
-            Yes
-          </button>
-          <button
-            className="deleteJob_modal-button"
-            onClick={() => setIsDeleteModalVisible(false)}
-          >
-            Cancel
-          </button>
+        <Box sx={{ ...modalStyle, p: 2, width: { xs: "90%", sm: 400 } }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <IconButton
+              size="small"
+              onClick={() => setIsDeleteModalVisible(false)}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Box>
+
+<Typography fontWeight="regular" sx={{ my: 2 }}>
+  Are you sure you want to delete your
+  <Box component="span" sx={{ fontWeight: 700, color: "error.main", mx: 0.5 }}>
+    {currentEditingJob?.job_title}
+  </Box>
+  application to
+  <Box component="span" sx={{ fontWeight: 700, color: "primary.main", mx: 0.5 }}>
+    {currentEditingJob?.company}
+  </Box>
+  ?
+</Typography>
+
+
+          <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() =>
+                selectedJobId &&
+                deleteJob(selectedJobId).then(() =>
+                  setIsDeleteModalVisible(false)
+                )
+              }
+            >
+              Yes
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={() => setIsDeleteModalVisible(false)}
+            >
+              Cancel
+            </Button>
+          </Box>
         </Box>
       </Modal>
+
     </div>
     </>
     );
