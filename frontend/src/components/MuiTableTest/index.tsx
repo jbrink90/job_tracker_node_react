@@ -36,6 +36,9 @@ function applyChipsToStatus(params: GridRenderCellParams) {
       case "Not Selected":
         return <Chip label="Rejected" color="error" sx={{height: 25}}/>;
         break;
+      case "":
+        return;
+        break;
       default:
         return <Chip label={params.value} sx={{height: 25}}/>;
         break;

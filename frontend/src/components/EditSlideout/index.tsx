@@ -5,9 +5,16 @@ import MapIcon from "@mui/icons-material/Map";
 import { Job } from "../../types/Job";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
 import SearchableMap from "../SearchableMap";
+import {
+  Drawer,
+  Box,
+  Typography,
+  TextField,
+  IconButton,
+  Stack,
+  Modal,
+} from "@mui/material";
 import {
   MDXEditor,
   headingsPlugin,
@@ -20,10 +27,9 @@ import {
   imagePlugin,
   InsertImage,
   ListsToggle,
-  MDXEditorMethods,
+  MDXEditorMethods
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-import { useTheme, useMediaQuery } from "@mui/material";
 import { Button } from '@mui/material';
 
 
@@ -54,8 +60,8 @@ const modalStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  bgcolor: "#3E3E3E",
-  border: "2px solid #000",
+  bgcolor: "#333",
+  border: "1px solid #000",
   boxShadow: 24,
   borderRadius: "7px",
 };
@@ -68,32 +74,16 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   addJob,
   saveJob,
   onSaveJob,
-  setIsDeleteModalVisible
+  setIsDeleteModalVisible,
 }) => {
-  const [jobValues, setJobValues] = useState<Job>(defaultJob);
+  const [jobValues, setJobValues] = useState<Job>(currentEditingJob);
+  const [isSaveModalVisible, setIsSaveModalVisible] = useState(false);
+  const [isMapModalVisible, setIsMapModalVisible] = useState(false);
   const [hasJobBeenModified, setHasJobBeenModified] = useState(false);
-  const [isSaveModalVisible, setIsSaveModalVisible] = useState<boolean>(false);
-  const [isMapModalVisible, setIsMapModalVisible] = useState<boolean>(false);
   const editorRef = useRef<MDXEditorMethods>(null);
   const [markdownSource, setMarkdownSource] = useState<string>("");
 
-  const openMapModal = () => setIsMapModalVisible(true);
-  const closeMapModal = () => setIsMapModalVisible(false);
-  const openSaveModal = () => setIsSaveModalVisible(true);
-  const closeSaveModal = () => setIsSaveModalVisible(false);
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const toggleLocalSlideout = () => {
-    if (hasJobBeenModified) {
-      openSaveModal();
-    } else {
-      setIsSlideoutOpen(false);
-    }
-  };
-
-  useEffect(() => {
+   useEffect(() => {
     if (!isSlideoutOpen) return;
 
     if (isAddingNewJob) {
@@ -111,6 +101,24 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     }
     setHasJobBeenModified(false);
   }, [currentEditingJob, isAddingNewJob, isSlideoutOpen]);
+
+  const toggleLocalSlideout = () => {
+    if (hasJobBeenModified) {
+      setIsSaveModalVisible(true);
+    } else {
+      setIsSlideoutOpen(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setJobValues((prev) => ({ ...prev, [name]: value }));
+    setHasJobBeenModified(true);
+  };
+
+  const openMapModal = () => setIsMapModalVisible(true);
+  const closeMapModal = () => setIsMapModalVisible(false);
+  const closeSaveModal = () => setIsSaveModalVisible(false);
 
   const handleEditorMarkdownChange = (
     newMarkdown: string,
@@ -136,17 +144,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     closeSaveModal();
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setJobValues((prevJob) => ({
-      ...prevJob,
-      [name]: value,
-    }));
-    setHasJobBeenModified(true);
-  };
-
   const saveApplication = () => {
     closeSaveModal();
 
@@ -170,117 +167,119 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
 
   return (
     <>
-      <aside
-        className={`editSlideout_container ${isSlideoutOpen ? "open" : ""}`}
+      <Drawer
+        anchor="right"
+        open={isSlideoutOpen}
+        onClose={toggleLocalSlideout}
+        slotProps={{
+            paper: {
+              sx: {
+                width: { xs: "100%", sm: 500 },
+                bgcolor: "#222",
+                color: "grey.100",
+                p: 3,
+              },
+            },
+          }}
       >
-        <div className="editSlideout_navRow">
-          <CloseIcon
-            fontSize="large"
-            onClick={() => {
-              toggleLocalSlideout();
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <IconButton onClick={toggleLocalSlideout}>
+            <CloseIcon fontSize="large" />
+          </IconButton>
+        </Box>
+
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
+          <Typography variant="h5" fontWeight={700}>
+            {isAddingNewJob ? "Add Job" : "Edit Job"}
+          </Typography>
+
+          {!isAddingNewJob && (
+            <Button
+              color="error"
+              variant="contained"
+              sx={{ minWidth: "100px", height: "35px" }}
+              onClick={() => setIsDeleteModalVisible(true)}
+            >
+              Delete Job
+            </Button>
+          )}
+        </Box>
+
+        <Stack spacing={2}>
+          <TextField
+            label="Company"
+            name="company"
+            value={jobValues?.company || ""}
+            onChange={handleInputChange}
+            fullWidth
+          />
+
+          <TextField
+            label="Position"
+            name="job_title"
+            value={jobValues?.job_title || ""}
+            onChange={handleInputChange}
+            fullWidth
+          />
+
+          <Box>
+            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+              Description
+            </Typography>
+            <MDXEditor
+              ref={editorRef}
+              key={`${isAddingNewJob ? "new" : jobValues.id}`}
+              markdown={markdownSource}
+              onChange={handleEditorMarkdownChange}
+              contentEditableClassName="editSlideout_mdxeditor_text"
+              plugins={[
+                imagePlugin(),
+                headingsPlugin(),
+                listsPlugin(),
+                quotePlugin(),
+                thematicBreakPlugin(),
+                toolbarPlugin({
+                  toolbarClassName: "editSlideout_mdxeditor_toolbar",
+                  toolbarContents: () => (
+                    <>
+                      <UndoRedo />
+                      <BoldItalicUnderlineToggles />
+                      <ListsToggle />
+                      <InsertImage />
+                    </>
+                  ),
+                }),
+              ]}
+            />
+          </Box>
+
+          <TextField
+            label="Location"
+            name="location"
+            value={jobValues?.location || ""}
+            onChange={handleInputChange}
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <MapIcon
+                  sx={{ cursor: "pointer" }}
+                  onClick={openMapModal}
+                />
+              ),
             }}
           />
-        </div>
-        <div className="editSlideout_content">
-          <div className="editSlideout_headerContainer">
-            <header className="editSlideout_header">
-              {isAddingNewJob ? "Add Job" : "Edit Job"}
-            </header>
-            {isMobile && !isAddingNewJob && (
-              <Button
-                color='error'
-                variant="contained"
-                sx={{ minWidth: '100px', height: '55px' }}
-                className="editSlideout_deleteButton"
-                onClick={() => {
-                  setIsDeleteModalVisible(true);
-                }}
-              >
-                Delete Job
-              </Button>
-            )}
-          </div>
-          <label htmlFor="company">Company</label>
-          <input
-            type="text"
-            name="company"
-            value={jobValues ? jobValues.company : ""}
-            onChange={handleInputChange}
-          />
 
-          <label htmlFor="job_title">Position</label>
-          <input
-            type="text"
-            name="job_title"
-            value={jobValues ? jobValues.job_title : ""}
-            onChange={handleInputChange}
-          />
-
-          <label>Description</label>
-          <MDXEditor
-            className="editSlideout_mdxeditor"
-            ref={editorRef}
-            key={`${isAddingNewJob ? "new" : jobValues.id}`}
-            markdown={markdownSource}
-            onChange={handleEditorMarkdownChange}
-            contentEditableClassName="editSlideout_mdxeditor_text"
-            plugins={[
-              imagePlugin(),
-              headingsPlugin(),
-              listsPlugin(),
-              quotePlugin(),
-              thematicBreakPlugin(),
-              imagePlugin({
-                imageUploadHandler: () => {
-                  return Promise.resolve(
-                    "https://lh3.googleusercontent.com/proxy/ByPklvBVCoshX99JEmMxg0DLx_7Ig_AyAkP5095aUlAuk22vxeD4W6pOxPPaWetDpu1RgvGms593mFnQtuw5uAerl_eBzmD-x_uIDJXTK4OcUfL8PNRh"
-                  );
-                },
-              }),
-              toolbarPlugin({
-                toolbarClassName: "editSlideout_mdxeditor_toolbar",
-                toolbarContents: () => (
-                  <>
-                    <UndoRedo />
-                    <BoldItalicUnderlineToggles />
-                    <ListsToggle />
-                    <InsertImage />
-                  </>
-                ),
-              }),
-            ]}
-          />
-
-          <label htmlFor="location">Location</label>
-          <div className="editSlideout_locationDiv">
-            <input
-              type="text"
-              name="location"
-              value={jobValues ? jobValues.location : ""}
-              onChange={handleInputChange}
-              className="editSlideout_locationInput"
-            />
-            <MapIcon
-              className="editSlideout_mapIcon"
-              onClick={openMapModal}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === "Enter" && openMapModal()}
-            />
-          </div>
-
-          <label htmlFor="status">Status</label>
-          <input
-            type="text"
+          <TextField
+            label="Status"
             name="status"
-            value={jobValues ? jobValues.status : ""}
+            value={jobValues?.status || ""}
             onChange={handleInputChange}
+            fullWidth
           />
 
-          <label htmlFor="date-applied">Date Applied</label>
           <DatePicker
-            name="date-applied"
-            value={jobValues ? dayjs(jobValues.applied?.toString()) : dayjs()}
+            label="Date Applied"
+            value={jobValues?.applied ? dayjs(jobValues.applied) : dayjs()}
             onChange={(value) => {
               setJobValues((prev) => ({
                 ...prev,
@@ -288,83 +287,71 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               }));
               setHasJobBeenModified(true);
             }}
-            slotProps={{
-              textField: {
-                fullWidth: true,
-                sx: {
-                  "& .MuiInputBase-root": {
-                    paddingRight: "40px", // room for icon
-                  },
-                  "& .MuiInputAdornment-root": {
-                    position: "absolute",
-                    right: 8,
-                  },
-                  "& .MuiIconButton-root": {
-                    color: "white",
-                  },
-                  input: {
-                    color: "white",
-                  },
-                },
-              },
-            }}
+            slotProps={{ textField: { fullWidth: true } }}
           />
 
-          <label>Last Update</label>
-          <input 
-            type="text"
-            name="last-updated"
-            className="editSlideout_span"
+          <TextField
+            label="Last Update"
+            value={
+              jobValues?.last_updated
+                ? dayjs(jobValues.last_updated).format("MM/DD/YYYY")
+                : ""
+            }
             disabled
-          value={jobValues?.last_updated
-              ? dayjs(jobValues.last_updated).format("MM/DD/YYYY")
-              : ""}/>
-        </div>
+            fullWidth
+          />
+        </Stack>
 
-        <div className="editSlideout_saveDiv">
-          <button
-            className="editSlideout_saveButton"
+        <Box sx={{ mt: 3 }}>
+          <Button
+            fullWidth
+            variant="contained"
             onClick={() => onSaveJob(jobValues)}
             disabled={!hasJobBeenModified}
+            sx={{
+              py: 2,
+              fontSize: "1.1rem",
+              fontWeight: 600,
+            }}
           >
             {isAddingNewJob ? "Add Job" : "Save Job"}
-          </button>
-        </div>
-      </aside>
+          </Button>
+        </Box>
+      </Drawer>
 
       <Modal open={isSaveModalVisible} onClose={closeSaveModal}>
-        <Box sx={modalStyle} style={{ padding: "10px", width: "80%" }}>
-          <CloseIcon fontSize="small" onClick={closeSaveModal} />
-          <h2 className="editSlideout_modal-message">Save your changes?</h2>
-          <button
-            className="editSlideout_modal-button"
-            onClick={saveApplication}
-          >
-            Yes
-          </button>
-          <button
-            className="editSlideout_modal-button"
-            onClick={discardChanges}
-          >
-            No
-          </button>
-          <button
-            className="editSlideout_modal-button"
-            onClick={closeSaveModal}
-          >
-            Cancel
-          </button>
+        <Box sx={{ ...modalStyle, width: { xs: "90%", sm: 400 } }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <IconButton onClick={closeSaveModal}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+
+          <Typography variant="h6" sx={{ mb: 3, textAlign: 'center' }}>
+            Save your changes?
+          </Typography>
+
+          <Stack direction="row" spacing={2} mb={2} justifyContent="center">
+            <Button variant="contained" onClick={saveApplication}>
+              Yes
+            </Button>
+            <Button variant="contained" color="error" onClick={discardChanges}>
+              No
+            </Button>
+            <Button variant="outlined" onClick={closeSaveModal}>
+              Cancel
+            </Button>
+          </Stack>
         </Box>
       </Modal>
 
       <Modal open={isMapModalVisible} onClose={closeMapModal}>
-        <Box sx={modalStyle}>
-          <CloseIcon
-            fontSize="large"
-            onClick={() => {
-              closeMapModal();
-            }}
-          />
+        <Box sx={{ ...modalStyle, p: 3 }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <IconButton onClick={closeMapModal}>
+              <CloseIcon fontSize="large" />
+            </IconButton>
+          </Box>
           <SearchableMap />
         </Box>
       </Modal>
