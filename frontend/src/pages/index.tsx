@@ -5,3 +5,5 @@ export { default as Login } from "./Login";
 export { default as Logout } from "./Logout";
 export { default as AuthCallback } from "./AuthCallback";
 export { default as Account } from "./Account";
+export { default as PrivacyPolicy } from "./PrivacyPolicy";
+export { default as Terms } from "./Terms";

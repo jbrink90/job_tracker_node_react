@@ -1,13 +1,14 @@
 import { useEffect, useState, useMemo } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { Home, SimpleDashboard, Map, Login, Logout, AuthCallback, Account } from "./pages";
+import { Home, SimpleDashboard, Map, Login, Logout, AuthCallback, Account, PrivacyPolicy, Terms } from "./pages";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { supabase } from "./lib/supabase";
 import { User } from "@supabase/supabase-js";
 import "./main.css";
-import { ThemeProvider, createTheme, CssBaseline, useMediaQuery } from "@mui/material";
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+import { SnackbarProvider } from 'notistack';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
@@ -28,22 +29,46 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return children;
 }
 
-function AppWrapper() {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('/sw.js');
+      console.log('Service worker registered:', reg);
 
-  const [siteTheme, setSiteTheme] = useState<"light" | "dark" | "system">("system");
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker?.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            // a new servicewroker is available; prompt the user to refresh and
+            // call navigator.serviceWorker.controller.postMessage({type: 'SKIP_WAITING'})
+          }
+        });
+      });
+    } catch (err) {
+      console.error('SW registration failed:', err);
+    }
+  });
+}
+
+function AppWrapper() {
+  type Theme = "light" | "dark";
+
+  const [siteTheme, setSiteTheme] = useState<Theme>(() => {
+    return (localStorage.getItem("theme") as Theme) ?? "light";
+  });
   
-  const resolvedMode =
-  siteTheme === "system" ? (prefersDarkMode ? "dark" : "light") : siteTheme;
-  
+  useEffect(() => {
+    localStorage.setItem("theme", siteTheme);
+  }, [siteTheme]);
+
   const theme = useMemo(
     () =>
       createTheme({
         palette: {
-          mode: resolvedMode,
+          mode: siteTheme,
           background: {
-            default: resolvedMode === "dark" ? "#242424" : "#f5f5f5",
-            paper: resolvedMode === "dark" ? "#3a3a3a" : "#ffffff",
+            default: siteTheme === "dark" ? "#242424" : "#f5f5f5",
+            paper: siteTheme === "dark" ? "#3a3a3a" : "#ffffff",
           },
           primary: { main: "#1976d2" },
           success: { main: "#24b14f" },
@@ -51,14 +76,14 @@ function AppWrapper() {
         shape: { borderRadius: 7 },
         typography: { button: { textTransform: "none" } },
       }),
-    [resolvedMode]
+    [siteTheme]
   );
   
-
 return (
   <ThemeProvider theme={theme}>
     <CssBaseline />
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <SnackbarProvider maxSnack={3}>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -72,6 +97,8 @@ return (
           />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="/map" element={<Map />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route
@@ -84,6 +111,7 @@ return (
           />
         </Routes>
       </Router>
+      </SnackbarProvider>
     </LocalizationProvider>
   </ThemeProvider>
 );
