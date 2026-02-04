@@ -7,14 +7,14 @@ export const supabase = createClient(
 
 export async function getCurrentUser() {
   const { data, error } = await supabase.auth.getUser();
-  if (error) console.log(error);
+  if (error) console.error(error);
   return data.user;
 }
 
 export async function getUserEmailSplit() {
   // Return a capitalized version of the part of the email before the '@' symbol
   const { data, error } = await supabase.auth.getUser();
-  if (error) console.log(error);
+  if (error) console.error(error);
   const email = data.user?.email?.split('@')[0];
   if (!email) return null;
   return email.charAt(0).toUpperCase() + email.slice(1);
