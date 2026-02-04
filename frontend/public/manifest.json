@@ -1,5 +1,5 @@
 {
-  "name": "JobTrackr",
+  "name": "JobTrackr.online",
   "short_name": "JobTrackr",
   "description": "Your sidekick for tracking job applications and landing that dream gig with ease.",
   "start_url": "/",
@@ -9,54 +9,69 @@
   "orientation": "any",
   "icons": [
     {
-      "src": "icons/appicon-48x48.png",
+      "src": "/icons/appicon-48x48.png",
       "sizes": "48x48",
       "type": "image/png"
     },
     {
-      "src": "icons/appicon-72x72.png",
+      "src": "/icons/appicon-72x72.png",
       "sizes": "72x72",
       "type": "image/png"
     },
     {
-      "src": "icons/appicon-96x96.png",
+      "src": "/icons/appicon-96x96.png",
       "sizes": "96x96",
       "type": "image/png"
     },
     {
-      "src": "icons/appicon-128x128.png",
+      "src": "/icons/appicon-128x128.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src": "icons/appicon-144x144.png",
+      "src": "/icons/appicon-144x144.png",
       "sizes": "144x144",
       "type": "image/png"
     },
     {
-      "src": "icons/appicon-152x152.png",
+      "src": "/icons/appicon-152x152.png",
       "sizes": "152x152",
       "type": "image/png"
     },
     {
-      "src": "icons/appicon-192x192.png",
+      "src": "/icons/appicon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icons/appicon-256x256.png",
+      "src": "/icons/appicon-256x256.png",
       "sizes": "256x256",
       "type": "image/png"
     },
     {
-      "src": "icons/appicon-384x384.png",
+      "src": "/icons/appicon-384x384.png",
       "sizes": "384x384",
       "type": "image/png"
     },
     {
-      "src": "icons/appicon-512x512.png",
+      "src": "/icons/appicon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot_wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "App in landscape (wide)",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/screenshot_mobile.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "label": "App in portrait"
     }
   ]
 }

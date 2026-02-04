@@ -38,7 +38,7 @@ export default function Home() {
         justifyContent: "center",
       }}
     >
-      <Container maxWidth="md" sx={{ textAlign: "center", py: 8 }}>
+      <Container maxWidth="lg" sx={{ textAlign: "center", py: 8 }}>
         <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
           Track Your Job Postings
         </Typography>
@@ -67,7 +67,7 @@ export default function Home() {
           Start Using Now
         </Button>
 
-        <Grid container spacing={4} sx={{ mt: 8, justifyContent: "center" }}>
+        <Grid container spacing={4} sx={{ mt: 8, justifyContent: "center", gap: "30px" }}>
           {panels.map((panel) => (
             <Paper
               key={panel.title}
@@ -80,6 +80,8 @@ export default function Home() {
                 borderRadius: 3,
                 transition: "transform 0.3s ease",
                 "&:hover": { transform: "translateY(-8px)" },
+                backgroundColor: "white",
+                color: "black",
               }}
             >
               <Box sx={{ mb: 2 }}>{panel.icon}</Box>

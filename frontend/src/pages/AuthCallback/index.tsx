@@ -7,40 +7,38 @@ export default function AuthCallback() {
 
   useEffect(() => {
     const doCallback = async () => {
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const queryParams = new URLSearchParams(window.location.search);
-
-      const access_token = hashParams.get("access_token") || queryParams.get("access_token");
-      const refresh_token = hashParams.get("refresh_token") || queryParams.get("refresh_token");
-      const code = hashParams.get("code") || queryParams.get("code");
-      const redirectTo = hashParams.get("redirect") || queryParams.get("redirect") || "/dashboard";
-
       try {
+        const hashParams = new URLSearchParams(
+          window.location.hash.substring(1)
+        );
+        const queryParams = new URLSearchParams(window.location.search);
+
+        const access_token = hashParams.get("access_token") ?? queryParams.get("access_token");
+        const refresh_token = hashParams.get("refresh_token") ?? queryParams.get("refresh_token");
+        const code = hashParams.get("code") ?? queryParams.get("code");
+        const redirectTo = hashParams.get("redirect") ?? queryParams.get("redirect") ?? "/dashboard";
+
         if (access_token && refresh_token) {
-          const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+          const { error } = await supabase.auth.setSession({
+            access_token,
+            refresh_token,
+          });
           if (error) throw error;
-
-          navigate(redirectTo, { replace: true });
-          return;
-        }
-
-        if (code) {
+        } else if (code) {
           const { error } = await supabase.auth.exchangeCodeForSession(code);
           if (error) throw error;
-
-          navigate(redirectTo, { replace: true });
-          return;
+        } else {
+          throw new Error("No auth parameters found");
         }
 
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          navigate(redirectTo, { replace: true });
-          return;
-        }
+        const safeRedirect = redirectTo.startsWith("/")
+          ? redirectTo
+          : "/dashboard";
 
-        console.error("No login parameters found and user not logged in.");
+        navigate(safeRedirect, { replace: true });
       } catch (err) {
         console.error("Auth callback error:", err);
+        navigate("/login", { replace: true });
       }
     };
 

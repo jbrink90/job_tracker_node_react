@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import EditSlideout from "../../components/EditSlideout";
 import { NewNavBar } from "../../components";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -13,29 +13,55 @@ import {
   apiDeleteJob,
   apiSaveJob,
 } from "../../lib/api_calls";
-import { getUserEmailSplit, supabase } from "../../lib/supabase";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
+import { supabase } from "../../lib/supabase";
 import CloseIcon from "@mui/icons-material/Close";
 import {PageFooter} from "../../components";
+import { Button } from '@mui/material';
+import { useSnackbar } from 'notistack';
+import {
+  Box,
+  Typography,
+  IconButton,
+  Modal,
+} from "@mui/material";
 
 const modalStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  bgcolor: "#3E3E3E",
-  border: "2px solid #000",
+  bgcolor: "#333",
+  border: "1px solid #000",
   boxShadow: 24,
   borderRadius: "7px",
+  textAlign: 'center',
 };
 
 interface DashBoardProps {
-  siteTheme: "light" | "dark" | "system";
-  setSiteTheme: (theme: "light" | "dark" | "system") => void;
+  siteTheme: "light" | "dark";
+  setSiteTheme: (theme: "light" | "dark") => void;
 }
 
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: "accepted" | "dismissed";
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
+
+declare global {
+  interface BeforeInstallPromptEvent extends Event {
+    prompt(): Promise<void>;
+    userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+  }
+}
+export {};
+
 const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) => {
+  const [masterJobList, setMasterJobList] = useState<Job[]>([]);
+  const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
   const defaultJob: Job = {
     company: "",
     job_title: "",
@@ -46,32 +72,76 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
     last_updated: new Date(),
     supabase_id: "",
   };
-
-  const [masterJobList, setMasterJobList] = useState<Job[]>([]);
-  const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
   const [currentEditingJob, setCurrentEditingJob] = useState<Job | null>(
     defaultJob
   );
   const [isAddingNewJob, setIsAddingNewJob] = useState(false);
   const [isSlideoutOpen, setIsSlideoutOpen] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-
-  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [isDataLoading, setIsDataLoading] = useState(true);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  async function onInstallClick() {
+    const promptEvent = deferredPrompt.current;
+    console.log('onInstallClick called, promptEvent=', promptEvent);
+  
+    if (!promptEvent) {
+      //console.log('No saved beforeinstallprompt event — cannot prompt');
+      return;
+    }
+  
+    try {
+      await promptEvent.prompt();
+      const choice = await promptEvent.userChoice;
+      console.log('userChoice', choice);
+      if (choice.outcome === 'accepted') {
+        console.log('User accepted install');
+      } else {
+        console.log('User dismissed install');
+        localStorage.setItem('pwa-install-dismissed', '1');
+      }
+    } finally {
+      deferredPrompt.current = null;
+    }
+  }
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      deferredPrompt.current = e as BeforeInstallPromptEvent;
+      //console.log('beforeinstallprompt saved', deferredPrompt.current);
+    };
+  
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
 
   useEffect(() => {
     const initUser = async () => {
-      const emailSplit = await getUserEmailSplit();
       const session = await supabase.auth.getSession();
-      setUserEmail(emailSplit);
       setAccessToken(session.data.session?.access_token ?? null);
       // optionally fetch jobs here once token is ready
       if (session.data.session?.access_token) {
-        getAllJobs(session.data.session.access_token);
+        await getAllJobs(session.data.session.access_token);
       }
     };
     initUser();
   }, []);
+
+  useEffect(() => {
+    if (selectedJobId == null) {
+      setCurrentEditingJob(defaultJob);
+      return;
+    }
+
+    const job = masterJobList.find((j) => j.id === selectedJobId);
+    setCurrentEditingJob(job ?? defaultJob);
+  }, [selectedJobId, masterJobList]);
 
   /**
    * Fetch all jobs for the current user.
@@ -87,10 +157,13 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
   const getAllJobs = async (token: string) => {
     if (!token) return; // no token yet
     try {
+      setIsDataLoading(true);
       const jobs = await apiGetJobs(token);
       setMasterJobList(jobs);
+      setIsDataLoading(false);
     } catch (error) {
       console.error(error);
+      showToast("Failed to fetch jobs. Please try again.", 'error')();
     }
   };
 
@@ -109,11 +182,16 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
   const deleteJob = async (jobId: number) => {
     if (!accessToken) return;
     try {
+      //setIsDataLoading(true);
       await apiDeleteJob(jobId, accessToken);
       setMasterJobList((prev) => prev.filter((job) => job.id !== jobId));
       setIsSlideoutOpen(false);
+      //setIsDataLoading(false);
+      showToast("Job deleted successfully.", 'success')();
     } catch (error) {
       console.error(error);
+      showToast("Failed to delete job. Please try again.", 'error')();
+      //setIsDataLoading(false);
     }
   };
 
@@ -133,14 +211,17 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
     if (!accessToken) return;
     jobValues.last_updated = new Date();
     try {
+      //setIsDataLoading(true);
       const newJob = await apiAddJob(jobValues, accessToken);
       setMasterJobList((prev) => [...prev, newJob]);
       setIsSlideoutOpen(false);
       setIsDeleteModalVisible(false);
       setSelectedJobId(null);
+      //setIsDataLoading(false);
+      showToast("Job added successfully.", 'success')();
     } catch (error) {
       console.error(error);
-      alert("Failed to add job. Please try again.");
+      showToast("Failed to add job. Please try again.", 'error')();
     }
   };
 
@@ -167,9 +248,10 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
         )
       );
       setIsSlideoutOpen(false);
+      showToast("Job saved successfully.", 'success')();
     } catch (error) {
       console.error(error);
-      alert("Failed to save job. Please try again.");
+      showToast("Failed to save job. Please try again.", 'error')();
     }
   };
 
@@ -187,15 +269,9 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
     setIsSlideoutOpen(true);
   };
 
-  useEffect(() => {
-    if (selectedJobId == null) {
-      setCurrentEditingJob(defaultJob);
-      return;
-    }
-
-    const job = masterJobList.find((j) => j.id === selectedJobId);
-    setCurrentEditingJob(job ?? defaultJob);
-  }, [selectedJobId, masterJobList]);
+  const showToast = (message: string, variant: "default" | "error" | "success" | "warning" | "info" | undefined) => () => {
+    enqueueSnackbar(`${message}`, { variant } );
+  };
 
   return (
     <>
@@ -209,18 +285,27 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
           </header>
           <div className="reactTrackerPage_buttonsInner">
             <Tooltip title="Refresh Applications">
-              <button>
-                <RefreshIcon
-                  onClick={() => {
-                    getAllJobs(accessToken || "");
-                  }}
-                />
-              </button>
+              <Button 
+                variant="contained"
+                color="primary"
+                startIcon={<RefreshIcon />}
+                sx={{ marginLeft: "10px", alignItems: "center" }}
+                onClick={() => {
+                  setIsDataLoading(true);
+                  getAllJobs(accessToken || "").then(() => setIsDataLoading(false));
+                }}>
+                  Refresh
+              </Button>
             </Tooltip>
             <Tooltip title="Add New Application">
-              <button>
-                <AddIcon onClick={slideoutNewJob} />
-              </button>
+              <Button 
+                variant="contained"
+                color="primary"
+                startIcon={<AddIcon />}
+                sx={{ marginLeft: "10px", alignItems: "center" }}
+                onClick={slideoutNewJob}>
+                 Add Job
+              </Button>
             </Tooltip>
           </div>
         </div>
@@ -234,10 +319,11 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
             deleteJob={deleteJob}
             setIsAddingNewJob={setIsAddingNewJob}
             setIsDeleteModalVisible={setIsDeleteModalVisible}
+            isDataLoading={isDataLoading}
           />
         </div>
       </div>
-      <PageFooter />
+      <PageFooter onInstallClick={onInstallClick} />
       <EditSlideout
         currentEditingJob={currentEditingJob ?? defaultJob}
         isSlideoutOpen={isSlideoutOpen}
@@ -252,28 +338,53 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({siteTheme, setSiteTheme}) =>
         open={isDeleteModalVisible}
         onClose={() => setIsDeleteModalVisible(false)}
       >
-        <Box sx={modalStyle} style={{ padding: "10px" }}>
-          <CloseIcon
-            fontSize="small"
-            onClick={() => setIsDeleteModalVisible(false)}
-          />
-          <div className="deleteJob_modal-message">
-            {`Are you sure you want to delete your ${currentEditingJob?.job_title} application to ${currentEditingJob?.company}?`}
-          </div>
-          <button
-            className="deleteJob_modal-button"
-            onClick={() => selectedJobId && deleteJob(selectedJobId).then(() => setIsDeleteModalVisible(false))}
-          >
-            Yes
-          </button>
-          <button
-            className="deleteJob_modal-button"
-            onClick={() => setIsDeleteModalVisible(false)}
-          >
-            Cancel
-          </button>
+        <Box sx={{ ...modalStyle, p: 2, width: { xs: "90%", sm: 400 } }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <IconButton
+              size="small"
+              onClick={() => setIsDeleteModalVisible(false)}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Box>
+
+<Typography fontWeight="regular" sx={{ my: 2 }}>
+  Are you sure you want to delete your
+  <Box component="span" sx={{ fontWeight: 700, color: "error.main", mx: 0.5 }}>
+    {currentEditingJob?.job_title}
+  </Box>
+  application to
+  <Box component="span" sx={{ fontWeight: 700, color: "primary.main", mx: 0.5 }}>
+    {currentEditingJob?.company}
+  </Box>
+  ?
+</Typography>
+
+
+          <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() =>
+                selectedJobId &&
+                deleteJob(selectedJobId).then(() =>
+                  setIsDeleteModalVisible(false)
+                )
+              }
+            >
+              Yes
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={() => setIsDeleteModalVisible(false)}
+            >
+              Cancel
+            </Button>
+          </Box>
         </Box>
       </Modal>
+
     </div>
     </>
     );
