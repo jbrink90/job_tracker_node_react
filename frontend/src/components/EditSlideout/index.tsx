@@ -14,6 +14,8 @@ import {
   IconButton,
   Stack,
   Modal,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import {
   MDXEditor,
@@ -27,11 +29,10 @@ import {
   imagePlugin,
   InsertImage,
   ListsToggle,
-  MDXEditorMethods
+  MDXEditorMethods,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-import { Button } from '@mui/material';
-
+import { Button } from "@mui/material";
 
 interface EditSlideoutProps {
   isSlideoutOpen: boolean;
@@ -60,10 +61,12 @@ const modalStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  bgcolor: "#c5c5c5",
-  border: "1px solid #000",
+  bgcolor: "background.paper",           // ← now theme-aware
+  border: "1px solid",
+  borderColor: "divider",
   boxShadow: 24,
-  borderRadius: "7px",
+  borderRadius: "12px",                  // slightly softer
+  p: 3,
 };
 
 const EditSlideout: React.FC<EditSlideoutProps> = ({
@@ -76,6 +79,9 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   onSaveJob,
   setIsDeleteModalVisible,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  
   const [jobValues, setJobValues] = useState<Job>(currentEditingJob);
   const [isSaveModalVisible, setIsSaveModalVisible] = useState(false);
   const [isMapModalVisible, setIsMapModalVisible] = useState(false);
@@ -83,21 +89,17 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   const editorRef = useRef<MDXEditorMethods>(null);
   const [markdownSource, setMarkdownSource] = useState<string>("");
 
-   useEffect(() => {
+  useEffect(() => {
     if (!isSlideoutOpen) return;
 
     if (isAddingNewJob) {
       setJobValues(defaultJob);
       setMarkdownSource("");
       editorRef.current?.setMarkdown("");
-
     } else {
       setJobValues(currentEditingJob || defaultJob);
       setMarkdownSource(currentEditingJob?.description || "");
-    
-      editorRef.current?.setMarkdown(
-        currentEditingJob?.description || ""
-      );
+      editorRef.current?.setMarkdown(currentEditingJob?.description || "");
     }
     setHasJobBeenModified(false);
   }, [currentEditingJob, isAddingNewJob, isSlideoutOpen]);
@@ -120,18 +122,13 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   const closeMapModal = () => setIsMapModalVisible(false);
   const closeSaveModal = () => setIsSaveModalVisible(false);
 
-  const handleEditorMarkdownChange = (
-    newMarkdown: string,
-    isInitial: boolean
-  ) => {
+  const handleEditorMarkdownChange = (newMarkdown: string, isInitial: boolean) => {
     if (!isInitial) {
       setMarkdownSource(newMarkdown);
-
       setJobValues((prev) => ({
         ...prev,
         description: newMarkdown,
       }));
-
       setHasJobBeenModified(true);
     }
   };
@@ -172,15 +169,20 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
         open={isSlideoutOpen}
         onClose={toggleLocalSlideout}
         slotProps={{
-            paper: {
-              sx: {
-                width: { xs: "100%", sm: 500 },
-                bgcolor: "#222",
-                color: "grey.100",
-                p: 3,
-              },
+          paper: {
+            sx: {
+              width: { xs: "100%", sm: "85%", md: "600px" },
+              color: theme.palette.text.primary,
+              borderLeft: `1px solid ${theme.palette.divider}`,
+              boxShadow: theme.shadows[16],
+              bgcolor: theme.palette.background.default,
+              padding: "7px",
+              // bgcolor: theme.palette.primary.dark
+              // bgcolor: theme.palette.grey[900]
+              // bgcolor: theme.palette.mode === 'dark' ? '#1e1e1e' : 'white',
             },
-          }}
+          },
+        }}
       >
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <IconButton onClick={toggleLocalSlideout}>
@@ -193,7 +195,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             {isAddingNewJob ? "Add Job" : "Edit Job"}
           </Typography>
 
-          {!isAddingNewJob && (
+          {isMobile && !isAddingNewJob && (
             <Button
               color="error"
               variant="contained"
@@ -205,52 +207,42 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           )}
         </Box>
 
-        <Stack spacing={2}>
-          <TextField
-            label="Company"
-            name="company"
-            value={jobValues?.company || ""}
-            onChange={handleInputChange}
-            fullWidth
-          />
-
-          <TextField
-            label="Position"
-            name="job_title"
-            value={jobValues?.job_title || ""}
-            onChange={handleInputChange}
-            fullWidth
-          />
+        <Stack spacing={2.5}>
+          <TextField label="Company" name="company" value={jobValues?.company || ""} onChange={handleInputChange} fullWidth />
+          <TextField label="Position" name="job_title" value={jobValues?.job_title || ""} onChange={handleInputChange} fullWidth />
 
           <Box>
             <Typography variant="subtitle1" sx={{ mb: 1 }}>
               Description
             </Typography>
-            <MDXEditor
-              ref={editorRef}
-              key={`${isAddingNewJob ? "new" : jobValues.id}`}
-              markdown={markdownSource}
-              onChange={handleEditorMarkdownChange}
-              contentEditableClassName="editSlideout_mdxeditor_text"
-              plugins={[
-                imagePlugin(),
-                headingsPlugin(),
-                listsPlugin(),
-                quotePlugin(),
-                thematicBreakPlugin(),
-                toolbarPlugin({
-                  toolbarClassName: "editSlideout_mdxeditor_toolbar",
-                  toolbarContents: () => (
-                    <>
-                      <UndoRedo />
-                      <BoldItalicUnderlineToggles />
-                      <ListsToggle />
-                      <InsertImage />
-                    </>
-                  ),
-                }),
-              ]}
-            />
+
+            <Box>
+              <MDXEditor
+                ref={editorRef}
+                key={`${isAddingNewJob ? "new" : jobValues.id}`}
+                markdown={markdownSource}
+                onChange={handleEditorMarkdownChange}
+                contentEditableClassName="editSlideout_mdxeditor_text"
+                plugins={[
+                  imagePlugin(),
+                  headingsPlugin(),
+                  listsPlugin(),
+                  quotePlugin(),
+                  thematicBreakPlugin(),
+                  toolbarPlugin({
+                    toolbarClassName: "editSlideout_mdxeditor_toolbar",
+                    toolbarContents: () => (
+                      <>
+                        <UndoRedo />
+                        <BoldItalicUnderlineToggles />
+                        <ListsToggle />
+                        <InsertImage />
+                      </>
+                    ),
+                  }),
+                ]}
+              />
+            </Box>
           </Box>
 
           <TextField
@@ -261,21 +253,12 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             fullWidth
             InputProps={{
               endAdornment: (
-                <MapIcon
-                  sx={{ cursor: "pointer" }}
-                  onClick={openMapModal}
-                />
+                <MapIcon sx={{ cursor: "pointer" }} onClick={openMapModal} />
               ),
             }}
           />
 
-          <TextField
-            label="Status"
-            name="status"
-            value={jobValues?.status || ""}
-            onChange={handleInputChange}
-            fullWidth
-          />
+          <TextField label="Status" name="status" value={jobValues?.status || ""} onChange={handleInputChange} fullWidth />
 
           <DatePicker
             label="Date Applied"
@@ -302,7 +285,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           />
         </Stack>
 
-        <Box sx={{ mt: 3 }}>
+        <Box sx={{ mt: 4 }}>
           <Button
             fullWidth
             variant="contained"
@@ -312,6 +295,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               py: 2,
               fontSize: "1.1rem",
               fontWeight: 600,
+              borderRadius: 2,
             }}
           >
             {isAddingNewJob ? "Add Job" : "Save Job"}
@@ -320,14 +304,14 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       </Drawer>
 
       <Modal open={isSaveModalVisible} onClose={closeSaveModal}>
-        <Box sx={{ ...modalStyle, width: { xs: "90%", sm: 400 } }}>
+        <Box sx={modalStyle}>
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <IconButton onClick={closeSaveModal}>
               <CloseIcon />
             </IconButton>
           </Box>
 
-          <Typography variant="h6" sx={{ mb: 3, textAlign: 'center' }}>
+          <Typography variant="h6" sx={{ mb: 3, textAlign: "center" }}>
             Save your changes?
           </Typography>
 
@@ -346,7 +330,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       </Modal>
 
       <Modal open={isMapModalVisible} onClose={closeMapModal}>
-        <Box sx={{ ...modalStyle, p: 3 }}>
+        <Box sx={modalStyle}>
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <IconButton onClick={closeMapModal}>
               <CloseIcon fontSize="large" />
