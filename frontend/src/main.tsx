@@ -1,10 +1,11 @@
 import { useEffect, useState, useMemo } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { Home, SimpleDashboard, Map, Login, Logout, AuthCallback, Account, PrivacyPolicy, Terms } from "./pages";
+import { Home, SimpleDashboard, Map, Login, Logout, AuthCallback, Account, PrivacyPolicy, Terms, Contact } from "./pages";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { supabase } from "./lib/supabase";
+import { initPwaListener } from "./lib/pwa";
 import { User } from "@supabase/supabase-js";
 import "./main.css";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
@@ -19,13 +20,10 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  // Loading state (prevents instant redirect)
   if (user === undefined) return <p>Loading...</p>;
 
-  // Not logged in
   if (!user) return <Navigate to="/login" />;
 
-  // Logged in
   return children;
 }
 
@@ -33,7 +31,7 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
       const reg = await navigator.serviceWorker.register('/sw.js');
-      console.log('Service worker registered:', reg);
+      console.log('Service worker registered.');
 
       reg.addEventListener('updatefound', () => {
         const newWorker = reg.installing;
@@ -78,6 +76,10 @@ function AppWrapper() {
       }),
     [siteTheme]
   );
+
+  useEffect(() => {
+    initPwaListener();
+  }, []);
   
 return (
   <ThemeProvider theme={theme}>
@@ -97,6 +99,7 @@ return (
           />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/map" element={<Map />} />

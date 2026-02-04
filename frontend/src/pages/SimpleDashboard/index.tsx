@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import EditSlideout from "../../components/EditSlideout";
 import { NewNavBar } from "../../components";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -14,6 +14,7 @@ import {
   apiSaveJob,
 } from "../../lib/api_calls";
 import { supabase } from "../../lib/supabase";
+import { getDeferredPrompt, clearDeferredPrompt } from "../../lib/pwa";
 import CloseIcon from "@mui/icons-material/Close";
 import { PageFooter } from "../../components";
 import { Button } from "@mui/material";
@@ -37,14 +38,6 @@ interface DashBoardProps {
   setSiteTheme: (theme: "light" | "dark") => void;
 }
 
-interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: string[];
-  readonly userChoice: Promise<{
-    outcome: "accepted" | "dismissed";
-    platform: string;
-  }>;
-  prompt(): Promise<void>;
-}
 
 declare global {
   interface BeforeInstallPromptEvent extends Event {
@@ -81,49 +74,33 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null);
 
   const { enqueueSnackbar } = useSnackbar();
 
   async function onInstallClick() {
-    const promptEvent = deferredPrompt.current;
-    console.log("onInstallClick called, promptEvent=", promptEvent);
+    const promptEvent = getDeferredPrompt();
 
     if (!promptEvent) {
-      //console.log('No saved beforeinstallprompt event — cannot prompt');
+      console.log("No install prompt available yet");
       return;
     }
 
     try {
       await promptEvent.prompt();
       const choice = await promptEvent.userChoice;
-      console.log("userChoice", choice);
       if (choice.outcome === "accepted") {
         console.log("User accepted install");
+        localStorage.setItem("pwa-installed", "1");
+        localStorage.setItem("pwa-install-dismissed", "0");
       } else {
         console.log("User dismissed install");
+        localStorage.setItem("pwa-installed", "0");
         localStorage.setItem("pwa-install-dismissed", "1");
       }
     } finally {
-      deferredPrompt.current = null;
+      clearDeferredPrompt();
     }
   }
-
-  useEffect(() => {
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      deferredPrompt.current = e as BeforeInstallPromptEvent;
-      //console.log('beforeinstallprompt saved', deferredPrompt.current);
-    };
-
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt,
-      );
-    };
-  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
