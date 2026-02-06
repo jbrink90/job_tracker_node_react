@@ -61,11 +61,11 @@ const modalStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",           // ← now theme-aware
+  bgcolor: "background.paper",
   border: "1px solid",
   borderColor: "divider",
   boxShadow: 24,
-  borderRadius: "12px",                  // slightly softer
+  borderRadius: "7px",
   p: 3,
 };
 
@@ -322,7 +322,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             <Button variant="contained" color="error" onClick={discardChanges}>
               No
             </Button>
-            <Button variant="outlined" onClick={closeSaveModal}>
+            <Button variant="contained" color="warning" onClick={closeSaveModal}>
               Cancel
             </Button>
           </Stack>
