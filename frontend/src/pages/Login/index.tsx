@@ -18,10 +18,6 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(`${frontEndUrl}/dashboard`);
-  },[])
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
