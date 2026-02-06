@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import isDev from "../../lib/is_dev";
 import "./index.css";
@@ -18,6 +18,9 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    console.log(`${frontEndUrl}/dashboard`);
+  },[])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
