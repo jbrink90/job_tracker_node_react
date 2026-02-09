@@ -1,20 +1,23 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import Logout from '@mui/icons-material/Logout';
-import Link from "@mui/material/Link";
-
+import {
+  styled,
+  alpha,
+  ListItemIcon,
+  Link,
+  Menu,
+  MenuItem,
+  InputBase,
+  Typography,
+  Box,
+  AppBar,
+  Toolbar
+} from "@mui/material";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -60,82 +63,63 @@ interface NewNavBarProps {
   setSiteTheme: (theme: "light" | "dark") => void;
 }
 
-const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
-
+const NewNavBar: React.FC<NewNavBarProps> = ({ siteTheme, setSiteTheme }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleAccountMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
-  const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
-  const handleMenuClose = () => { setAnchorEl(null); handleMobileMenuClose(); };
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => setMobileMoreAnchorEl(event.currentTarget);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) =>
+    setAnchorEl(event.currentTarget);
+
+  const handleMenuClose = () => setAnchorEl(null);
 
   const toggleTheme = () => {
-    if (siteTheme === "light") {
-      setSiteTheme("dark");
-    } else {
-      setSiteTheme("light");
-    }
+    setSiteTheme(siteTheme === "light" ? "dark" : "light");
   };
+
+  const menuItems = [
+    {
+      label: "Change Theme",
+      icon: <ContrastIcon />,
+      onClick: () => {
+        toggleTheme();
+        handleMenuClose();
+      },
+    },
+    {
+      label: "Account",
+      icon: <AccountCircle />,
+      href: "/account",
+    },
+    {
+      label: "Logout",
+      icon: <Logout />,
+      href: "/logout",
+      onClick: handleMenuClose,
+    },
+  ];
 
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id='primary-search-account-menu'
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      id="primary-search-account-menu"
       keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem component={Link} href="/account" onClick={handleMenuClose}>Account</MenuItem>
-      <MenuItem component={Link} href="/logout" onClick={handleMenuClose}>Logout</MenuItem>
-    </Menu>
-  );
-
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id='primary-search-account-menu-mobile'
-      keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem onClick={toggleTheme}>
-        <IconButton size="large" color="inherit" aria-label='change theme'>
-            <ContrastIcon />
-          </IconButton>
-        <p>Change Theme</p>
-      </MenuItem>
-      <MenuItem component={Link} href="/account">
-      <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls='primary-search-account-menu'
-          aria-haspopup="true"
-          color="inherit"
+      {menuItems.map((item) => (
+        <MenuItem
+          key={item.label}
+          component={item.href ? Link : "li"}
+          href={item.href}
+          onClick={item.onClick || handleMenuClose}
         >
-          <AccountCircle />
-        </IconButton>
-        <p>Account</p>
-      </MenuItem>
-        <MenuItem onClick={handleMenuClose} component={Link} href="/logout" >
-                <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls='primary-search-account-menu'
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <Logout />
-          </IconButton>
-            <p>Logout</p>
-          </MenuItem>
+          <ListItemIcon>{item.icon}</ListItemIcon>
+          <Typography>{item.label}</Typography>
+        </MenuItem>
+      ))}
     </Menu>
   );
 
@@ -143,41 +127,54 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" enableColorOnDark color="primary">
         <Toolbar>
-          <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ display: { xs: 'none', sm: 'block' } }}
+          >
             JobTrackr
           </Typography>
+
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+            />
           </Search>
+
           <Box sx={{ flexGrow: 1 }} />
+
+          {/* Desktop */}
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" color="inherit">
-                <ContrastIcon 
-                  onClick={toggleTheme}
-                />
+            <IconButton size="large" color="inherit" onClick={toggleTheme}>
+              <ContrastIcon />
             </IconButton>
+
             <IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
-              aria-controls='primary-search-account-menu'
+              aria-controls="primary-search-account-menu"
               aria-haspopup="true"
-              onClick={handleAccountMenuOpen}
+              onClick={handleMenuOpen}
               color="inherit"
             >
               <AccountCircle />
             </IconButton>
           </Box>
+
+          {/* Mobile */}
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="show more"
-              aria-controls='primary-search-account-menu-mobile'
+              aria-controls="primary-search-account-menu"
               aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
+              onClick={handleMenuOpen}
               color="inherit"
             >
               <MoreIcon />
@@ -185,9 +182,10 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
+
       {renderMenu}
     </Box>
   );
-}
+};
+
 export default NewNavBar;
