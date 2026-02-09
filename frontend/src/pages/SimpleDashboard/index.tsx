@@ -73,7 +73,6 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
   const [isSlideoutOpen, setIsSlideoutOpen] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -81,7 +80,6 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
     const promptEvent = getDeferredPrompt();
 
     if (!promptEvent) {
-      console.log("No install prompt available yet");
       return;
     }
 
@@ -89,11 +87,9 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
       await promptEvent.prompt();
       const choice = await promptEvent.userChoice;
       if (choice.outcome === "accepted") {
-        console.log("User accepted install");
         localStorage.setItem("pwa-installed", "1");
         localStorage.setItem("pwa-install-dismissed", "0");
       } else {
-        console.log("User dismissed install");
         localStorage.setItem("pwa-installed", "0");
         localStorage.setItem("pwa-install-dismissed", "1");
       }
@@ -103,16 +99,9 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setAccessToken(data.session?.access_token ?? null);
-    });
+    getAllJobs()
   }, []);
-
-  useEffect(() => {
-    if (accessToken) {
-      getAllJobs();
-    }
-  }, [accessToken]);
+  
 
   useEffect(() => {
     if (selectedJobId == null) {
@@ -121,8 +110,15 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
     }
 
     const job = masterJobList.find((j) => j.id === selectedJobId);
-    setCurrentEditingJob(job ?? defaultJob);
+      setCurrentEditingJob(job ?? defaultJob);
   }, [selectedJobId, masterJobList]);
+
+  const getAccessToken = async (): Promise<string> => {
+    const { data } = await supabase.auth.getSession();
+    if (!data.session?.access_token) throw new Error("Not authenticated");
+    return data.session.access_token;
+  };
+
 
   /**
    * Fetch all jobs for the current user.
@@ -136,10 +132,10 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
    * const jobs = await getAllJobs();
    */
   const getAllJobs = async () => {
-    if (!accessToken) return; // no token yet
     try {
       setIsDataLoading(true);
-      const jobs = await apiGetJobs(accessToken);
+      const token = await getAccessToken();
+      const jobs = await apiGetJobs(token);
       setMasterJobList(jobs);
       setIsDataLoading(false);
     } catch (error) {
@@ -161,18 +157,15 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
    * await deleteJob(57);
    */
   const deleteJob = async (jobId: number) => {
-    if (!accessToken) return;
     try {
-      //setIsDataLoading(true);
-      await apiDeleteJob(jobId, accessToken);
+      const token = await getAccessToken();
+      await apiDeleteJob(jobId, token);
       setMasterJobList((prev) => prev.filter((job) => job.id !== jobId));
       setIsSlideoutOpen(false);
-      //setIsDataLoading(false);
       showToast("Job deleted successfully.", "success")();
     } catch (error) {
       console.error(error);
       showToast("Failed to delete job. Please try again.", "error")();
-      //setIsDataLoading(false);
     }
   };
 
@@ -189,16 +182,14 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
    * await addJob({ company: 'ABC', job_title: 'Dev', ... });
    */
   const addJob = async (jobValues: Job) => {
-    if (!accessToken) return;
     jobValues.last_updated = new Date();
     try {
-      //setIsDataLoading(true);
-      const newJob = await apiAddJob(jobValues, accessToken);
+      const token = await getAccessToken();
+      const newJob = await apiAddJob(jobValues, token);
       setMasterJobList((prev) => [...prev, newJob]);
       setIsSlideoutOpen(false);
       setIsDeleteModalVisible(false);
       setSelectedJobId(null);
-      //setIsDataLoading(false);
       showToast("Job added successfully.", "success")();
     } catch (error) {
       console.error(error);
@@ -219,14 +210,14 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
    * await saveJob({ company: 'ABC', job_title: 'Dev', ... });
    */
   const saveJob = async (jobValues: Job) => {
-    if (!accessToken) return;
     jobValues.last_updated = new Date();
     try {
-      await apiSaveJob(jobValues, accessToken);
+      const token = await getAccessToken();
+      await apiSaveJob(jobValues, token);
       setMasterJobList(
         masterJobList.map((item) =>
-          item.id === jobValues.id ? jobValues : item,
-        ),
+          item.id === jobValues.id ? jobValues : item
+        )
       );
       setIsSlideoutOpen(false);
       showToast("Job saved successfully.", "success")();

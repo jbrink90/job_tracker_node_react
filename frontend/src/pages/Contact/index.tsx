@@ -8,6 +8,7 @@ export default function Contact() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [emailDisabled, setEmailDisabled] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +17,7 @@ export default function Contact() {
       if (session) {
         setName(session.user?.user_metadata?.full_name || "");
         setEmail(session.user?.email || "");
+        setEmailDisabled(true);
       }
     };
     getSession();
@@ -30,6 +32,14 @@ export default function Contact() {
 
   return (
  <Box sx={{ p: 4, maxWidth: 800, mx: "auto", color: "text.primary" }}>
+      <Button
+        variant="outlined"
+        sx={{ mb: 2 }}
+        onClick={() => navigate(-1)}
+      >
+        &larr; Back
+      </Button>
+
       <Typography variant="h4" gutterBottom>
         Contact Us
       </Typography>
@@ -52,6 +62,7 @@ export default function Contact() {
           onChange={(e) => setEmail(e.target.value)}
           fullWidth
           required
+          disabled={emailDisabled}
         />
         <TextField
           label="Message"
@@ -78,23 +89,6 @@ export default function Contact() {
             transition: "all 0.3s ease",
         }}>
           Send Message
-        </Button>
-        <Button type="submit" variant="contained" color="error"
-          onClick={() => navigate(-1)}
-          sx={{
-            px: 6,
-            py: 1.5,
-            fontSize: "1.1rem",
-            fontWeight: 600,
-            borderRadius: 3,
-            boxShadow: "0px 4px 15px rgba(0,0,0,0.25)",
-            "&:hover": {
-            transform: "scale(1.05)",
-            boxShadow: "0px 6px 20px rgba(0,0,0,0.35)",
-            },
-            transition: "all 0.3s ease",
-        }}>
-          Go Back
         </Button>
       </Box>
     </Box>

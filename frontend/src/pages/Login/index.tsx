@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import isDev from "../../lib/is_dev";
 import "./index.css";
