@@ -14,7 +14,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import Logout from '@mui/icons-material/Logout';
 import Link from "@mui/material/Link";
-
+import { useThemeContext } from "../../context/ThemeContext";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -60,7 +60,8 @@ interface NewNavBarProps {
   setSiteTheme: (theme: "light" | "dark") => void;
 }
 
-const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
+const NewNavBar: React.FC<NewNavBarProps> = () => {
+  const { toggleTheme } = useThemeContext();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -73,13 +74,7 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
   const handleMenuClose = () => { setAnchorEl(null); handleMobileMenuClose(); };
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => setMobileMoreAnchorEl(event.currentTarget);
 
-  const toggleTheme = () => {
-    if (siteTheme === "light") {
-      setSiteTheme("dark");
-    } else {
-      setSiteTheme("light");
-    }
-  };
+
 
   const renderMenu = (
     <Menu
@@ -106,7 +101,7 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={toggleTheme}>
+      <MenuItem onClick={toggleTheme} data-testid="toggle_theme">
         <IconButton size="large" color="inherit" aria-label='change theme'>
             <ContrastIcon />
           </IconButton>

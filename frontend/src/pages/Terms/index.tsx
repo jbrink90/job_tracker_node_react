@@ -5,7 +5,7 @@ export default function Terms() {
     const navigate = useNavigate();
 
   return (
- <Box sx={{ p: 4, maxWidth: 800, mx: "auto", color: "text.primary" }}>
+ <Box sx={{ p: 4, maxWidth: 800, mx: "auto", color: "text.primary" }} data-testid="terms_box">
     <Typography variant="h4" gutterBottom>
       Terms of Service
     </Typography>

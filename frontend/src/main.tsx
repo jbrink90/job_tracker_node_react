@@ -10,6 +10,8 @@ import { User } from "@supabase/supabase-js";
 import "./main.css";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import { SnackbarProvider } from 'notistack';
+import { AppThemeProvider } from "./context/ThemeContext";
+
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
@@ -82,7 +84,7 @@ function AppWrapper() {
   }, []);
   
 return (
-  <ThemeProvider theme={theme}>
+  <AppThemeProvider>
     <CssBaseline />
     <LocalizationProvider dateAdapter={AdapterDayjs}>
     <SnackbarProvider maxSnack={3}>
@@ -116,7 +118,7 @@ return (
       </Router>
       </SnackbarProvider>
     </LocalizationProvider>
-  </ThemeProvider>
+  </AppThemeProvider>
 );
 }
 

@@ -1,0 +1,371 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NewNavBar > should display dark theme 1`] = `
+<div
+  class="MuiBox-root css-13z07nz"
+  data-testid="terms_box"
+>
+  <h4
+    class="MuiTypography-root MuiTypography-h4 MuiTypography-gutterBottom css-1it4a80-MuiTypography-root"
+  >
+    Terms of Service
+  </h4>
+  <h6
+    class="MuiTypography-root MuiTypography-subtitle2 MuiTypography-gutterBottom css-a3u038-MuiTypography-root"
+  >
+    Last updated: January 2026.
+  </h6>
+  <hr
+    class="MuiDivider-root MuiDivider-fullWidth css-x148m1-MuiDivider-root"
+  />
+  <br />
+  <p
+    class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+  >
+    Welcome to JobTrackr.online ("we," "us," or "our").
+    <br />
+    <br />
+     By using our services ("Services"), you agree to these Terms of Service. 
+    <br />
+    <br />
+     If you do not agree, please do not use our Services.
+  </p>
+  <br />
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      1. Using the Services
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      You agree to use JobTrackr responsibly and in compliance with all applicable laws.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      2. Accounts
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      You must be at least 18 years old to create an account. You are responsible for all activity under your account. We may suspend or terminate accounts that violate these Terms or are inactive for a long period.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      3. Content
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      You retain ownership of content you upload, but by using the Services, you grant us a license to operate, display, and manage your content as needed to provide our Services.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      4. Acceptable Use
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      You may not use the Services for illegal activities, to harm others, or to disrupt our systems. We reserve the right to remove content or suspend accounts that violate these rules.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      5. Payments
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      If you use paid features, you agree to pay the applicable fees. All payments are non-refundable unless otherwise stated. We may change fees with prior notice.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      6. Disclaimers
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      The Services are provided "as is" without warranties of any kind. We do not guarantee uninterrupted or error-free service. You use the Services at your own risk.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      7. Limitation of Liability
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      To the maximum extent permitted by law, JobTrackr will not be liable for indirect, incidental, or consequential damages arising from your use of the Services.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      8. Termination
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      We may suspend or terminate your access at any time for violation of these Terms or for other reasons. Upon termination, your rights to use the Services immediately cease.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      9. Changes to Terms
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      We may update these Terms occasionally. The revised date will be updated at the top. Continued use of the Services after updates constitutes acceptance of the new Terms.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      10. Contact
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      Questions about these Terms? Contact us at jobtrackr.online/contact.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-sznkde"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-colorPrimary css-1dfuhcu-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Back
+    </button>
+  </div>
+</div>
+`;
+
+exports[`NewNavBar > should display dark theme 2`] = `
+<div
+  class="MuiBox-root css-13z07nz"
+  data-testid="terms_box"
+>
+  <h4
+    class="MuiTypography-root MuiTypography-h4 MuiTypography-gutterBottom css-1it4a80-MuiTypography-root"
+  >
+    Terms of Service
+  </h4>
+  <h6
+    class="MuiTypography-root MuiTypography-subtitle2 MuiTypography-gutterBottom css-a3u038-MuiTypography-root"
+  >
+    Last updated: January 2026.
+  </h6>
+  <hr
+    class="MuiDivider-root MuiDivider-fullWidth css-x148m1-MuiDivider-root"
+  />
+  <br />
+  <p
+    class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+  >
+    Welcome to JobTrackr.online ("we," "us," or "our").
+    <br />
+    <br />
+     By using our services ("Services"), you agree to these Terms of Service. 
+    <br />
+    <br />
+     If you do not agree, please do not use our Services.
+  </p>
+  <br />
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      1. Using the Services
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      You agree to use JobTrackr responsibly and in compliance with all applicable laws.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      2. Accounts
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      You must be at least 18 years old to create an account. You are responsible for all activity under your account. We may suspend or terminate accounts that violate these Terms or are inactive for a long period.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      3. Content
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      You retain ownership of content you upload, but by using the Services, you grant us a license to operate, display, and manage your content as needed to provide our Services.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      4. Acceptable Use
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      You may not use the Services for illegal activities, to harm others, or to disrupt our systems. We reserve the right to remove content or suspend accounts that violate these rules.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      5. Payments
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      If you use paid features, you agree to pay the applicable fees. All payments are non-refundable unless otherwise stated. We may change fees with prior notice.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      6. Disclaimers
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      The Services are provided "as is" without warranties of any kind. We do not guarantee uninterrupted or error-free service. You use the Services at your own risk.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      7. Limitation of Liability
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      To the maximum extent permitted by law, JobTrackr will not be liable for indirect, incidental, or consequential damages arising from your use of the Services.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      8. Termination
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      We may suspend or terminate your access at any time for violation of these Terms or for other reasons. Upon termination, your rights to use the Services immediately cease.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      9. Changes to Terms
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      We may update these Terms occasionally. The revised date will be updated at the top. Continued use of the Services after updates constitutes acceptance of the new Terms.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-1y8uf5e"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom css-1wmifpn-MuiTypography-root"
+    >
+      10. Contact
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+    >
+      Questions about these Terms? Contact us at jobtrackr.online/contact.
+    </p>
+  </div>
+  <div
+    class="MuiBox-root css-sznkde"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-colorPrimary css-1dfuhcu-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Back
+    </button>
+  </div>
+</div>
+`;
