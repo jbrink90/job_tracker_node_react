@@ -11,10 +11,9 @@ import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import ContrastIcon from '@mui/icons-material/Contrast';
 import Logout from '@mui/icons-material/Logout';
 import Link from "@mui/material/Link";
-
+import ThemeToggle from "../ThemeToggle";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -55,13 +54,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-interface NewNavBarProps {
-  siteTheme: "light" | "dark";
-  setSiteTheme: (theme: "light" | "dark") => void;
-}
-
-const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
-
+const NewNavBar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -73,13 +66,7 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
   const handleMenuClose = () => { setAnchorEl(null); handleMobileMenuClose(); };
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => setMobileMoreAnchorEl(event.currentTarget);
 
-  const toggleTheme = () => {
-    if (siteTheme === "light") {
-      setSiteTheme("dark");
-    } else {
-      setSiteTheme("light");
-    }
-  };
+
 
   const renderMenu = (
     <Menu
@@ -106,11 +93,9 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={toggleTheme}>
-        <IconButton size="large" color="inherit" aria-label='change theme'>
-            <ContrastIcon />
-          </IconButton>
-        <p>Change Theme</p>
+      <MenuItem>
+        <ThemeToggle />
+        <p>Theme</p>
       </MenuItem>
       <MenuItem component={Link} href="/account">
       <IconButton
@@ -154,11 +139,7 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" color="inherit">
-                <ContrastIcon 
-                  onClick={toggleTheme}
-                />
-            </IconButton>
+            <ThemeToggle />
             <IconButton
               size="large"
               edge="end"
