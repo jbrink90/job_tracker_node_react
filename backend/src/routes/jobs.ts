@@ -159,7 +159,7 @@ router.post('/', supabaseAuthMiddleware, async (req: Request, res: Response) => 
         const insertedJob = await insertJob(db, jobData, user_id);
         res.json(insertedJob);
     } catch (error: any) {
-        res.status(500).json({ error: error.message });
+        throw new HttpError(500, error.message);
     } finally {
         db.close();
     }
@@ -179,7 +179,7 @@ router.patch('/', supabaseAuthMiddleware, async (req: Request, res: Response) =>
         await modifyJob(db, jobData, user_id);
         res.json({ message: "Job: '" + jobData.job_title + "' modified successfully" });
     } catch (error: any) {
-        res.status(500).json({ error: error.message });
+        throw new HttpError(500, error.message);
     } finally {
         db.close();
     }
@@ -218,7 +218,8 @@ router.get('/', supabaseAuthMiddleware, async (req: Request, res: Response, next
       const jobs: Job[] = await getAllJobsById(db, user.id);
       res.json(jobs);
     } catch (error: any) {
-        next(error.message);
+      throw new HttpError(500,  error.message);
+      //next(error.message);
     } finally {
       db.close();
     }
@@ -231,7 +232,8 @@ router.get('/all', supabaseAuthMiddleware, async (req: Request, res: Response, n
       const jobs: Job[] = await fetchAll(db);
       res.json(jobs);
     } catch (error: any) {
-        next(error.message);
+      throw new HttpError(500,  error.message);
+      //next(error.message);
     } finally {
       db.close();
     }
@@ -255,7 +257,8 @@ router.get("/resettable", supabaseAuthMiddleware, async (req: Request, res: Resp
       await execute(db, `DROP TABLE jobs; DELETE FROM SQLITE_SEQUENCE WHERE NAME='jobs';`);
       res.json({ message: "jobs table reset successfully" });
     } catch (error: any) {
-      next(error.message);
+      throw new HttpError(500,  error.message);
+      //next(error.message);
     } finally {
       db.close();
     }
