@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import isDev from "../../lib/is_dev";
 import "./index.css";
-import { Button } from "@mui/material";
+import { Button, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { PageFooter } from "../../components";
 
 
 const frontEndUrl =
@@ -12,6 +13,7 @@ const frontEndUrl =
     : import.meta.env.VITE_FRONTEND_BASE_URL_PROD) || "http://localhost:5173";
 
 const Login = () => {
+  const theme = useTheme();
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
@@ -60,13 +62,13 @@ const Login = () => {
             padding: 30,
             borderRadius: 12,
             boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-            backgroundColor: "#fff",
+            backgroundColor: theme.palette.background.paper,
           }}
         >
-          <h2 style={{ marginBottom: 10, fontWeight: 700, color: "#333" }}>
+          <h2 style={{ marginBottom: 10, fontWeight: 700, color: theme.palette.text.primary }}>
             Sign in
           </h2>
-          <p style={{ marginBottom: 20, color: "#555" }}>
+          <p style={{ marginBottom: 20, color: theme.palette.text.secondary }}>
             We'll send you a magic login link. No password needed!
           </p>
 
@@ -84,18 +86,18 @@ const Login = () => {
                   marginBottom: "12px",
                   fontSize: "1rem",
                   borderRadius: 8,
-                  border: "1px solid #ccc",
+                  border: `1px solid ${theme.palette.divider}`,
                   outline: "none",
                   transition: "border-color 0.2s",
                   boxSizing: "border-box",
-                  color: 'white',
+                  color: theme.palette.text.primary,
                 }}
                 
                 onFocus={(e) =>
-                  (e.currentTarget.style.borderColor = "#1976d2")
+                  (e.currentTarget.style.borderColor = theme.palette.primary.main)
                 }
                 onBlur={(e) =>
-                  (e.currentTarget.style.borderColor = "#ccc")
+                  (e.currentTarget.style.borderColor = theme.palette.divider)
                 }
                 required
               />
@@ -143,7 +145,7 @@ const Login = () => {
             <div>
               <p
                 style={{
-                  color: "#4caf50",
+                  color: theme.palette.success.main,
                   fontWeight: 500,
                   marginTop: 12,
                 }}
@@ -153,6 +155,7 @@ const Login = () => {
             </div>
           )}
         </div>
+        <PageFooter />
       </div>
     </>
   );

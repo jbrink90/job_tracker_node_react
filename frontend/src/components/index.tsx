@@ -5,3 +5,4 @@ export { default as SearchableMap } from "./SearchableMap";
 export { default as NavBar } from "./NavBar";
 export { default as PageFooter } from "./PageFooter";
 export { default as NewNavBar } from "./NewNavBar";
+export { default as ThemeToggle } from "./ThemeToggle";

@@ -14,30 +14,23 @@ import {
   apiSaveJob,
 } from "../../lib/api_calls";
 import { supabase } from "../../lib/supabase";
-import { getDeferredPrompt, clearDeferredPrompt } from "../../lib/pwa";
 import CloseIcon from "@mui/icons-material/Close";
 import { PageFooter } from "../../components";
 import { Button } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { Box, Typography, IconButton, Modal } from "@mui/material";
+import { Box, Typography, IconButton, Modal, useTheme } from "@mui/material";
 
-const modalStyle = {
+const getModalStyle = (theme: any) => ({
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  bgcolor: "#333",
-  border: "1px solid #000",
+  bgcolor: theme.palette.background.paper,
+  border: `1px solid ${theme.palette.divider}`,
   boxShadow: 24,
   borderRadius: "7px",
   textAlign: "center",
-};
-
-interface DashBoardProps {
-  siteTheme: "light" | "dark";
-  setSiteTheme: (theme: "light" | "dark") => void;
-}
-
+});
 
 declare global {
   interface BeforeInstallPromptEvent extends Event {
@@ -50,10 +43,8 @@ declare global {
 }
 export {};
 
-const SimpleDashboard: React.FC<DashBoardProps> = ({
-  siteTheme,
-  setSiteTheme,
-}) => {
+const SimpleDashboard: React.FC = () => {
+  const theme = useTheme();
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
   const defaultJob: Job = {
@@ -76,31 +67,6 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const { enqueueSnackbar } = useSnackbar();
-
-  async function onInstallClick() {
-    const promptEvent = getDeferredPrompt();
-
-    if (!promptEvent) {
-      console.log("No install prompt available yet");
-      return;
-    }
-
-    try {
-      await promptEvent.prompt();
-      const choice = await promptEvent.userChoice;
-      if (choice.outcome === "accepted") {
-        console.log("User accepted install");
-        localStorage.setItem("pwa-installed", "1");
-        localStorage.setItem("pwa-install-dismissed", "0");
-      } else {
-        console.log("User dismissed install");
-        localStorage.setItem("pwa-installed", "0");
-        localStorage.setItem("pwa-install-dismissed", "1");
-      }
-    } finally {
-      clearDeferredPrompt();
-    }
-  }
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -262,7 +228,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
   return (
     <>
       <div className="reactTrackerPage_main">
-        <NewNavBar siteTheme={siteTheme} setSiteTheme={setSiteTheme} />
+        <NewNavBar />
 
         <div className="reactTrackerPage_leftPane">
           <div className="reactTrackerPage_headerContainer">
@@ -311,7 +277,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
             />
           </div>
         </div>
-        <PageFooter onInstallClick={onInstallClick} />
+        <PageFooter />
         <EditSlideout
           currentEditingJob={currentEditingJob ?? defaultJob}
           isSlideoutOpen={isSlideoutOpen}
@@ -326,7 +292,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
           open={isDeleteModalVisible}
           onClose={() => setIsDeleteModalVisible(false)}
         >
-          <Box sx={{ ...modalStyle, p: 2, width: { xs: "90%", sm: 400 } }}>
+          <Box sx={{ ...getModalStyle(theme), p: 2, width: { xs: "90%", sm: 400 } }}>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               <IconButton
                 size="small"

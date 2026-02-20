@@ -1,11 +1,37 @@
 import {useState} from "react";
 import "./index.css";
 import { NavLink } from "react-router-dom";
+import { getDeferredPrompt, clearDeferredPrompt } from "../../lib/pwa";
 
-export default function PageFooter({ onInstallClick }: { onInstallClick: () => Promise<void> | void }) {
+
+export default function PageFooter() {
   const logo_src = "search.png";
-
   const [year] = useState<number>(new Date().getFullYear());
+
+    async function onInstallClick() {
+      const promptEvent = getDeferredPrompt();
+
+      if (!promptEvent) {
+        console.log("No install prompt available yet");
+        return;
+      }
+
+      try {
+        await promptEvent.prompt();
+        const choice = await promptEvent.userChoice;
+        if (choice.outcome === "accepted") {
+          console.log("User accepted install");
+          localStorage.setItem("pwa-installed", "1");
+          localStorage.setItem("pwa-install-dismissed", "0");
+        } else {
+          console.log("User dismissed install");
+          localStorage.setItem("pwa-installed", "0");
+          localStorage.setItem("pwa-install-dismissed", "1");
+        }
+      } finally {
+        clearDeferredPrompt();
+      }
+    }
 
   return (
     <footer className="pageFooter_container">
@@ -39,6 +65,13 @@ export default function PageFooter({ onInstallClick }: { onInstallClick: () => P
         <div className="pageFooter_linksGroup">
           <h3 className="pageFooter_title">Learn More</h3>
           <ul className="pageFooter_list">
+            <li>
+              <NavLink
+                className="pageFooter_link"
+                to="/login">
+                  Try the demo
+                </NavLink>
+            </li>
             <li>
               <NavLink
                 className="pageFooter_link"
