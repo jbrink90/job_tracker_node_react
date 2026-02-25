@@ -156,18 +156,21 @@
   width: 100%;
   padding-right: 40px; /* space for the icon */
 }
+
 .editSlideout_mdxeditor {
   border-radius: 7px;
 }
 .editSlideout_mdxeditor_text {
   background-color: #d8d8d873;
   border-radius: 10px;
-  padding: 1px 5px 1px 5px !important;
-  min-height: 0;
+  padding: 8px 12px !important;
+  min-height: 120px;
   overflow-y: auto;
 }
+
 .editSlideout_mdxeditor_toolbar {
   background-color: #009ce8 !important;
+
 }
 .editSlideout_deleteButton {
   background-color: #e80000;
