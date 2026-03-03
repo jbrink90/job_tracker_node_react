@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./index.css";
+import "../../pages/Login/index.css";
 import CloseIcon from "@mui/icons-material/Close";
 import MapIcon from "@mui/icons-material/Map";
 import { Job } from "../../types/Job";
@@ -86,8 +87,10 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   const [isSaveModalVisible, setIsSaveModalVisible] = useState(false);
   const [isMapModalVisible, setIsMapModalVisible] = useState(false);
   const [hasJobBeenModified, setHasJobBeenModified] = useState(false);
+  const [linkedinUrl, setLinkedinUrl] = useState("");
   const editorRef = useRef<MDXEditorMethods>(null);
   const [markdownSource, setMarkdownSource] = useState<string>("");
+  const [showLinkedInDiv, setShowLinkedInDiv] = useState(true);
 
   useEffect(() => {
     if (!isSlideoutOpen) return;
@@ -100,6 +103,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       setJobValues(currentEditingJob || defaultJob);
       setMarkdownSource(currentEditingJob?.description || "");
       editorRef.current?.setMarkdown(currentEditingJob?.description || "");
+      setShowLinkedInDiv(false);
     }
     setHasJobBeenModified(false);
   }, [currentEditingJob, isAddingNewJob, isSlideoutOpen]);
@@ -109,6 +113,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       setIsSaveModalVisible(true);
     } else {
       setIsSlideoutOpen(false);
+      setShowLinkedInDiv(true);
     }
   };
 
@@ -138,6 +143,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     setMarkdownSource(currentEditingJob.description || "");
     setHasJobBeenModified(false);
     setIsSlideoutOpen(false);
+    setShowLinkedInDiv(true);
     closeSaveModal();
   };
 
@@ -149,6 +155,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
         addJob(jobValues);
         setJobValues(defaultJob);
         setIsSlideoutOpen(false);
+        setShowLinkedInDiv(true);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -162,7 +169,8 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     }
   };
 
-  return (
+  if (showLinkedInDiv) {
+    return (
     <>
       <Drawer
         anchor="right"
@@ -177,6 +185,66 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               boxShadow: theme.shadows[16],
               bgcolor: theme.palette.background.default,
               padding: "7px",
+            },
+          },
+        }}
+      >
+        <Box sx={{ padding: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Typography variant="h6" sx={{ marginBottom: 2, fontWeight: 600 }}>
+            Add Job
+          </Typography>
+          
+          <Typography variant="body2" sx={{ marginBottom: 3, color: 'text.secondary' }}>
+            Enter a LinkedIn job posting URL to automatically import job details
+          </Typography>
+          
+          <TextField
+            fullWidth
+            placeholder="https://www.linkedin.com/jobs/view/..."
+            value={linkedinUrl}
+            onChange={(e) => setLinkedinUrl(e.target.value)}
+            variant="outlined"
+            sx={{ marginBottom: 2 }}
+            size="small"
+          />
+          
+          <Button
+            variant="contained"
+            fullWidth
+            disabled={!linkedinUrl || !linkedinUrl.includes('linkedin.com/jobs')}
+          >
+            Import from LinkedIn
+          </Button>
+          
+          <div className="or-divider">OR</div>
+          
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => setShowLinkedInDiv(false)}
+          >
+            Enter posting manually
+          </Button>
+        </Box>
+      </Drawer>
+    </>
+    );
+  } else {
+      return (
+    <>
+      <Drawer
+        anchor="right"
+        open={isSlideoutOpen}
+        onClose={toggleLocalSlideout}
+        slotProps={{
+          paper: {
+            sx: {
+              width: { xs: "100%", sm: "85%", md: "600px" },
+              color: theme.palette.text.primary,
+              borderLeft: `1px solid ${theme.palette.divider}`,
+              boxShadow: theme.shadows[16],
+              bgcolor: theme.palette.background.default,
+              padding: "20px",
               // bgcolor: theme.palette.primary.dark
               // bgcolor: theme.palette.grey[900]
               // bgcolor: theme.palette.mode === 'dark' ? '#1e1e1e' : 'white',
@@ -341,6 +409,9 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       </Modal>
     </>
   );
+  }
+
+
 };
 
 export default EditSlideout;

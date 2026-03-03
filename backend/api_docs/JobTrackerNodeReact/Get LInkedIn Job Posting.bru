@@ -1,0 +1,27 @@
+meta {
+  name: Get LInkedIn Job Posting
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{api_url}}/jobs/pull
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+      "url": "https://www.linkedin.com/jobs/view/4354677379/?alternateChannel=search&eBP=CwEAAAGcllEXKSxaFs9bBXsuBRwysobkF9lbcAiRA7gj_8VdnhmweuKXECMtF2TIXxAwqlNWEuWQigBhOPAI5MYZY_uouHCRV_5DPyqdSIWPKy0H_crgOp71iFkMytCqn_96vPPvzziEdwhVUL1hkiuWYzVTl8hVQps45DQoRd5EYN4xzrcabmVxeSk8EsT3b-48O1c1RQRYoofhdxqyHkfxcv0HaTDYbPcevJ_RgREJHF1JskRl6xA-_cEUTwkzv6bcNlBhRTYAS7UXIGroN0nWAI1jLlhsEmG4sLcMQAHNb7o8ZQzv93osFXGZX-k1xijDoGJ96H31GKzfpqTESeh2MePWXar8Sg_39fq8LFzz7TAq_szDGwCavgrKhUAX2g-KozqyQvHuMlh2LNxgrjm4VQ2qlVWQrDrC274T3wUlNWTBdWv_b2rylliMr2ga5VTkfGVXUqBaLxkub2uwneH_0RM5YXnxaYyuQL4sZNlW&refId=bONd7djLGfvf0L7GEYDQ0w%3D%3D&trackingId=eXeqaSQ5lGZWMQMAKBWg7g%3D%3D"
+    }
+}
+
+body:text {
+  {
+      "url": "https://www.linkedin.com/jobs/view/4354677379/?alternateChannel=search&eBP=CwEAAAGcllEXKSxaFs9bBXsuBRwysobkF9lbcAiRA7gj_8VdnhmweuKXECMtF2TIXxAwqlNWEuWQigBhOPAI5MYZY_uouHCRV_5DPyqdSIWPKy0H_crgOp71iFkMytCqn_96vPPvzziEdwhVUL1hkiuWYzVTl8hVQps45DQoRd5EYN4xzrcabmVxeSk8EsT3b-48O1c1RQRYoofhdxqyHkfxcv0HaTDYbPcevJ_RgREJHF1JskRl6xA-_cEUTwkzv6bcNlBhRTYAS7UXIGroN0nWAI1jLlhsEmG4sLcMQAHNb7o8ZQzv93osFXGZX-k1xijDoGJ96H31GKzfpqTESeh2MePWXar8Sg_39fq8LFzz7TAq_szDGwCavgrKhUAX2g-KozqyQvHuMlh2LNxgrjm4VQ2qlVWQrDrC274T3wUlNWTBdWv_b2rylliMr2ga5VTkfGVXUqBaLxkub2uwneH_0RM5YXnxaYyuQL4sZNlW&refId=bONd7djLGfvf0L7GEYDQ0w%3D%3D&trackingId=eXeqaSQ5lGZWMQMAKBWg7g%3D%3D"
+    }
+}
