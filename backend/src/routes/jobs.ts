@@ -27,7 +27,6 @@ const getAuthBearer = (req: Request): string | null => {
     return user_id || null;
 };
 
-// LinkedIn job scraping function
 const extractLinkedInJob = async (url: string) => {
   console.log("Fetching:", url);
   
@@ -41,14 +40,9 @@ const extractLinkedInJob = async (url: string) => {
       "Upgrade-Insecure-Requests": "1",
     },
   });
-
-  console.log("Final URL:", res.request.res.responseUrl);
-  console.log("Status:", res.status);
   
   const $ = cheerio.load(res.data);
   
-  console.log("Page title:", $("title").text());
-
   const jsonLd = $('script[type="application/ld+json"]').html();
   if (jsonLd) {
     try {
@@ -67,16 +61,30 @@ const extractLinkedInJob = async (url: string) => {
       .trim();
   };
 
+  const titleText = $("title").text();
+
+  let location = '';
+  
+  const titleMatch = titleText.match(/^(.+?)\s+in\s+(.+?)\s*\|/);
+  if (titleMatch && titleMatch[2]) {
+    location = titleMatch[2].trim();
+  }
+  
+  if (!location) {
+    location = $('[class*="location"]:not([class*="typeahead"])').first().text().trim() ||
+               $('.topcard__flavor--bullet-location-v2').first().text().trim() ||
+               $('[data-test="job-location"]').first().text().trim() ||
+               '';
+  }
+  
   return {
     title: cleanText($("h1").first().text().trim() || $('[data-test="job-title"]').text().trim()),
     company: cleanText($('[data-test="job-company"]').text().trim() || 
              $('a[href*="/company/"]').first().text().trim()),
-    location: cleanText($('[data-test="job-location"]').text().trim() || 
-             $('.job-location').text().trim()),
+    location: cleanText(location.split('\n')[0].split(',')[0].split('·')[0].trim()),
     description: cleanText($('[data-test="job-description"]').text().trim() ||
-                $('.description').text().trim()),
-    salary: cleanText($('[data-test="job-salary"]').text().trim() ||
-            $('span:contains("$")').first().text().trim()),
+                $('.description__text').text().trim() ||
+                $('.show-more-less-html__markup').text().trim()),
   };
 };
 
@@ -337,8 +345,7 @@ router.post("/pull", async (req: Request, res: Response, next: NextFunction) => 
         job_title: scrapedJob.title,
         company: scrapedJob.company,
         location: scrapedJob.location,
-        description: scrapedJob.description,
-        salary: scrapedJob.salary
+        description: scrapedJob.description
       }
     });
   } catch (error: any) {
