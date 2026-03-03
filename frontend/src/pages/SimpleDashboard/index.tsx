@@ -267,7 +267,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
         <div className="reactTrackerPage_leftPane">
           <div className="reactTrackerPage_headerContainer">
             <header className="reactTrackerPage_header">
-              Your Applications
+              Job Applications ({masterJobList.length})
             </header>
             <div className="reactTrackerPage_buttonsInner">
               <Tooltip title="Refresh Applications">
