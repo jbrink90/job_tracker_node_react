@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef, GridColumnVisibilityModel, GridRenderCellParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridColumnVisibilityModel, GridRenderCellParams, GridPaginationModel } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import "@fontsource/roboto/400.css";
 import { Job } from "../../types/Job";
@@ -17,6 +17,7 @@ interface ReactTableProps {
   setIsAddingNewJob: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDeleteModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isDataLoading: boolean;
+  refreshTable?: () => void;
 }
 
 function applyChipsToStatus(params: GridRenderCellParams) {
@@ -45,7 +46,7 @@ function applyChipsToStatus(params: GridRenderCellParams) {
     }
 }
 
-export const MuiTableTest: React.FC<ReactTableProps> = ({jobs, setIsSlideoutOpen, setIsAddingNewJob, setSelectedJobId, setIsDeleteModalVisible, isDataLoading}) => {
+export const MuiTableTest: React.FC<ReactTableProps> = ({jobs, setIsSlideoutOpen, setIsAddingNewJob, setSelectedJobId, setIsDeleteModalVisible, isDataLoading, refreshTable}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -54,6 +55,11 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({jobs, setIsSlideoutOpen
     location: false,
     applied: false,
     last_updated: false,
+  });
+
+  const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({
+    pageSize: 15,
+    page: 0,
   });
 
   const desktopColumns: GridColDef[] = [
@@ -125,6 +131,12 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({jobs, setIsSlideoutOpen
     },
   ];
 
+  React.useEffect(() => {
+    if (refreshTable) {
+      setPaginationModel(prev => ({ ...prev, page: 0 }));
+    }
+  }, [refreshTable]);
+
   const formattedJobs = jobs.map(job => ({
     id: job.id,
     ...job,
@@ -141,7 +153,9 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({jobs, setIsSlideoutOpen
           sx={{ display: 'flex', flexDirection: 'column'}}
           columnVisibilityModel={columnVisibilityModel}
           onColumnVisibilityModelChange={setColumnVisibilityModel}
-          hideFooter={true}
+          pageSizeOptions={[10, 15, 25, 50, 100]}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           loading={isDataLoading}
           slotProps={{
             loadingOverlay: {
