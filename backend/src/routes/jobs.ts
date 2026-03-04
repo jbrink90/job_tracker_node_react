@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import sqlite3 from "sqlite3";
 import { Job } from "../types/Job";
 import { openDatabase, insertJob, modifyJob, deleteJob, getAllJobsById, execute, fetchAll } from "../utils/sql_functions";
-import { supabaseAuthMiddleware } from "../utils/supabaseAuth";
+import { createAuthMiddleware } from "../utils/authMiddleware";
 import { MOCK_API_GET_ALL_JOBS } from "../mock_data/mockApiGetAllJobs";
 import { HttpError } from '../utils/http_error';
 import axios from "axios";
@@ -283,7 +283,7 @@ export const addDemoData = async () => {
   });
 };
 
-router.post('/', supabaseAuthMiddleware, async (req: Request, res: Response) => {
+router.post('/', createAuthMiddleware(false), async (req: Request, res: Response) => {
     const user_id = getAuthBearer(req);
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { body: jobData } = req;
@@ -309,7 +309,7 @@ router.post('/', supabaseAuthMiddleware, async (req: Request, res: Response) => 
     }
 });
 
-router.patch('/', supabaseAuthMiddleware, async (req: Request, res: Response) => {
+router.patch('/', createAuthMiddleware(false), async (req: Request, res: Response) => {
     const user_id = getAuthBearer(req);
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { body: jobData } = req;
@@ -335,7 +335,7 @@ router.patch('/', supabaseAuthMiddleware, async (req: Request, res: Response) =>
     }
 });
 
-router.delete('/', supabaseAuthMiddleware, async (req: Request, res: Response) => {
+router.delete('/', createAuthMiddleware(false), async (req: Request, res: Response) => {
     const user_id = getAuthBearer(req);
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { id } = req.query;
@@ -355,12 +355,10 @@ router.delete('/', supabaseAuthMiddleware, async (req: Request, res: Response) =
         res.json({ message: "Job: '" + id + "' deleted successfully" });
     } catch (error: any) {
         throw new HttpError(500,  error.message);
-    } finally {
-        db.close();
     }
 });
 
-router.get('/', supabaseAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+router.get('/', createAuthMiddleware(false), async (req: Request, res: Response, next: NextFunction) => {
     const user = (req as any).supabaseUser;
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READONLY);
   
@@ -374,7 +372,7 @@ router.get('/', supabaseAuthMiddleware, async (req: Request, res: Response, next
     }
 });
 
-router.get('/all', supabaseAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+router.get('/all', createAuthMiddleware(true), async (req: Request, res: Response, next: NextFunction) => {
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READONLY);
   
     try {
@@ -388,17 +386,17 @@ router.get('/all', supabaseAuthMiddleware, async (req: Request, res: Response, n
 });
 
 
-router.get("/createdatabase", supabaseAuthMiddleware, async (req: Request, res: Response) => {
+router.get("/createdatabase", createAuthMiddleware(true), async (req: Request, res: Response) => {
   res.json(await createDatabase());
 });
-router.get("/createtable", supabaseAuthMiddleware, async (req: Request, res: Response) => {
+router.get("/createtable", createAuthMiddleware(true), async (req: Request, res: Response) => {
   res.json(await createTables());
 });
-router.get("/mockdata", supabaseAuthMiddleware, async (req: Request, res: Response) => {
+router.get("/mockdata", createAuthMiddleware(true), async (req: Request, res: Response) => {
   res.json(await addDemoData());
 });
   
-router.get("/resettable", supabaseAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+router.get("/resettable", createAuthMiddleware(true), async (req: Request, res: Response, next: NextFunction) => {
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE);
   
     try {
@@ -411,7 +409,7 @@ router.get("/resettable", supabaseAuthMiddleware, async (req: Request, res: Resp
     }
 });
 
-router.post("/pull", async (req: Request, res: Response, next: NextFunction) => {
+router.post("/pull", createAuthMiddleware(false), async (req: Request, res: Response, next: NextFunction) => {
   const { url } = req.body;
   
   if (!url) {
