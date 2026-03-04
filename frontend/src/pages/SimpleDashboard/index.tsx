@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import EditSlideout from "../../components/EditSlideout";
 import { NewNavBar } from "../../components";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -140,20 +140,22 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
    * @example
    * const jobs = await getAllJobs();
    */
-  const getAllJobs = async () => {
+  const getAllJobs = useCallback(async (resetPagination: boolean = false) => {
     if (!accessToken) return; // no token yet
     try {
       setIsDataLoading(true);
       const jobs = await apiGetJobs(accessToken);
       setMasterJobList(jobs);
       setIsDataLoading(false);
-      // Trigger table pagination reset
-      setRefreshTableTrigger(prev => prev + 1);
+      // Only trigger table pagination reset if explicitly requested
+      if (resetPagination) {
+        setRefreshTableTrigger(prev => prev + 1);
+      }
     } catch (error) {
       console.error(error);
-      showToast("Failed to fetch jobs. Please try again.", "error")();
+      enqueueSnackbar("Failed to fetch jobs. Please try again.", { variant: "error" });
     }
-  };
+  }, [accessToken]);
 
   /**
    * Delete a job by its ID.
@@ -266,9 +268,9 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
       enqueueSnackbar(`${message}`, { variant });
     };
 
-  const refreshTable = () => {
-    setRefreshTableTrigger(prev => prev + 1);
-  };
+  const refreshTable = useCallback(() => {
+    getAllJobs(true); // Explicitly reset pagination on refresh
+  }, [getAllJobs]);
 
   const handleSearchChange = (searchTerm: string) => {
     setSearchTerm(searchTerm);
@@ -312,7 +314,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
                   }}
                   onClick={() => {
                     setIsDataLoading(true);
-                    getAllJobs();
+                    getAllJobs(true);
                   }}
                 >
                   {isMobile ? "" : "Refresh"}
