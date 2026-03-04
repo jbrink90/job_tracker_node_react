@@ -74,6 +74,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshTableTrigger, setRefreshTableTrigger] = useState<number>(0);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -142,6 +143,8 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
       const jobs = await apiGetJobs(accessToken);
       setMasterJobList(jobs);
       setIsDataLoading(false);
+      // Trigger table pagination reset
+      setRefreshTableTrigger(prev => prev + 1);
     } catch (error) {
       console.error(error);
       showToast("Failed to fetch jobs. Please try again.", "error")();
@@ -259,6 +262,10 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
       enqueueSnackbar(`${message}`, { variant });
     };
 
+  const refreshTable = () => {
+    setRefreshTableTrigger(prev => prev + 1);
+  };
+
   return (
     <>
       <div className="reactTrackerPage_main">
@@ -308,6 +315,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
               setIsAddingNewJob={setIsAddingNewJob}
               setIsDeleteModalVisible={setIsDeleteModalVisible}
               isDataLoading={isDataLoading}
+              refreshTable={refreshTable}
             />
           </div>
         </div>
