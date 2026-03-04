@@ -188,7 +188,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
 
     function handleImportFromLinkedIn() {
       setLoadingLinkedIn(true);
-      fetch("http://localhost:4444/jobs/pull", {
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/jobs/pull`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
