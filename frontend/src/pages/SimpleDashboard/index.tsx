@@ -20,6 +20,7 @@ import { PageFooter } from "../../components";
 import { Button } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { Box, Typography, IconButton, Modal } from "@mui/material";
+import { useTheme, useMediaQuery } from "@mui/material";
 
 const modalStyle = {
   position: "absolute",
@@ -54,6 +55,8 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
   siteTheme,
   setSiteTheme,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
   const defaultJob: Job = {
@@ -75,6 +78,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshTableTrigger, setRefreshTableTrigger] = useState<number>(0);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -266,10 +270,24 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
     setRefreshTableTrigger(prev => prev + 1);
   };
 
+  const handleSearchChange = (searchTerm: string) => {
+    setSearchTerm(searchTerm);
+  };
+
+  const filteredJobs = masterJobList.filter(job => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      (job.company || "").toLowerCase().includes(searchLower) ||
+      (job.job_title || "").toLowerCase().includes(searchLower) ||
+      (job.location || "").toLowerCase().includes(searchLower) ||
+      (job.status || "").toLowerCase().includes(searchLower)
+    );
+  });
+
   return (
     <>
       <div className="reactTrackerPage_main">
-        <NewNavBar siteTheme={siteTheme} setSiteTheme={setSiteTheme} />
+        <NewNavBar siteTheme={siteTheme} setSiteTheme={setSiteTheme} onSearchChange={handleSearchChange} />
 
         <div className="reactTrackerPage_leftPane">
           <div className="reactTrackerPage_headerContainer">
@@ -282,13 +300,22 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
                   variant="contained"
                   color="primary"
                   startIcon={<RefreshIcon />}
-                  sx={{ marginLeft: "10px", alignItems: "center" }}
+                  sx={{ 
+                    marginLeft: "10px", 
+                    alignItems: "center",
+                    minWidth: isMobile ? "40px" : "auto",
+                    width: isMobile ? "40px" : "auto",
+                    padding: isMobile ? "8px" : "normal",
+                    "& .MuiButton-startIcon": {
+                      margin: isMobile ? 0 : "0 8px 0 0",
+                    }
+                  }}
                   onClick={() => {
                     setIsDataLoading(true);
                     getAllJobs();
                   }}
                 >
-                  Refresh
+                  {isMobile ? "" : "Refresh"}
                 </Button>
               </Tooltip>
               <Tooltip title="Add New Application">
@@ -296,10 +323,19 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
                   variant="contained"
                   color="primary"
                   startIcon={<AddIcon />}
-                  sx={{ marginLeft: "10px", alignItems: "center" }}
+                  sx={{ 
+                    marginLeft: "10px", 
+                    alignItems: "center",
+                    minWidth: isMobile ? "40px" : "auto",
+                    width: isMobile ? "40px" : "auto",
+                    padding: isMobile ? "8px" : "normal",
+                    "& .MuiButton-startIcon": {
+                      margin: isMobile ? 0 : "0 8px 0 0",
+                    }
+                  }}
                   onClick={slideoutNewJob}
                 >
-                  Add Job
+                  {isMobile ? "" : "Add Job"}
                 </Button>
               </Tooltip>
             </div>
@@ -307,7 +343,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
 
           <div className="reactTrackerPage_tableContainer">
             <MuiTableTest
-              jobs={masterJobList}
+              jobs={filteredJobs}
               setIsSlideoutOpen={setIsSlideoutOpen}
               selectedJobId={selectedJobId}
               setSelectedJobId={setSelectedJobId}
