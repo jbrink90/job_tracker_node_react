@@ -1,11 +1,7 @@
 // lib/api_calls.ts
 import { Job } from "../types/Job";
-import isDev from "../lib/is_dev";
 
-const baseUrl =
-  (isDev()
-    ? import.meta.env.VITE_API_BASE_URL_DEV
-    : import.meta.env.VITE_API_BASE_URL_PROD) || "http://localhost:4444";
+const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:4444";
     
 /**
  * Fetch all jobs for a specific user.

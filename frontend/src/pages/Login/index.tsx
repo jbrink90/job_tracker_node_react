@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "../../lib/supabase";
-import isDev from "../../lib/is_dev";
 import "./index.css";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 
-const frontEndUrl =
-  (isDev()
-    ? import.meta.env.VITE_FRONTEND_BASE_URL_DEV
-    : import.meta.env.VITE_FRONTEND_BASE_URL_PROD) || "http://localhost:5173";
+const frontEndUrl = import.meta.env.VITE_FRONTEND_BASE_URL || "http://localhost:5173";
 
 const Login = () => {
   const [email, setEmail] = useState("");
