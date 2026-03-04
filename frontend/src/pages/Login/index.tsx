@@ -74,6 +74,10 @@ const Login = () => {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck="false"
                 style={{
                   width: "100%",
                   padding: "12px 14px",
@@ -84,7 +88,8 @@ const Login = () => {
                   outline: "none",
                   transition: "border-color 0.2s",
                   boxSizing: "border-box",
-                  color: 'white',
+                  color: "#333",
+                  backgroundColor: "#fff",
                 }}
                 
                 onFocus={(e) =>
