@@ -22,18 +22,6 @@ import { useSnackbar } from "notistack";
 import { Box, Typography, IconButton, Modal } from "@mui/material";
 import { useTheme, useMediaQuery } from "@mui/material";
 
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "#333",
-  border: "1px solid #000",
-  boxShadow: 24,
-  borderRadius: "7px",
-  textAlign: "center",
-};
-
 interface DashBoardProps {
   siteTheme: "light" | "dark";
   setSiteTheme: (theme: "light" | "dark") => void;
@@ -57,6 +45,18 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  
+  const modalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: theme.palette.background.paper,
+    border: `1px solid ${theme.palette.divider}`,
+    boxShadow: 24,
+    borderRadius: "7px",
+    textAlign: "center",
+  };
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
   const defaultJob: Job = {
