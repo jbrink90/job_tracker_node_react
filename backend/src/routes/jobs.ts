@@ -61,6 +61,57 @@ const extractLinkedInJob = async (url: string) => {
       .trim();
   };
 
+  const htmlToMarkdown = (html: string) => {
+    return html
+      // Remove comment nodes
+      .replace(/<!---->/g, '')
+      // Convert <strong> and <b> to markdown bold
+      .replace(/<(?:strong|b)>(.*?)<\/(?:strong|b)>/g, '**$1**')
+      // Convert <em> and <i> to markdown italic
+      .replace(/<(?:em|i)>(.*?)<\/(?:em|i)>/g, '*$1*')
+      // Convert <ul> to markdown lists (remove opening tag)
+      .replace(/<ul[^>]*>/g, '')
+      // Convert </ul> to just newlines
+      .replace(/<\/ul>/g, '\n')
+      // Convert <ol> to markdown numbered lists
+      .replace(/<ol[^>]*>/g, '')
+      .replace(/<\/ol>/g, '\n')
+      // Convert <li> to markdown list items
+      .replace(/<li[^>]*>(.*?)<\/li>/g, '- $1\n')
+      // Convert <br> and <br/> to newlines
+      .replace(/<br\s*\/?>/g, '\n')
+      // Convert <p> and </p> to newlines
+      .replace(/<p[^>]*>/g, '')
+      .replace(/<\/p>/g, '\n\n')
+      // Convert <h1>-<h6> to markdown headers
+      .replace(/<h1[^>]*>(.*?)<\/h1>/g, '# $1\n\n')
+      .replace(/<h2[^>]*>(.*?)<\/h2>/g, '## $1\n\n')
+      .replace(/<h3[^>]*>(.*?)<\/h3>/g, '### $1\n\n')
+      .replace(/<h4[^>]*>(.*?)<\/h4>/g, '#### $1\n\n')
+      .replace(/<h5[^>]*>(.*?)<\/h5>/g, '##### $1\n\n')
+      .replace(/<h6[^>]*>(.*?)<\/h6>/g, '###### $1\n\n')
+      // Remove any remaining HTML tags
+      .replace(/<[^>]*>/g, '')
+      // Clean up whitespace
+      .replace(/\n\s*\n\s*\n/g, '\n\n') // Normalize multiple newlines
+      .replace(/^\s+|\s+$/gm, '') // Trim lines
+      .trim();
+  };
+
+  const extractDescriptionMarkdown = () => {
+    // Try to get the inner content of the description div
+    const descriptionDiv = $('.show-more-less-html__markup').first();
+    if (descriptionDiv.length) {
+      return htmlToMarkdown(descriptionDiv.html() || '');
+    }
+    
+    // Fallback to other methods
+    const fallbackHtml = $('[data-test="job-description"]').html() ||
+                        $('.description__text').html() ||
+                        $('.show-more-less-html__markup').html() || '';
+    return htmlToMarkdown(fallbackHtml);
+  };
+
   const titleText = $("title").text();
 
   let location = '';
@@ -82,9 +133,7 @@ const extractLinkedInJob = async (url: string) => {
     company: cleanText($('[data-test="job-company"]').text().trim() || 
              $('a[href*="/company/"]').first().text().trim()),
     location: cleanText(location.split('\n')[0].split(',')[0].split('·')[0].trim()),
-    description: cleanText($('[data-test="job-description"]').text().trim() ||
-                $('.description__text').text().trim() ||
-                $('.show-more-less-html__markup').text().trim()),
+    description: extractDescriptionMarkdown(),
   };
 };
 
