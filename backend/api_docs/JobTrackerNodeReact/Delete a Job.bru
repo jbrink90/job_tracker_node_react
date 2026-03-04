@@ -5,17 +5,15 @@ meta {
 }
 
 delete {
-  url: {{api_url}}/jobs
-  body: json
+  url: {{api_url}}/jobs?id=333
+  body: none
   auth: bearer
+}
+
+params:query {
+  id: 333
 }
 
 auth:bearer {
   token: {{access_token}}
-}
-
-body:json {
-  {
-    "id": 41
-  }
 }
