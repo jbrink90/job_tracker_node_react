@@ -12,6 +12,35 @@ const fs = require('fs');
 const filename = process.env.SQLITE_FILENAME || "./job_data.sqlite";
 const router = Router();
 
+const validateJobData = (data: any): Job => {
+  const job: Job = {
+    id: data.id || null,
+    company: data.company || '',
+    job_title: data.job_title || '',
+    description: data.description || '',
+    location: data.location || '',
+    status: data.status || '',
+    applied: data.applied ? new Date(data.applied) : new Date(),
+    last_updated: data.last_updated ? new Date(data.last_updated) : new Date(),
+    supabase_id: data.supabase_id || ''
+  };
+
+  if (!job.supabase_id) {
+    throw new HttpError(400, "supabase_id is required");
+  }
+  if (!job.company) {
+    throw new HttpError(400, "company is required");
+  }
+  if (!job.job_title) {
+    throw new HttpError(400, "job_title is required");
+  }
+  if (!job.last_updated) {
+    throw new HttpError(400, "last_updated is required");
+  }
+
+  return job;
+};
+
 const decodeJwt = (token: string): any => {
     const payloadBase64 = token.split('.')[1];
     const payloadJson = Buffer.from(payloadBase64, 'base64').toString('utf-8');
@@ -265,10 +294,16 @@ router.post('/', supabaseAuthMiddleware, async (req: Request, res: Response) => 
     }
 
     try {
-        const insertedJob = await insertJob(db, jobData, user_id);
+        // Validate and sanitize job data
+        const validatedJob = validateJobData(jobData);
+        const insertedJob = await insertJob(db, validatedJob, user_id);
         res.json(insertedJob);
     } catch (error: any) {
-        res.status(500).json({ error: error.message });
+        if (error instanceof HttpError) {
+            res.status(error.statusCode).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: error.message });
+        }
     } finally {
         db.close();
     }
@@ -285,10 +320,16 @@ router.patch('/', supabaseAuthMiddleware, async (req: Request, res: Response) =>
     }
 
     try {
-        await modifyJob(db, jobData, user_id);
-        res.json({ message: "Job: '" + jobData.job_title + "' modified successfully" });
+        // Validate and sanitize job data
+        const validatedJob = validateJobData(jobData);
+        await modifyJob(db, validatedJob, user_id);
+        res.json({ message: "Job: '" + validatedJob.job_title + "' modified successfully" });
     } catch (error: any) {
-        res.status(500).json({ error: error.message });
+        if (error instanceof HttpError) {
+            res.status(error.statusCode).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: error.message });
+        }
     } finally {
         db.close();
     }
