@@ -58,15 +58,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 interface NewNavBarProps {
   siteTheme: "light" | "dark";
   setSiteTheme: (theme: "light" | "dark") => void;
+  onSearchChange?: (searchTerm: string) => void;
 }
 
-const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
+const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme, onSearchChange}) => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const searchTerm = event.target.value;
+    if (onSearchChange) {
+      onSearchChange(searchTerm);
+    }
+  };
 
   const handleAccountMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
@@ -150,7 +158,11 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme}) => {
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
+            <StyledInputBase 
+              placeholder="Search jobs…" 
+              inputProps={{ 'aria-label': 'search jobs' }}
+              onChange={handleSearchChange}
+            />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
