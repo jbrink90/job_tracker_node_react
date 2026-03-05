@@ -3,6 +3,7 @@ node_modules/
 dist/
 build/
 .vite/
+data/
 
 # Logs
 npm-debug.log*
