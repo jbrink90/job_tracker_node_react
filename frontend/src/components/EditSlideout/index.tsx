@@ -290,6 +290,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           },
         }}
       >
+        
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <IconButton onClick={toggleLocalSlideout}>
             <CloseIcon fontSize="large" />
@@ -402,11 +403,11 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
         </Box>
 
         <Stack spacing={2.5}>
-          <TextField label="Company" name="company" value={jobValues?.company || ""} onChange={handleInputChange} fullWidth required />
-          <TextField label="Position" name="job_title" value={jobValues?.job_title || ""} onChange={handleInputChange} fullWidth required />
+          <TextField label="Company" name="company" value={jobValues?.company || ""} onChange={handleInputChange} fullWidth required size="small" />
+          <TextField label="Position" name="job_title" value={jobValues?.job_title || ""} onChange={handleInputChange} fullWidth required size="small" />
 
           <Box>
-            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+            <Typography variant="subtitle1">
               Description
             </Typography>
 
@@ -446,6 +447,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             onChange={handleInputChange}
             fullWidth
             required
+            size="small"
             InputProps={{
               endAdornment: (
                 <MapIcon sx={{ cursor: "pointer" }} onClick={openMapModal} />
@@ -453,7 +455,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             }}
           />
 
-          <TextField label="Status" name="status" value={jobValues?.status || ""} onChange={handleInputChange} fullWidth required />
+          <TextField label="Status" name="status" value={jobValues?.status || ""} onChange={handleInputChange} fullWidth required size="small" />
 
           <DatePicker
             label="Date Applied"
@@ -465,7 +467,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               }));
               setHasJobBeenModified(true);
             }}
-            slotProps={{ textField: { fullWidth: true, required: true } }}
+            slotProps={{ textField: { fullWidth: true, required: true, size: "small" } }}
           />
 
           <TextField
@@ -477,10 +479,11 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             }
             disabled
             fullWidth
+            size="small"
           />
         </Stack>
 
-        <Box sx={{ mt: 4 }}>
+        <Box sx={{ mt: 2 }}>
           <Button
             fullWidth
             variant="contained"

@@ -9,6 +9,7 @@ import {
   Stack,
   CircularProgress,
 } from "@mui/material";
+import { PageFooter } from "../../components";
 
 const Account = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -80,7 +81,8 @@ const Account = () => {
   }
 
   return (
-    <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+    <>
+    <Box sx={{ mt: 4, mb: 4, display: "flex", justifyContent: "center" }}>
       <Paper sx={{ p: 4, width: "100%", maxWidth: 420 }}>
         {/* Back Button */}
         <Button
@@ -136,6 +138,9 @@ const Account = () => {
         </Stack>
       </Paper>
     </Box>
+    
+    <PageFooter />
+    </>
   );
 };
 

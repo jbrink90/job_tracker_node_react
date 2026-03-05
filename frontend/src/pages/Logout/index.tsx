@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
-import { useTheme } from "@mui/material";
+import { 
+  Paper,
+  Typography,
+  Box,
+  Alert,
+  CircularProgress
+} from "@mui/material";
 import "./index.css";
 import { PageFooter } from "../../components";
 
 const Logout = () => {
-  const theme = useTheme();
   const [status, setStatus] = useState<"pending" | "done" | "error">("pending");
   const [error, setError] = useState("");
 
@@ -31,42 +36,40 @@ const Logout = () => {
 
   return (
     <>
-      <div className="reactTrackerPage_main">
-        <div
-          style={{
-            maxWidth: 400,
-            margin: "40px auto",
-            padding: 30,
-            borderRadius: 12,
-            boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-            backgroundColor: theme.palette.background.paper,
-          }}
-        >
-          <h2 style={{ marginBottom: 10, fontWeight: 700, color: theme.palette.text.primary }}>
+      <Box sx={{ mt: 4, mb: 4, display: "flex", justifyContent: "center" }}>
+        <Paper sx={{ p: 4, width: "100%", maxWidth: 420, textAlign: 'center' }}>
+          <Typography component="h1" variant="h5" fontWeight="bold" gutterBottom>
             Log out
-          </h2>
+          </Typography>
 
           {status === "pending" && (
-            <p style={{ marginTop: 12, color: theme.palette.text.secondary }}>
-              Kicking your session out the door, please hold.
-            </p>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 3 }}>
+              <CircularProgress size={40} sx={{ mb: 2 }} />
+              <Typography variant="body1" color="text.secondary">
+                Kicking your session out the door, please hold.
+              </Typography>
+            </Box>
           )}
 
           {status === "done" && (
-            <p style={{ marginTop: 12, color: theme.palette.success.main, fontWeight: 500 }}>
-              ✔ You're logged out! <br /> 
-              Hang tight while we take you home.
-            </p>
+            <Alert severity="success" sx={{ mt: 2 }}>
+              <Typography variant="body1" fontWeight={500}>
+                ✔ You're logged out! <br /> 
+                Hang tight while we take you home.
+              </Typography>
+            </Alert>
           )}
 
           {status === "error" && (
-            <p style={{ marginTop: 12, color: theme.palette.error.main }}>
-              Something went wrong: {error}
-            </p>
+            <Alert severity="error" sx={{ mt: 2 }}>
+              <Typography variant="body1">
+                Something went wrong: {error}
+              </Typography>
+            </Alert>
           )}
-        </div>
+        </Paper>
+      </Box>
       <PageFooter />
-      </div>
     </>
   );
 };

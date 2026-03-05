@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import { styled, alpha, useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,6 +14,11 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import Logout from '@mui/icons-material/Logout';
 import Link from "@mui/material/Link";
+import { useThemeContext } from '../../context/ThemeContext';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
+import ClearIcon from '@mui/icons-material/Clear';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -26,9 +31,12 @@ const Search = styled('div')(({ theme }) => ({
   marginRight: theme.spacing(2),
   marginLeft: 0,
   width: '100%',
+  maxWidth: '500px',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
     width: 'auto',
+    flex: 1,
+    maxWidth: '600px',
   },
 }));
 
@@ -47,32 +55,44 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    paddingRight: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '20ch',
+      width: '30ch',
     },
   },
 }));
 
 interface NewNavBarProps {
-  siteTheme: "light" | "dark";
-  setSiteTheme: (theme: "light" | "dark") => void;
   onSearchChange?: (searchTerm: string) => void;
 }
 
-const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme, onSearchChange}) => {
+const NewNavBar: React.FC<NewNavBarProps> = ({onSearchChange}) => {
+  const { siteTheme, setTheme } = useThemeContext();
+  const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [themeMenuAnchorEl, setThemeMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [searchValue, setSearchValue] = React.useState('');
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isThemeMenuOpen = Boolean(themeMenuAnchorEl);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value;
+    setSearchValue(searchTerm);
     if (onSearchChange) {
       onSearchChange(searchTerm);
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchValue('');
+    if (onSearchChange) {
+      onSearchChange('');
     }
   };
 
@@ -80,13 +100,11 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme, onSearchC
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
   const handleMenuClose = () => { setAnchorEl(null); handleMobileMenuClose(); };
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => setMobileMoreAnchorEl(event.currentTarget);
-
-  const toggleTheme = () => {
-    if (siteTheme === "light") {
-      setSiteTheme("dark");
-    } else {
-      setSiteTheme("light");
-    }
+  const handleThemeMenuOpen = (event: React.MouseEvent<HTMLElement>) => setThemeMenuAnchorEl(event.currentTarget);
+  const handleThemeMenuClose = () => setThemeMenuAnchorEl(null);
+  const handleThemeSelect = (theme: "light" | "dark" | "system") => {
+    setTheme(theme);
+    handleThemeMenuClose();
   };
 
   const renderMenu = (
@@ -104,6 +122,31 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme, onSearchC
     </Menu>
   );
 
+  const renderThemeMenu = (
+    <Menu
+      anchorEl={themeMenuAnchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id='theme-selection-menu'
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isThemeMenuOpen}
+      onClose={handleThemeMenuClose}
+    >
+      <MenuItem onClick={() => handleThemeSelect("light")} selected={siteTheme === "light"}>
+        <LightModeIcon sx={{ mr: 1 }} />
+        Light
+      </MenuItem>
+      <MenuItem onClick={() => handleThemeSelect("dark")} selected={siteTheme === "dark"}>
+        <DarkModeIcon sx={{ mr: 1 }} />
+        Dark
+      </MenuItem>
+      <MenuItem onClick={() => handleThemeSelect("system")} selected={siteTheme === "system"}>
+        <SettingsBrightnessIcon sx={{ mr: 1 }} />
+        System
+      </MenuItem>
+    </Menu>
+  );
+
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -114,11 +157,11 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme, onSearchC
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={toggleTheme}>
-        <IconButton size="large" color="inherit" aria-label='change theme'>
+      <MenuItem onClick={handleThemeMenuOpen}>
+        <IconButton size="large" color="inherit" aria-label='select theme'>
             <ContrastIcon />
           </IconButton>
-        <p>Change Theme</p>
+        <p>Select Theme</p>
       </MenuItem>
       <MenuItem component={Link} href="/account">
       <IconButton
@@ -161,15 +204,31 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme, onSearchC
             <StyledInputBase 
               placeholder="Search jobs…" 
               inputProps={{ 'aria-label': 'search jobs' }}
+              value={searchValue}
               onChange={handleSearchChange}
             />
+            {searchValue && (
+              <IconButton
+                size="small"
+                aria-label="clear search"
+                onClick={handleClearSearch}
+                sx={{
+                  position: 'absolute',
+                  right: theme.spacing(1),
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: 'inherit',
+                  padding: theme.spacing(0.5),
+                }}
+              >
+                <ClearIcon fontSize="small" />
+              </IconButton>
+            )}
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" color="inherit">
-                <ContrastIcon 
-                  onClick={toggleTheme}
-                />
+            <IconButton size="large" color="inherit" onClick={handleThemeMenuOpen}>
+                <ContrastIcon />
             </IconButton>
             <IconButton
               size="large"
@@ -199,6 +258,7 @@ const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme, onSearchC
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {renderThemeMenu}
     </Box>
   );
 }
