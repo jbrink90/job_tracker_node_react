@@ -1,16 +1,12 @@
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
-import isDev from "../../lib/is_dev";
 import "./index.css";
 import { Button, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PageFooter } from "../../components";
 
 
-const frontEndUrl =
-  (isDev()
-    ? import.meta.env.VITE_FRONTEND_BASE_URL_DEV
-    : import.meta.env.VITE_FRONTEND_BASE_URL_PROD) || "http://localhost:5173";
+const frontEndUrl = import.meta.env.VITE_FRONTEND_BASE_URL || "http://localhost:5173";
 
 const Login = () => {
   const theme = useTheme();
@@ -80,6 +76,10 @@ const Login = () => {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck="false"
                 style={{
                   width: "100%",
                   padding: "12px 14px",

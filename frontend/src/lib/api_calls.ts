@@ -1,12 +1,8 @@
 // lib/api_calls.ts
 import { Job } from "../types/Job";
-import isDev from "../lib/is_dev";
 
-const baseUrl =
-  (isDev()
-    ? import.meta.env.VITE_API_BASE_URL_DEV
-    : import.meta.env.VITE_API_BASE_URL_PROD) || "http://localhost:4444";
-    
+const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:4444";
+
 /**
  * Fetch all jobs for a specific user.
  *
@@ -92,4 +88,28 @@ export async function apiSaveJob(job: Job, supabase_id: string | null): Promise<
     body: JSON.stringify(job),
   });
   if (!res.ok) throw new Error("Failed to save job");
+}
+
+/**
+ * Pull LinkedIn information about a job posting
+ *
+ * @async
+ * @function
+ * @param {Job} job - The updated job data.
+ * @param {string | null} supabase_id - The Supabase user ID to authorize the save. Can be null.
+ * @returns {Promise<void>} Resolves with nothing on success.
+ * @throws Will throw an error if the fetch fails or the response is not OK.
+ *
+ * @example
+ * await apiSaveJob({ id: 42, company: 'Acme', job_title: 'Senior Dev', ... }, 'user-id-123');
+ */
+export async function apiPullLinkedInData(linkedinUrl: string, supabase_id: string | null): Promise<void> {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/jobs/pull`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
+        body: JSON.stringify({
+          url: linkedinUrl,
+        }),
+      });
+  return res.json();
 }
