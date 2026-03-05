@@ -65,7 +65,7 @@ const defaultJob: Job = {
   job_title: "",
   description: "",
   location: "",
-  status: "",
+  status: "Applied",
   applied: new Date(),
   last_updated: new Date(),
   supabase_id: "",
@@ -164,8 +164,55 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     closeSaveModal();
   };
 
+  const handleDirectSave = () => {
+    // Validate required fields
+    const missingFields = validateRequiredFields();
+    if (missingFields.length > 0) {
+      enqueueSnackbar(
+        `Please fill in the required fields: ${missingFields.join(', ')}`, 
+        { variant: 'error' }
+      );
+      return;
+    }
+    
+    // If validation passes, call the save function
+    onSaveJob(jobValues);
+  };
+
+  const validateRequiredFields = (): string[] => {
+    const missingFields: string[] = [];
+    
+    if (!jobValues.company?.trim()) {
+      missingFields.push('Company');
+    }
+    if (!jobValues.job_title?.trim()) {
+      missingFields.push('Position');
+    }
+    if (!jobValues.location?.trim()) {
+      missingFields.push('Location');
+    }
+    if (!jobValues.status?.trim()) {
+      missingFields.push('Status');
+    }
+    if (!jobValues.applied) {
+      missingFields.push('Date Applied');
+    }
+    
+    return missingFields;
+  };
+
   const saveApplication = () => {
     closeSaveModal();
+
+    // Validate required fields
+    const missingFields = validateRequiredFields();
+    if (missingFields.length > 0) {
+      enqueueSnackbar(
+        `Please fill in the required fields: ${missingFields.join(', ')}`, 
+        { variant: 'error' }
+      );
+      return;
+    }
 
     if (isAddingNewJob) {
       try {
@@ -367,8 +414,8 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
         </Box>
 
         <Stack spacing={2.5}>
-          <TextField label="Company" name="company" value={jobValues?.company || ""} onChange={handleInputChange} fullWidth />
-          <TextField label="Position" name="job_title" value={jobValues?.job_title || ""} onChange={handleInputChange} fullWidth />
+          <TextField label="Company" name="company" value={jobValues?.company || ""} onChange={handleInputChange} fullWidth required />
+          <TextField label="Position" name="job_title" value={jobValues?.job_title || ""} onChange={handleInputChange} fullWidth required />
 
           <Box>
             <Typography variant="subtitle1" sx={{ mb: 1 }}>
@@ -410,6 +457,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             value={jobValues?.location || ""}
             onChange={handleInputChange}
             fullWidth
+            required
             InputProps={{
               endAdornment: (
                 <MapIcon sx={{ cursor: "pointer" }} onClick={openMapModal} />
@@ -417,7 +465,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             }}
           />
 
-          <TextField label="Status" name="status" value={jobValues?.status || ""} onChange={handleInputChange} fullWidth />
+          <TextField label="Status" name="status" value={jobValues?.status || ""} onChange={handleInputChange} fullWidth required />
 
           <DatePicker
             label="Date Applied"
@@ -429,7 +477,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               }));
               setHasJobBeenModified(true);
             }}
-            slotProps={{ textField: { fullWidth: true } }}
+            slotProps={{ textField: { fullWidth: true, required: true } }}
           />
 
           <TextField
@@ -448,7 +496,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <Button
             fullWidth
             variant="contained"
-            onClick={() => onSaveJob(jobValues)}
+            onClick={handleDirectSave}
             disabled={!hasJobBeenModified}
             sx={{
               py: 2,
