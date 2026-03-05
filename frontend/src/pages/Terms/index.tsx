@@ -1,11 +1,13 @@
 import { Box, Typography, Divider, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { PageFooter } from "../../components";
 
 export default function Terms() {
     const navigate = useNavigate();
 
   return (
- <Box sx={{ p: 4, maxWidth: 800, mx: "auto", color: "text.primary" }}>
+    <>
+  <Box sx={{ p: 4, maxWidth: 800, mx: "auto", color: "text.primary" }}>
     <Typography variant="h4" gutterBottom>
       Terms of Service
     </Typography>
@@ -135,5 +137,8 @@ export default function Terms() {
         </Button>
       </Box>
     </Box>
+    
+    <PageFooter />
+    </>
   );
 }

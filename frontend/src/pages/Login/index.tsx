@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import "./index.css";
-import { Button, useTheme } from "@mui/material";
+import { 
+  Button, 
+  Paper, 
+  Typography, 
+  TextField, 
+  Box, 
+  Alert,
+  CircularProgress,
+  Divider
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PageFooter } from "../../components";
 
@@ -9,16 +18,17 @@ import { PageFooter } from "../../components";
 const frontEndUrl = import.meta.env.VITE_FRONTEND_BASE_URL || "http://localhost:5173";
 
 const Login = () => {
-  const theme = useTheme();
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
@@ -26,6 +36,8 @@ const Login = () => {
         emailRedirectTo: `${frontEndUrl}/dashboard`,
       },
     });
+
+    setLoading(false);
 
     if (error) {
       setError(error.message);
@@ -36,13 +48,17 @@ const Login = () => {
   };
 
   const handleDemoLogin = async () => {
+    setLoading(true);
     const {error} = await supabase.auth.signInWithPassword({
       email: "demo@jobtrackr.online",
       password: import.meta.env.VITE_DEMO_PASSWORD,
     });
 
+    setLoading(false);
+
     if (error) {
       console.error(error);
+      setError(error.message);
     } else {
       navigate("/dashboard", { replace: false });
     }
@@ -50,113 +66,79 @@ const Login = () => {
 
   return (
     <>
-      <div className="reactTrackerPage_main">
-        <div
-          style={{
-            maxWidth: 400,
-            margin: "40px auto",
-            padding: 30,
-            borderRadius: 12,
-            boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-            backgroundColor: theme.palette.background.paper,
-          }}
-        >
-          <h2 style={{ marginBottom: 10, fontWeight: 700, color: theme.palette.text.primary }}>
+      <Box sx={{ mt: 4, mb: 4, display: "flex", justifyContent: "center" }}>
+        <Paper sx={{ p: 4, width: "100%", maxWidth: 420 }}>
+          <Typography component="h1" variant="h5" fontWeight="bold" gutterBottom>
             Sign in
-          </h2>
-          <p style={{ marginBottom: 20, color: theme.palette.text.secondary }}>
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             We'll send you a magic login link. No password needed!
-          </p>
+          </Typography>
 
           {!sent ? (
-            <>
-            <form onSubmit={handleLogin}>
-              <input
-                type="email"
-                placeholder="you@example.com"
+            <Box component="form" onSubmit={handleLogin} sx={{ width: '100%' }}>
+              <TextField
+                fullWidth
+                id="email"
+                label="Email address"
+                name="email"
+                autoComplete="email"
+                autoFocus
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                autoComplete="email"
-                autoCapitalize="off"
-                autoCorrect="off"
-                spellCheck="false"
-                style={{
-                  width: "100%",
-                  padding: "12px 14px",
-                  marginBottom: "12px",
-                  fontSize: "1rem",
-                  borderRadius: 8,
-                  border: `1px solid ${theme.palette.divider}`,
-                  outline: "none",
-                  transition: "border-color 0.2s",
-                  boxSizing: "border-box",
-                  color: theme.palette.text.primary,
-                }}
-                
-                onFocus={(e) =>
-                  (e.currentTarget.style.borderColor = theme.palette.primary.main)
-                }
-                onBlur={(e) =>
-                  (e.currentTarget.style.borderColor = theme.palette.divider)
-                }
+                margin="normal"
                 required
+                disabled={loading}
               />
 
               <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  sx={{
-                    padding: "12px",
-                    fontWeight: 600,
-                    fontSize: "1rem",
-                    borderRadius: 2,
-                    textTransform: "none",
-                  }}
-                >
-                  Send Magic Link
-                </Button>
+                type="submit"
+                fullWidth
+                variant="contained"
+                size="large"
+                sx={{ mt: 3, mb: 2 }}
+                disabled={loading}
+                startIcon={loading && <CircularProgress size={20} />}
+              >
+                {loading ? 'Sending...' : 'Send Magic Link'}
+              </Button>
 
               {error && (
-                <p style={{ color: "red", marginTop: 12 }}>{error}</p>
+                <Alert severity="error" sx={{ mt: 2 }}>
+                  {error}
+                </Alert>
               )}
-            </form>
 
-            <div className="or-divider">OR</div>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="success"
-                  fullWidth
-                  sx={{
-                    padding: "12px",
-                    fontWeight: 600,
-                    fontSize: "1rem",
-                    borderRadius: 2,
-                    textTransform: "none",
-                  }}
-                  onClick={handleDemoLogin}
-                >
-                  Try the Demo Account
-                </Button>
-            </>
-          ) : (
-            <div>
-              <p
-                style={{
-                  color: theme.palette.success.main,
-                  fontWeight: 500,
-                  marginTop: 12,
-                }}
+              <Divider sx={{ my: 3 }}>
+                <Typography variant="body2" color="text.secondary">
+                  OR
+                </Typography>
+              </Divider>
+
+              <Button
+                fullWidth
+                variant="contained"
+                color="success"
+                size="large"
+                onClick={handleDemoLogin}
+                disabled={loading}
+                startIcon={loading && <CircularProgress size={20} />}
               >
-                ✔ Magic link sent! Check your inbox and click the link to sign in.
-              </p>
-            </div>
+                {loading ? 'Signing in...' : 'Try the Demo Account'}
+              </Button>
+            </Box>
+          ) : (
+            <Box sx={{ textAlign: 'center', py: 2 }}>
+              <Alert severity="success">
+                <Typography variant="body1" fontWeight={500}>
+                  ✔ Magic link sent! <br/> Check your inbox and click the link to sign in.
+                </Typography>
+              </Alert>
+            </Box>
           )}
-        </div>
-        <PageFooter />
-      </div>
+        </Paper>
+      </Box>
+      <PageFooter />
     </>
   );
 };

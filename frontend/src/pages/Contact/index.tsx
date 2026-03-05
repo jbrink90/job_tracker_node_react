@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { supabase } from "../../lib/supabase";
 import { useNavigate } from "react-router-dom";
+import { PageFooter } from "../../components";
 
 
 export default function Contact() {
@@ -29,7 +30,8 @@ export default function Contact() {
   };
 
   return (
- <Box sx={{ p: 4, maxWidth: 800, mx: "auto", color: "text.primary" }}>
+    <>
+    <Box sx={{ p: 4, maxWidth: 800, mx: "auto", color: "text.primary" }}>
       <Typography variant="h4" gutterBottom>
         Contact Us
       </Typography>
@@ -98,5 +100,8 @@ export default function Contact() {
         </Button>
       </Box>
     </Box>
+    
+    <PageFooter />
+    </>
   );
 }

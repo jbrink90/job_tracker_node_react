@@ -34,8 +34,7 @@ const getModalStyle = (theme: any) => ({
 });
 
 interface DashBoardProps {
-  siteTheme: "light" | "dark";
-  setSiteTheme: (theme: "light" | "dark") => void;
+  // Theme is now handled by context, no props needed
 }
 
 
@@ -50,10 +49,7 @@ declare global {
 }
 export {};
 
-const SimpleDashboard: React.FC<DashBoardProps> = ({
-  siteTheme,
-  setSiteTheme,
-}) => {
+const SimpleDashboard: React.FC<DashBoardProps> = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   
@@ -287,7 +283,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
   return (
     <>
       <div className="reactTrackerPage_main">
-        <NewNavBar siteTheme={siteTheme} setSiteTheme={setSiteTheme} onSearchChange={handleSearchChange} />
+        <NewNavBar onSearchChange={handleSearchChange} />
 
         <div className="reactTrackerPage_leftPane">
           <div className="reactTrackerPage_headerContainer">
