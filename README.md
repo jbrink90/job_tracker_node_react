@@ -18,9 +18,9 @@
 - 🛡️ **Admin Protection** - Secure admin endpoints with role-based access
 
 ### 📱 **Progressive Web App**
-- 📲 **Install Anywhere** - Works as a native app on desktop and mobile
+- 📈 **Install Anywhere** - Works as a native app on desktop and mobile
 - 🌐 **Offline Support** - Service worker caching for offline functionality
-- � **Mobile Optimized** - Responsive design that works on all devices
+- 📱 **Mobile Optimized** - Responsive design that works on all devices
 
 ### 🛠️ **Developer Experience**
 - ⚡ **TypeScript** - Full type safety across frontend and backend
