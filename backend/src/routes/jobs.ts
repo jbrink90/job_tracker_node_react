@@ -284,19 +284,22 @@ export const addDemoData = async () => {
 };
 
 router.post('/', createAuthMiddleware(false), async (req: Request, res: Response) => {
-    const user_id = getAuthBearer(req);
+    const user = (req as any).supabaseUser;
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { body: jobData } = req;
 
-    if (!user_id) {
+    if (!user) {
         throw new HttpError(401, "Unauthorized");
         return;
     }
 
     try {
+        // Add user ID to job data
+        const jobDataWithUserId = { ...jobData, supabase_id: user.id };
+        
         // Validate and sanitize job data
-        const validatedJob = validateJobData(jobData);
-        const insertedJob = await insertJob(db, validatedJob, user_id);
+        const validatedJob = validateJobData(jobDataWithUserId);
+        const insertedJob = await insertJob(db, validatedJob, user.id);
         res.json(insertedJob);
     } catch (error: any) {
         if (error instanceof HttpError) {
@@ -310,19 +313,22 @@ router.post('/', createAuthMiddleware(false), async (req: Request, res: Response
 });
 
 router.patch('/', createAuthMiddleware(false), async (req: Request, res: Response) => {
-    const user_id = getAuthBearer(req);
+    const user = (req as any).supabaseUser;
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { body: jobData } = req;
 
-    if (!user_id) {
+    if (!user) {
         throw new HttpError(401, "Unauthorized");
         return;
     }
 
     try {
+        // Add user ID to job data
+        const jobDataWithUserId = { ...jobData, supabase_id: user.id };
+        
         // Validate and sanitize job data
-        const validatedJob = validateJobData(jobData);
-        await modifyJob(db, validatedJob, user_id);
+        const validatedJob = validateJobData(jobDataWithUserId);
+        await modifyJob(db, validatedJob, user.id);
         res.json({ message: "Job: '" + validatedJob.job_title + "' modified successfully" });
     } catch (error: any) {
         if (error instanceof HttpError) {
@@ -335,8 +341,8 @@ router.patch('/', createAuthMiddleware(false), async (req: Request, res: Respons
     }
 });
 
-router.delete('/', createAuthMiddleware(false), async (req: Request, res: Response) => {
-    const user_id = getAuthBearer(req);
+router.delete('/:id', createAuthMiddleware(false), async (req: Request, res: Response) => {
+    const user = (req as any).supabaseUser;
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { id } = req.query;
     
@@ -345,16 +351,18 @@ router.delete('/', createAuthMiddleware(false), async (req: Request, res: Respon
         return;
     }
 
-    if (!user_id) {
+    if (!user) {
         throw new HttpError(401, "Unauthorized");
         return;
     }
 
     try {
-        await deleteJob(db, parseInt(id as string, 10), user_id);
+        await deleteJob(db, parseInt(id as string, 10), user.id);
         res.json({ message: "Job: '" + id + "' deleted successfully" });
     } catch (error: any) {
         throw new HttpError(500,  error.message);
+    } finally {
+        db.close();
     }
 });
 
