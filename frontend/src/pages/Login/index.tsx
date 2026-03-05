@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "../../lib/supabase";
-import isDev from "../../lib/is_dev";
 import "./index.css";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 
-const frontEndUrl =
-  (isDev()
-    ? import.meta.env.VITE_FRONTEND_BASE_URL_DEV
-    : import.meta.env.VITE_FRONTEND_BASE_URL_PROD) || "http://localhost:5173";
+const frontEndUrl = import.meta.env.VITE_FRONTEND_BASE_URL || "http://localhost:5173";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -78,6 +74,10 @@ const Login = () => {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck="false"
                 style={{
                   width: "100%",
                   padding: "12px 14px",
@@ -88,7 +88,8 @@ const Login = () => {
                   outline: "none",
                   transition: "border-color 0.2s",
                   boxSizing: "border-box",
-                  color: 'white',
+                  color: "#333",
+                  backgroundColor: "#fff",
                 }}
                 
                 onFocus={(e) =>

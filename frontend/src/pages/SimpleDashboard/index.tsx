@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import EditSlideout from "../../components/EditSlideout";
 import { NewNavBar } from "../../components";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -20,18 +20,7 @@ import { PageFooter } from "../../components";
 import { Button } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { Box, Typography, IconButton, Modal } from "@mui/material";
-
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "#333",
-  border: "1px solid #000",
-  boxShadow: 24,
-  borderRadius: "7px",
-  textAlign: "center",
-};
+import { useTheme, useMediaQuery } from "@mui/material";
 
 interface DashBoardProps {
   siteTheme: "light" | "dark";
@@ -54,6 +43,20 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
   siteTheme,
   setSiteTheme,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  
+  const modalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: theme.palette.background.paper,
+    border: `1px solid ${theme.palette.divider}`,
+    boxShadow: 24,
+    borderRadius: "7px",
+    textAlign: "center",
+  };
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
   const defaultJob: Job = {
@@ -74,6 +77,8 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshTableTrigger, setRefreshTableTrigger] = useState<number>(0);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -135,18 +140,22 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
    * @example
    * const jobs = await getAllJobs();
    */
-  const getAllJobs = async () => {
+  const getAllJobs = useCallback(async (resetPagination: boolean = false) => {
     if (!accessToken) return; // no token yet
     try {
       setIsDataLoading(true);
       const jobs = await apiGetJobs(accessToken);
       setMasterJobList(jobs);
       setIsDataLoading(false);
+      // Only trigger table pagination reset if explicitly requested
+      if (resetPagination) {
+        setRefreshTableTrigger(prev => prev + 1);
+      }
     } catch (error) {
       console.error(error);
-      showToast("Failed to fetch jobs. Please try again.", "error")();
+      enqueueSnackbar("Failed to fetch jobs. Please try again.", { variant: "error" });
     }
-  };
+  }, [accessToken]);
 
   /**
    * Delete a job by its ID.
@@ -259,15 +268,33 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
       enqueueSnackbar(`${message}`, { variant });
     };
 
+  const refreshTable = useCallback(() => {
+    getAllJobs(true); // Explicitly reset pagination on refresh
+  }, [getAllJobs]);
+
+  const handleSearchChange = (searchTerm: string) => {
+    setSearchTerm(searchTerm);
+  };
+
+  const filteredJobs = masterJobList.filter(job => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      (job.company || "").toLowerCase().includes(searchLower) ||
+      (job.job_title || "").toLowerCase().includes(searchLower) ||
+      (job.location || "").toLowerCase().includes(searchLower) ||
+      (job.status || "").toLowerCase().includes(searchLower)
+    );
+  });
+
   return (
     <>
       <div className="reactTrackerPage_main">
-        <NewNavBar siteTheme={siteTheme} setSiteTheme={setSiteTheme} />
+        <NewNavBar siteTheme={siteTheme} setSiteTheme={setSiteTheme} onSearchChange={handleSearchChange} />
 
         <div className="reactTrackerPage_leftPane">
           <div className="reactTrackerPage_headerContainer">
             <header className="reactTrackerPage_header">
-              Your Applications
+              Job Applications ({masterJobList.length})
             </header>
             <div className="reactTrackerPage_buttonsInner">
               <Tooltip title="Refresh Applications">
@@ -275,13 +302,22 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
                   variant="contained"
                   color="primary"
                   startIcon={<RefreshIcon />}
-                  sx={{ marginLeft: "10px", alignItems: "center" }}
+                  sx={{ 
+                    marginLeft: "10px", 
+                    alignItems: "center",
+                    minWidth: isMobile ? "40px" : "auto",
+                    width: isMobile ? "40px" : "auto",
+                    padding: isMobile ? "8px" : "normal",
+                    "& .MuiButton-startIcon": {
+                      margin: isMobile ? 0 : "0 8px 0 0",
+                    }
+                  }}
                   onClick={() => {
                     setIsDataLoading(true);
-                    getAllJobs();
+                    getAllJobs(true);
                   }}
                 >
-                  Refresh
+                  {isMobile ? "" : "Refresh"}
                 </Button>
               </Tooltip>
               <Tooltip title="Add New Application">
@@ -289,10 +325,19 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
                   variant="contained"
                   color="primary"
                   startIcon={<AddIcon />}
-                  sx={{ marginLeft: "10px", alignItems: "center" }}
+                  sx={{ 
+                    marginLeft: "10px", 
+                    alignItems: "center",
+                    minWidth: isMobile ? "40px" : "auto",
+                    width: isMobile ? "40px" : "auto",
+                    padding: isMobile ? "8px" : "normal",
+                    "& .MuiButton-startIcon": {
+                      margin: isMobile ? 0 : "0 8px 0 0",
+                    }
+                  }}
                   onClick={slideoutNewJob}
                 >
-                  Add Job
+                  {isMobile ? "" : "Add Job"}
                 </Button>
               </Tooltip>
             </div>
@@ -300,7 +345,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
 
           <div className="reactTrackerPage_tableContainer">
             <MuiTableTest
-              jobs={masterJobList}
+              jobs={filteredJobs}
               setIsSlideoutOpen={setIsSlideoutOpen}
               selectedJobId={selectedJobId}
               setSelectedJobId={setSelectedJobId}
@@ -308,6 +353,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
               setIsAddingNewJob={setIsAddingNewJob}
               setIsDeleteModalVisible={setIsDeleteModalVisible}
               isDataLoading={isDataLoading}
+              refreshTable={refreshTable}
             />
           </div>
         </div>

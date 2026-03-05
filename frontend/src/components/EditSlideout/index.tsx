@@ -1,8 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./index.css";
+import "../../pages/Login/index.css";
 import CloseIcon from "@mui/icons-material/Close";
 import MapIcon from "@mui/icons-material/Map";
 import { Job } from "../../types/Job";
+
+type LinkedInJobResponse = {
+  success: boolean;
+  job?: {
+    job_title: string;
+    company: string;
+    location: string;
+    description: string;
+  };
+  error?: string;
+  details?: string;
+}
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import SearchableMap from "../SearchableMap";
@@ -16,7 +29,9 @@ import {
   Modal,
   useTheme,
   useMediaQuery,
+  CircularProgress,
 } from "@mui/material";
+import { useSnackbar } from 'notistack';
 import {
   MDXEditor,
   headingsPlugin,
@@ -50,7 +65,7 @@ const defaultJob: Job = {
   job_title: "",
   description: "",
   location: "",
-  status: "",
+  status: "Applied",
   applied: new Date(),
   last_updated: new Date(),
   supabase_id: "",
@@ -81,18 +96,23 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { enqueueSnackbar } = useSnackbar();
   
   const [jobValues, setJobValues] = useState<Job>(currentEditingJob);
   const [isSaveModalVisible, setIsSaveModalVisible] = useState(false);
   const [isMapModalVisible, setIsMapModalVisible] = useState(false);
   const [hasJobBeenModified, setHasJobBeenModified] = useState(false);
+  const [linkedinUrl, setLinkedinUrl] = useState("");
   const editorRef = useRef<MDXEditorMethods>(null);
   const [markdownSource, setMarkdownSource] = useState<string>("");
+  const [showLinkedInDiv, setShowLinkedInDiv] = useState(true);
+  const [loadingLinkedIn, setLoadingLinkedIn] = useState(false);
 
   useEffect(() => {
     if (!isSlideoutOpen) return;
 
     if (isAddingNewJob) {
+      setLinkedinUrl("")
       setJobValues(defaultJob);
       setMarkdownSource("");
       editorRef.current?.setMarkdown("");
@@ -100,6 +120,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       setJobValues(currentEditingJob || defaultJob);
       setMarkdownSource(currentEditingJob?.description || "");
       editorRef.current?.setMarkdown(currentEditingJob?.description || "");
+      setShowLinkedInDiv(false);
     }
     setHasJobBeenModified(false);
   }, [currentEditingJob, isAddingNewJob, isSlideoutOpen]);
@@ -109,6 +130,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       setIsSaveModalVisible(true);
     } else {
       setIsSlideoutOpen(false);
+      setShowLinkedInDiv(true);
     }
   };
 
@@ -138,31 +160,130 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     setMarkdownSource(currentEditingJob.description || "");
     setHasJobBeenModified(false);
     setIsSlideoutOpen(false);
+    setShowLinkedInDiv(true);
     closeSaveModal();
+  };
+
+  const handleDirectSave = () => {
+    // Validate required fields
+    const missingFields = validateRequiredFields();
+    if (missingFields.length > 0) {
+      enqueueSnackbar(
+        `Please fill in the required fields: ${missingFields.join(', ')}`, 
+        { variant: 'error' }
+      );
+      return;
+    }
+    
+    // If validation passes, call the save function
+    onSaveJob(jobValues);
+  };
+
+  const validateRequiredFields = (): string[] => {
+    const missingFields: string[] = [];
+    
+    if (!jobValues.company?.trim()) {
+      missingFields.push('Company');
+    }
+    if (!jobValues.job_title?.trim()) {
+      missingFields.push('Position');
+    }
+    if (!jobValues.location?.trim()) {
+      missingFields.push('Location');
+    }
+    if (!jobValues.status?.trim()) {
+      missingFields.push('Status');
+    }
+    if (!jobValues.applied) {
+      missingFields.push('Date Applied');
+    }
+    
+    return missingFields;
   };
 
   const saveApplication = () => {
     closeSaveModal();
+
+    // Validate required fields
+    const missingFields = validateRequiredFields();
+    if (missingFields.length > 0) {
+      enqueueSnackbar(
+        `Please fill in the required fields: ${missingFields.join(', ')}`, 
+        { variant: 'error' }
+      );
+      return;
+    }
 
     if (isAddingNewJob) {
       try {
         addJob(jobValues);
         setJobValues(defaultJob);
         setIsSlideoutOpen(false);
+        setShowLinkedInDiv(true);
       } catch (error) {
-        console.error("Error:", error);
+        enqueueSnackbar("Failed to add job. Please try again.", { variant: "error" });
       }
     } else {
       try {
         saveJob(jobValues);
         setHasJobBeenModified(false);
       } catch (error) {
-        console.error("Error:", error);
+        enqueueSnackbar("Failed to save job. Please try again.", { variant: "error" });
       }
     }
   };
 
-  return (
+    function handleImportFromLinkedIn() {
+      setLoadingLinkedIn(true);
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/jobs/pull`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: linkedinUrl,
+        }),
+      })
+        .then(response => response.json() as Promise<LinkedInJobResponse>)
+        .then((data: LinkedInJobResponse) => {
+          
+          if (data.success && data.job) {
+            setJobValues(prev => ({
+              ...prev,
+              job_title: data.job!.job_title,
+              company: data.job!.company,
+              location: data.job!.location,
+              description: data.job!.description,
+            }));
+            setMarkdownSource(data.job!.description);
+            setHasJobBeenModified(true);
+            
+            // Switch to manual entry mode
+            setShowLinkedInDiv(false);
+          } 
+          
+          if (data.details) {
+            switch (data.details) {
+              case "Request failed with status code 404":
+                enqueueSnackbar("Job not found. Please check the URL and try again.", { variant: "error" });
+                break;
+            
+              default:
+                enqueueSnackbar("Failed to import from LinkedIn. Please check the URL and try again.", { variant: "error" });
+                break;
+            }
+          }
+          
+          setLoadingLinkedIn(false);
+        })
+        .catch(error => {
+          setLoadingLinkedIn(false);
+          enqueueSnackbar("Failed to import from LinkedIn. Please check the URL and try again.", { variant: "error" });
+        });
+    }
+
+  if (showLinkedInDiv) {
+    return (
     <>
       <Drawer
         anchor="right"
@@ -176,10 +297,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               borderLeft: `1px solid ${theme.palette.divider}`,
               boxShadow: theme.shadows[16],
               bgcolor: theme.palette.background.default,
-              padding: "7px",
-              // bgcolor: theme.palette.primary.dark
-              // bgcolor: theme.palette.grey[900]
-              // bgcolor: theme.palette.mode === 'dark' ? '#1e1e1e' : 'white',
+              padding: "20px",
             },
           },
         }}
@@ -189,7 +307,95 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             <CloseIcon fontSize="large" />
           </IconButton>
         </Box>
-
+        <Box sx={{ padding: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Typography variant="h6" sx={{ marginBottom: 2, fontWeight: 600 }}>
+            Add Job
+          </Typography>
+          
+          
+          <Typography variant="body2" sx={{ marginBottom: 3, color: 'text.secondary' }}>
+            Enter a LinkedIn job posting URL to automatically import job details
+          </Typography>
+          
+        <Box sx={{ position: 'relative' }}>
+          <TextField
+            fullWidth
+            placeholder="https://www.linkedin.com/jobs/view/..."
+            value={linkedinUrl}
+            onChange={(e) => setLinkedinUrl(e.target.value)}
+            variant="outlined"
+            sx={{ marginBottom: 2 }}
+            size="small"
+            disabled={loadingLinkedIn}
+          />
+          
+          <Button
+            variant="contained"
+            fullWidth
+            disabled={!linkedinUrl || !linkedinUrl.includes('linkedin.com/jobs/view/') || loadingLinkedIn}
+            onClick={handleImportFromLinkedIn}
+          >
+            Import from LinkedIn
+          </Button>
+          
+          {loadingLinkedIn && (
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 1,
+                borderRadius: 1
+              }}
+            >
+              <CircularProgress size={24} />
+            </Box>
+          )}
+        </Box>
+          
+          <div className="or-divider">OR</div>
+          
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => setShowLinkedInDiv(false)}
+          >
+            Enter posting manually
+          </Button>
+        </Box>
+      </Drawer>
+    </>
+    );
+  } else {
+      return (
+    <>
+      <Drawer
+        anchor="right"
+        open={isSlideoutOpen}
+        onClose={toggleLocalSlideout}
+        slotProps={{
+          paper: {
+            sx: {
+              width: { xs: "100%", sm: "85%", md: "600px" },
+              color: theme.palette.text.primary,
+              borderLeft: `1px solid ${theme.palette.divider}`,
+              boxShadow: theme.shadows[16],
+              bgcolor: theme.palette.background.default,
+              padding: "20px",
+            },
+          },
+        }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <IconButton onClick={toggleLocalSlideout}>
+            <CloseIcon fontSize="large" />
+          </IconButton>
+        </Box>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
           <Typography variant="h5" fontWeight={700}>
             {isAddingNewJob ? "Add Job" : "Edit Job"}
@@ -208,8 +414,8 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
         </Box>
 
         <Stack spacing={2.5}>
-          <TextField label="Company" name="company" value={jobValues?.company || ""} onChange={handleInputChange} fullWidth />
-          <TextField label="Position" name="job_title" value={jobValues?.job_title || ""} onChange={handleInputChange} fullWidth />
+          <TextField label="Company" name="company" value={jobValues?.company || ""} onChange={handleInputChange} fullWidth required />
+          <TextField label="Position" name="job_title" value={jobValues?.job_title || ""} onChange={handleInputChange} fullWidth required />
 
           <Box>
             <Typography variant="subtitle1" sx={{ mb: 1 }}>
@@ -251,6 +457,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             value={jobValues?.location || ""}
             onChange={handleInputChange}
             fullWidth
+            required
             InputProps={{
               endAdornment: (
                 <MapIcon sx={{ cursor: "pointer" }} onClick={openMapModal} />
@@ -258,7 +465,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             }}
           />
 
-          <TextField label="Status" name="status" value={jobValues?.status || ""} onChange={handleInputChange} fullWidth />
+          <TextField label="Status" name="status" value={jobValues?.status || ""} onChange={handleInputChange} fullWidth required />
 
           <DatePicker
             label="Date Applied"
@@ -270,7 +477,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               }));
               setHasJobBeenModified(true);
             }}
-            slotProps={{ textField: { fullWidth: true } }}
+            slotProps={{ textField: { fullWidth: true, required: true } }}
           />
 
           <TextField
@@ -289,7 +496,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           <Button
             fullWidth
             variant="contained"
-            onClick={() => onSaveJob(jobValues)}
+            onClick={handleDirectSave}
             disabled={!hasJobBeenModified}
             sx={{
               py: 2,
@@ -341,6 +548,9 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       </Modal>
     </>
   );
+  }
+
+
 };
 
 export default EditSlideout;

@@ -13,6 +13,27 @@ body {
   padding: 0;
   user-select: none;
 }
+
+/* Prevent body padding changes when Material-UI modals open */
+body.MuiModal-root {
+  padding-right: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Prevent scrollbar width compensation */
+.MuiModal-root {
+  padding-right: 0 !important;
+}
+
+/* Fix for menu modal causing viewport shift */
+.MuiMenu-paper {
+  outline: none;
+}
+
+/* Ensure no body modifications when menu opens */
+body[style*="overflow"] {
+  padding-right: 0 !important;
+}
 #root {
   display: flex;
   flex-direction: column;
