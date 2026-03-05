@@ -12,6 +12,7 @@ import {
   apiAddJob,
   apiDeleteJob,
   apiSaveJob,
+  apiPullLinkedInData,
 } from "../../lib/api_calls";
 import { supabase } from "../../lib/supabase";
 import { getDeferredPrompt, clearDeferredPrompt } from "../../lib/pwa";
@@ -180,7 +181,8 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
       showToast("Job deleted successfully.", "success")();
     } catch (error) {
       console.error(error);
-      showToast("Failed to delete job. Please try again.", "error")();
+      enqueueSnackbar("Failed to delete job. Please try again.", { variant: "error" });
+
       //setIsDataLoading(false);
     }
   };
@@ -211,7 +213,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
       showToast("Job added successfully.", "success")();
     } catch (error) {
       console.error(error);
-      showToast("Failed to add job. Please try again.", "error")();
+      enqueueSnackbar("Failed to add job. Please try again.", { variant: "error" });
     }
   };
 
@@ -241,9 +243,20 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
       showToast("Job saved successfully.", "success")();
     } catch (error) {
       console.error(error);
-      showToast("Failed to save job. Please try again.", "error")();
+      enqueueSnackbar("Failed to save job. Please try again.", { variant: "error" });
     }
   };
+
+  const getLinkedInData = async (url: string) => {
+    if (!accessToken) return;
+
+    try {
+      return await apiPullLinkedInData(url, accessToken);
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar("Failed to pull LinkedIn job data. Please try again.", { variant: "error" });
+    }
+  }
 
   const onSaveJob = (jobValues: Job) => {
     if (isAddingNewJob) {
@@ -367,6 +380,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = ({
           saveJob={saveJob}
           onSaveJob={onSaveJob}
           setIsDeleteModalVisible={setIsDeleteModalVisible}
+          getLinkedInData={getLinkedInData}
         />
         <Modal
           open={isDeleteModalVisible}

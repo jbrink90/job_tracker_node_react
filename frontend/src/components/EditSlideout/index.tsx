@@ -58,6 +58,7 @@ interface EditSlideoutProps {
   saveJob: (jobValues: Job) => void;
   onSaveJob: (jobValues: Job) => void;
   setIsDeleteModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  getLinkedInData: (linkedInUrl: string) => Promise<LinkedInJobResponse>;
 }
 
 const defaultJob: Job = {
@@ -93,6 +94,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   saveJob,
   onSaveJob,
   setIsDeleteModalVisible,
+  getLinkedInData,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -165,7 +167,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   };
 
   const handleDirectSave = () => {
-    // Validate required fields
     const missingFields = validateRequiredFields();
     if (missingFields.length > 0) {
       enqueueSnackbar(
@@ -175,7 +176,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
       return;
     }
     
-    // If validation passes, call the save function
     onSaveJob(jobValues);
   };
 
@@ -204,7 +204,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
   const saveApplication = () => {
     closeSaveModal();
 
-    // Validate required fields
     const missingFields = validateRequiredFields();
     if (missingFields.length > 0) {
       enqueueSnackbar(
@@ -233,54 +232,43 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     }
   };
 
-    function handleImportFromLinkedIn() {
-      setLoadingLinkedIn(true);
-      fetch(`${import.meta.env.VITE_API_BASE_URL}/jobs/pull`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          url: linkedinUrl,
-        }),
-      })
-        .then(response => response.json() as Promise<LinkedInJobResponse>)
-        .then((data: LinkedInJobResponse) => {
+  function handleImport() {
+    setLoadingLinkedIn(true);
+    
+    getLinkedInData(linkedinUrl)
+      .then((data: LinkedInJobResponse) => {
+        if (data.success && data.job) {
+          setJobValues(prev => ({
+            ...prev,
+            job_title: data.job!.job_title,
+            company: data.job!.company,
+            location: data.job!.location,
+            description: data.job!.description,
+          }));
+          setMarkdownSource(data.job!.description);
+          setHasJobBeenModified(true);
           
-          if (data.success && data.job) {
-            setJobValues(prev => ({
-              ...prev,
-              job_title: data.job!.job_title,
-              company: data.job!.company,
-              location: data.job!.location,
-              description: data.job!.description,
-            }));
-            setMarkdownSource(data.job!.description);
-            setHasJobBeenModified(true);
+          setShowLinkedInDiv(false);
+        } 
+        
+        if (data.details) {
+          switch (data.details) {
+            case "Request failed with status code 404":
+              enqueueSnackbar("Job not found. Please check the URL and try again.", { variant: "error" });
+              break;
             
-            // Switch to manual entry mode
-            setShowLinkedInDiv(false);
-          } 
-          
-          if (data.details) {
-            switch (data.details) {
-              case "Request failed with status code 404":
-                enqueueSnackbar("Job not found. Please check the URL and try again.", { variant: "error" });
-                break;
-            
-              default:
-                enqueueSnackbar("Failed to import from LinkedIn. Please check the URL and try again.", { variant: "error" });
-                break;
-            }
+            default:
+              enqueueSnackbar("Failed to import from LinkedIn. Please check the URL and try again.", { variant: "error" });
+              break;
           }
-          
-          setLoadingLinkedIn(false);
-        })
-        .catch(error => {
-          setLoadingLinkedIn(false);
-          enqueueSnackbar("Failed to import from LinkedIn. Please check the URL and try again.", { variant: "error" });
-        });
-    }
+        }
+      })
+      .catch((error: any) => {
+        console.error("LinkedIn import error:", error);
+        enqueueSnackbar("Failed to import from LinkedIn. Please check the URL and try again.", { variant: "error" });
+        setLoadingLinkedIn(false);
+      });
+  }
 
   if (showLinkedInDiv) {
     return (
@@ -333,7 +321,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             variant="contained"
             fullWidth
             disabled={!linkedinUrl || !linkedinUrl.includes('linkedin.com/jobs/view/') || loadingLinkedIn}
-            onClick={handleImportFromLinkedIn}
+            onClick={handleImport}
           >
             Import from LinkedIn
           </Button>
