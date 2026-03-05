@@ -13,17 +13,18 @@
 - 📍 **Interactive Maps** - Visualize job locations with Mapbox integration
 
 ### 🔐 **Modern Authentication**
-- � **Passwordless Login** - Secure email-based authentication via Supabase
-- �️ **Admin Protection** - Secure admin endpoints with role-based access
+- 📧 **Passwordless Login** - Secure email-based authentication via Supabase
+- 👤 **Multi-User Support** - Each user has their own private job database
+- 🛡️ **Admin Protection** - Secure admin endpoints with role-based access
 
-### � **Progressive Web App**
+### 📱 **Progressive Web App**
 - 📲 **Install Anywhere** - Works as a native app on desktop and mobile
 - 🌐 **Offline Support** - Service worker caching for offline functionality
 - � **Mobile Optimized** - Responsive design that works on all devices
 
 ### 🛠️ **Developer Experience**
 - ⚡ **TypeScript** - Full type safety across frontend and backend
-- � **Material-UI** - Beautiful, consistent UI components
+- 🎨 **Material-UI** - Beautiful, consistent UI components
 - 🐳 **Docker Ready** - Containerized deployment with Docker Compose
 - 🔄 **Hot Reload** - Fast development with Vite and Nodemon
 
@@ -117,6 +118,7 @@ Authorization: Bearer <your-supabase-jwt-token>
 | `PATCH` | `/jobs` | Update existing job | ✅ |
 | `DELETE` | `/jobs/:id` | Delete job entry | ✅ |
 | `POST` | `/jobs/pull` | Import from LinkedIn | ✅ |
+| `GET` | `/jobs/all` | Get all jobs (admin only) | 🔐 |
 
 ### **LinkedIn Integration**
 ```bash
