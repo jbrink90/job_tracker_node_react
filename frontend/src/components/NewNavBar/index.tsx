@@ -11,9 +11,10 @@ import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import ContrastIcon from '@mui/icons-material/Contrast';
 import Logout from '@mui/icons-material/Logout';
 import Link from "@mui/material/Link";
-import ThemeToggle from "../ThemeToggle";
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -54,19 +55,39 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const NewNavBar: React.FC = () => {
+interface NewNavBarProps {
+  siteTheme: "light" | "dark";
+  setSiteTheme: (theme: "light" | "dark") => void;
+  onSearchChange?: (searchTerm: string) => void;
+}
+
+const NewNavBar: React.FC<NewNavBarProps> = ({siteTheme, setSiteTheme, onSearchChange}) => {
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const searchTerm = event.target.value;
+    if (onSearchChange) {
+      onSearchChange(searchTerm);
+    }
+  };
+
   const handleAccountMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
   const handleMenuClose = () => { setAnchorEl(null); handleMobileMenuClose(); };
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => setMobileMoreAnchorEl(event.currentTarget);
 
-
+  const toggleTheme = () => {
+    if (siteTheme === "light") {
+      setSiteTheme("dark");
+    } else {
+      setSiteTheme("light");
+    }
+  };
 
   const renderMenu = (
     <Menu
@@ -93,9 +114,11 @@ const NewNavBar: React.FC = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <ThemeToggle />
-        <p>Theme</p>
+      <MenuItem onClick={toggleTheme}>
+        <IconButton size="large" color="inherit" aria-label='change theme'>
+            <ContrastIcon />
+          </IconButton>
+        <p>Change Theme</p>
       </MenuItem>
       <MenuItem component={Link} href="/account">
       <IconButton
@@ -135,11 +158,19 @@ const NewNavBar: React.FC = () => {
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
+            <StyledInputBase 
+              placeholder="Search jobs…" 
+              inputProps={{ 'aria-label': 'search jobs' }}
+              onChange={handleSearchChange}
+            />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <ThemeToggle />
+            <IconButton size="large" color="inherit">
+                <ContrastIcon 
+                  onClick={toggleTheme}
+                />
+            </IconButton>
             <IconButton
               size="large"
               edge="end"
