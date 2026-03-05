@@ -402,8 +402,8 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
         </Box>
 
         <Stack spacing={2.5}>
-          <TextField label="Company" name="company" value={jobValues?.company || ""} onChange={handleInputChange} size="small" fullWidth required />
-          <TextField label="Position" name="job_title" value={jobValues?.job_title || ""} onChange={handleInputChange} size="small" fullWidth required />
+          <TextField label="Company" name="company" value={jobValues?.company || ""} onChange={handleInputChange} fullWidth required />
+          <TextField label="Position" name="job_title" value={jobValues?.job_title || ""} onChange={handleInputChange} fullWidth required />
 
           <Box>
             <Typography variant="subtitle1" sx={{ mb: 1 }}>
@@ -444,7 +444,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             name="location"
             value={jobValues?.location || ""}
             onChange={handleInputChange}
-            size="small"
             fullWidth
             required
             InputProps={{
@@ -454,7 +453,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             }}
           />
 
-          <TextField label="Status" name="status" value={jobValues?.status || ""} onChange={handleInputChange} size="small" fullWidth required />
+          <TextField label="Status" name="status" value={jobValues?.status || ""} onChange={handleInputChange} fullWidth required />
 
           <DatePicker
             label="Date Applied"
@@ -466,7 +465,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               }));
               setHasJobBeenModified(true);
             }}
-            slotProps={{ textField: { fullWidth: true, required: true, size: "small" } }}
+            slotProps={{ textField: { fullWidth: true, required: true } }}
           />
 
           <TextField
@@ -478,7 +477,6 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             }
             disabled
             fullWidth
-            size="small"
           />
         </Stack>
 
