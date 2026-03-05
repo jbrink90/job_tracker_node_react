@@ -1,128 +1,166 @@
-# Job Tracker
+# JobTrackr.online 🚀
 
-A simple and efficient job tracking web app built using **React**, **Express (Node.js)**, and **SQLite**. This tool helps you keep track of your job applications, statuses, and updates in one clean interface.
-
-#### 🚀 Features
-
-- 📝 Add, edit, and delete job entries
-
-- 📅 Track application and status update dates
-- 📍 Log company, role, location, and status
-- 📊 Responsive table view with mobile-friendly column handling
-- 🔒 Local storage with lightweight SQLite database
-- 🌐 RESTful API built with Express
+**Your intelligent job application companion** - A modern PWA that helps you track, manage, and organize your job search with powerful features like LinkedIn integration, rich markdown descriptions, and seamless authentication.
 
 ---
 
-#### 🛠️ Tech Stack
+## ✨ Key Features
 
-- React + Vite + TypeScript
+### 🎯 **Smart Job Management**
+- 📝 **Rich Markdown Editor** - Format job descriptions with full markdown support
+- 🔗 **LinkedIn Integration** - Auto-import job details from LinkedIn URLs with one click
+- 📊 **Advanced Data Grid** - Sort, filter, and manage applications with MUI Data Grid
+- 📍 **Interactive Maps** - Visualize job locations with Mapbox integration
 
-- Node.js + Express
+### 🔐 **Modern Authentication**
+- � **Passwordless Login** - Secure email-based authentication via Supabase
+- �️ **Admin Protection** - Secure admin endpoints with role-based access
 
-- SQLite
+### � **Progressive Web App**
+- 📲 **Install Anywhere** - Works as a native app on desktop and mobile
+- 🌐 **Offline Support** - Service worker caching for offline functionality
+- � **Mobile Optimized** - Responsive design that works on all devices
 
----
-
-#### 📁 Project Structure
-
-job_tracker_node_react/
-backend/
-api_docs/ # Contains Bruno/Postman collection
-src/
-routes/ # Contains the files used to define our API endpoints
-types/ # Contains the used types
-utils/ # Contains utility or library files
-frontend/
-nginx/ # Contains necessary files for Docker deployments
-src/
-assets/
-components/ # Contains reusable UI components
-lib/ # Contains utility or library files
-pages/ # Contains each renderable page
-types/ # Contains the used types
+### 🛠️ **Developer Experience**
+- ⚡ **TypeScript** - Full type safety across frontend and backend
+- � **Material-UI** - Beautiful, consistent UI components
+- 🐳 **Docker Ready** - Containerized deployment with Docker Compose
+- 🔄 **Hot Reload** - Fast development with Vite and Nodemon
 
 ---
 
-### 📦 Getting Started
+## 🏗️ Architecture
 
-1. Clone the repo
+### **Frontend (React + TypeScript)**
+- **UI Framework**: Material-UI (MUI) v7 with custom theming
+- **State Management**: React hooks with local state
+- **Routing**: React Router v6 with protected routes
+- **Rich Text**: MDX Editor for job descriptions
+- **Maps**: Mapbox GL JS for location visualization
+- **PWA**: Service worker with offline caching
 
-```
+### **Backend (Node.js + Express)**
+- **API**: RESTful endpoints with Express.js
+- **Database**: SQLite for lightweight, portable storage
+- **Authentication**: Supabase JWT integration
+- **Web Scraping**: Cheerio + Axios for LinkedIn job import
+
+### **Infrastructure**
+- **Deployment**: Docker containers with nginx reverse proxy
+- **Environment**: Production-ready environment variable validation
+- **Security**: CORS, JWT authentication, admin middleware
+- **Monitoring**: Structured error handling and logging
+
+---
+
+## � Quick Start
+
+### **Prerequisites**
+- Node.js 18+ 
+- npm or yarn
+- Git
+
+### **Installation**
+
+1. **Clone the repository**
+```bash
 git clone https://github.com/jbrink90/job_tracker_node_react.git
 cd job_tracker_node_react
 ```
 
-2. Install dependencies
-
-```sh
+2. **Install dependencies**
+```bash
 npm install
 ```
 
-3. Run the app
+3. **Environment Setup**
+```bash
+# Copy the example environment file
+cp .env.example .env
 
-```sh
+# Edit .env with your Supabase credentials
+# Required: SUPABASE_URL, SUPABASE_ANON, ADMIN_EMAIL
+# Optional: API_PORT, SQLITE_FILENAME, NODE_ENV
+```
+
+4. **Start Development**
+```bash
+# Start both frontend and backend
 npm run dev
+
+# Or start individually
+npm run dev:frontend  # Frontend on http://localhost:5173
+npm run dev:backend   # Backend on http://localhost:4444
+```
+
+5. **Access the App**
+- 🌐 **Frontend**: http://localhost:5173
+- 🔧 **Backend API**: http://localhost:4444
+- 📊 **API Docs**: Check `/api_docs` for Bruno/Postman collections
+
+---
+
+## � API Documentation
+
+### **Authentication**
+All protected endpoints require a Bearer token from Supabase authentication:
+```http
+Authorization: Bearer <your-supabase-jwt-token>
+```
+
+### **Core Endpoints**
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/jobs` | Get user's job listings | ✅ |
+| `POST` | `/jobs` | Create new job entry | ✅ |
+| `PATCH` | `/jobs` | Update existing job | ✅ |
+| `DELETE` | `/jobs/:id` | Delete job entry | ✅ |
+| `POST` | `/jobs/pull` | Import from LinkedIn | ✅ |
+
+### **LinkedIn Integration**
+```bash
+curl -X POST http://localhost:4444/jobs/pull \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://www.linkedin.com/jobs/view/12345"}'
+```
+
+### **Job Data Model**
+```json
+{
+  "id": 1,
+  "company": "Tech Corp",
+  "job_title": "Senior Developer",
+  "description": "# About the role\n\nExciting opportunity...",
+  "location": "San Francisco, CA",
+  "status": "Applied",
+  "applied": "2024-01-15",
+  "last_updated": "2024-01-15T10:30:00Z",
+  "supabase_id": "user-uuid-here"
+}
 ```
 
 ---
 
-### 📬 API Endpoints
+## 🐳 Docker Deployment
 
-| Method | Endpoint | Description            | Request Payload | Response Payload |
-| ------ | -------- | ---------------------- | --------------- | ---------------- |
-| GET    | /jobs    | Fetch all job entries  | User ID         | Job[]            |
-| POST   | /jobs    | Add a new job entry    | Job             | JSON             |
-| PATCH  | /jobs    | Update an existing job | Job             | JSON             |
-| DELETE | /jobs    | Delete a job entry     | Job ID          | JSON             |
-
-**Payload**:
-
-```JSON
-  {
-    "id": 1,
-    "company": "Tester",
-    "job_title": "Modified Job Title",
-    "description": "Job Description changed",
-    "location": "New Delhi, India",
-    "status": "Denied",
-    "applied": "2025-08-01",
-    "last_updated": "2025-12-05T06:31:12.513Z",
-    "supabase_id": "269278e8-f504-4cb9-aea7-b917f235b255"
-  }
-```
-
----
-
-### 🧪 Future Enhancements
-
-- ✅ Authentication for multi-user support [Completed: branch (feature/user_id_integration)]
-
-- 🔍 Search & filter capabilities [Completed: [commit](https://github.com/jbrink90/job_tracker_node_react/commit/2aab105ac46d58f165313835908c1bc0b2f76e3c "commit")]
-
-- ⏰ Reminders for follow-ups
-
----
-
-### Docker Compose Example
-
+### **Production Docker Compose**
 ```yaml
 services:
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: job_tracker_backend
+    container_name: jobtrackr_backend
     ports:
       - "4444:4444"
     environment:
-      MODE: production
-      NODE_ENV: production
       API_PORT: 4444
       SQLITE_FILENAME: /usr/src/app/data/job_data.sqlite
-      SUPABASE_URL: https://yoursite.supabase.co
-      SUPABASE_ANON: your_secret_key
-
+      SUPABASE_URL: https://your-project.supabase.co
+      SUPABASE_ANON: your-anon-key
+      ADMIN_EMAIL: admin@example.com
     volumes:
       - ./data:/usr/src/app/data
     restart: unless-stopped
@@ -131,19 +169,113 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: job_tracker_frontend
+    container_name: jobtrackr_frontend
     ports:
-      - "42000:80"
+      - "80:80"
     depends_on:
       - backend
     restart: unless-stopped
-    volumes:
-      - ./conf.d:/etc/nginx/conf.d/
     environment:
-      VITE_SUPABASE_URL: https://yoursite.supabase.co
-      VITE_SUPABASE_ANON: your_secret_key
-      VITE_API_BASE_URL_DEV: http://localhost:4444
-      VITE_API_BASE_URL_PROD: https://api.jobtrackr.online
-      VITE_FRONTEND_BASE_URL_DEV: http://localhost:5173
-      VITE_FRONTEND_BASE_URL_PROD: https://jobtrackr.online
+      VITE_SUPABASE_URL: https://your-project.supabase.co
+      VITE_SUPABASE_ANON: your-anon-key
+      VITE_API_BASE_URL: https://api.jobtrackr.online
+      VITE_FRONTEND_BASE_URL: https://jobtrackr.online
 ```
+
+---
+
+## 🧪 Development & Testing
+
+### **Available Scripts**
+```bash
+npm run dev          # Start development servers
+npm run build        # Build for production
+npm run lint         # ESLint with auto-fix
+npm run format       # Prettier formatting
+npm run test         # Run frontend tests
+npm run test:ui      # Run tests with UI
+```
+
+### **Project Structure**
+```
+job_tracker_node_react/
+├── backend/                 # Node.js API server
+│   ├── src/
+│   │   ├── routes/         # API endpoints
+│   │   ├── utils/          # Authentication & utilities
+│   │   └── server.ts       # Main server file
+│   ├── api_docs/           # Bruno API collections
+│   └── Dockerfile
+├── frontend/               # React PWA
+│   ├── src/
+│   │   ├── components/    # Reusable UI components
+│   │   ├── pages/         # Route components
+│   │   ├── lib/           # Utilities & API calls
+│   │   └── main.tsx       # App entry point
+│   ├── public/            # Static assets & service worker
+│   └── Dockerfile
+├── compose.yaml           # Docker Compose configuration
+└── README.md
+```
+
+---
+
+## 🚀 Future Roadmap
+
+### **Completed Features** ✅
+- [x] Supabase authentication integration
+- [x] Advanced search and filtering
+- [x] LinkedIn job import functionality
+- [x] Rich markdown editor
+- [x] PWA capabilities
+- [x] Docker deployment
+
+### **In Development** 🚧
+- [ ] Unit Testing
+- [ ] Context / Theme Improvements
+- [ ] Limiting free users
+
+### **Planned Features** 📋
+- [ ] Interview Scheduling with calendar integration
+- [ ] Email notifications for interview reminders
+- [ ] Job application analytics dashboard
+- [ ] Job export functionality
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the ISC License - see the package.json file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- **Supabase** - Authentication and database services
+- **Material-UI** - React component library
+- **Mapbox** - Mapping and location services
+- **Vite** - Fast build tool and development server
+- **Express.js** - Backend web framework
+
+---
+
+## 📞 Support
+
+- 🌐 **Live App**: [JobTrackr.online](https://jobtrackr.online)
+- 📧 **Contact**: [Contact Page](https://jobtrackr.online/contact)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/jbrink90/job_tracker_node_react/issues)
+- 📖 **Documentation**: Check the `/docs` folder for detailed guides
+
+---
+
+**Built with ❤️ for job seekers everywhere** 🎯
