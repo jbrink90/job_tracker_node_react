@@ -1,6 +1,25 @@
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Container, Typography, Paper, Grid, useTheme } from "@mui/material";
-import { AccessTime, Edit, TrackChanges } from "@mui/icons-material";
+import { motion } from "framer-motion";
+import {
+  Button,
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Container,
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Grid,
+  useTheme,
+} from "@mui/material";
+import { ArrowForward, , AccessTime, Edit, TrackChanges } from "@mui/icons-material";
+import { PageFooter } from "../../components";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -8,19 +27,19 @@ export default function Home() {
 
   const panels = [
     {
-      title: "Update with Markdown ✍️",
+      title: "Update with Markdown",
       description:
         "Easily update your job postings with Markdown for rich formatting without the hassle.",
       icon: <Edit sx={{ fontSize: 40, color: theme.palette.primary.main }} />,
     },
     {
-      title: "Track Status ⏱️",
+      title: "Track Status",
       description:
         "Keep tabs on every job posting's progress, deadlines, and changes in one place.",
       icon: <TrackChanges sx={{ fontSize: 40, color: theme.palette.primary.main }} />,
     },
     {
-      title: "Magic Login 🔑",
+      title: "Magic Login",
       description:
         "No passwords required. Securely login using just your email — hassle-free and safe.",
       icon: <AccessTime sx={{ fontSize: 40, color: theme.palette.primary.main }} />,
@@ -28,71 +47,335 @@ export default function Home() {
   ];
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        bgcolor: "primary.light",
-        color: "primary.contrastText",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-      }}
-    >
-      <Container maxWidth="lg" sx={{ textAlign: "center", py: 8 }}>
-        <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
-          Track Your Job Postings
-        </Typography>
-        <Typography variant="h5" component="p" gutterBottom sx={{ mb: 4 }}>
-          Organize, update, and monitor your job postings effortlessly — all without passwords.
-        </Typography>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          onClick={() => navigate("/dashboard")}
-          sx={{
-            fontWeight: 600,
-            px: 5,
-            py: 1.5,
-            fontSize: "1.1rem",
-            borderRadius: 3,
-            boxShadow: "0px 4px 15px rgba(0,0,0,0.3)",
-            "&:hover": {
-              transform: "scale(1.05)",
-              boxShadow: "0px 6px 20px rgba(0,0,0,0.35)",
-            },
-            transition: "all 0.3s ease",
-          }}
-        >
-          Start Using Now
-        </Button>
+    <Box sx={{ minHeight: "100vh" }}>
+      <section className="relative min-h-screen hero-gradient overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/3 rounded-full blur-3xl" />
+        </div>
 
-        <Grid container spacing={4} sx={{ mt: 8, justifyContent: "center", gap: "30px" }}>
-          {panels.map((panel) => (
-            <Paper
-              key={panel.title}
-              sx={{
-                flex: "1 1 300px", // flex-basis + grow/shrink
-                maxWidth: 360,
-                minWidth: 280,
-                p: 4,
-                textAlign: "center",
-                borderRadius: 3,
-                transition: "transform 0.3s ease",
-                "&:hover": { transform: "translateY(-8px)" },
-                backgroundColor: "white",
-                color: "black",
-              }}
+        <div
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
+            backgroundSize: "60px 60px",
+          }}
+        />
+
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <AppBar
+            position="fixed"
+            elevation={0}
+            sx={{
+              backdropFilter: "blur(12px)",
+              bgcolor: theme.palette.mode === 'dark' ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.8)",
+              borderBottom: `1px solid ${theme.palette.divider}`,
+            }}
+          >
+            <Toolbar sx={{ justifyContent: "space-between" }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Box
+                  sx={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 2,
+                    bgcolor: "primary.main",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <img
+                    src="/search.png"
+                    width={24}
+                    height={24}
+                    alt="JobTrackr Logo"
+                  />
+                </Box>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: "text.primary" }}>
+                  JobTrackr
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <Button color="inherit" sx={{ color: "text.primary" }} onClick={() => navigate("/login")}>
+                  Login
+                </Button>
+                <Button variant="contained" disableElevation onClick={() => navigate("/login")}>
+                  Get Started
+                </Button>
+              </Box>
+            </Toolbar>
+          </AppBar>
+        </motion.div>
+
+        <Container sx={{ position: "relative", zIndex: 10, pt: 16, pb: 10 }}>
+          <Box sx={{ maxWidth: 800, mx: "auto", textAlign: "center", pt: 10 }}>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <Box sx={{ mb: 2 }}>{panel.icon}</Box>
-              <Typography variant="h6" gutterBottom>
-                {panel.title}
+              <Typography
+                variant="h1"
+                sx={{
+                  fontSize: { xs: "2.8rem", md: "3.5rem", lg: "4.2rem" },
+                  lineHeight: 1.1,
+                  mb: 3,
+                  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                Keep Track of Your{" "}
+                <span style={{ background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+                  Dream Gig
+                </span>
               </Typography>
-              <Typography variant="body2">{panel.description}</Typography>
-            </Paper>
-          ))}
-        </Grid>
-      </Container>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  color: "text.secondary",
+                  maxWidth: 600,
+                  mx: "auto",
+                  mb: 5,
+                  lineHeight: 1.6,
+                  fontWeight: 400,
+                }}
+              >
+                Your sidekick for tracking applications and landing that dream gig
+                with ease.
+              </Typography>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 2,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  size="large"
+                  disableElevation
+                  endIcon={<ArrowForward />}
+                  onClick={() => navigate("/dashboard")}
+                  sx={{
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                    px: 4,
+                    "&:hover": { opacity: 0.9 },
+                  }}
+                >
+                  Get Started Free
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={() => navigate("/login")}
+                  sx={{ px: 4, borderWidth: 2, "&:hover": { borderWidth: 2 } }}
+                >
+                  See How It Works
+                </Button>
+              </Box>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+            >
+              <Typography variant="body2" sx={{ color: "text.secondary", mt: 3 }}>
+                ✨ Install as an app on any device • No credit card required
+              </Typography>
+            </motion.div>
+          </Box>
+
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <Box sx={{ mt: 8, maxWidth: 1000, mx: "auto" }}>
+              <Paper
+                elevation={8}
+                sx={{
+                  borderRadius: 3,
+                  overflow: "hidden",
+                  border: `1px solid ${theme.palette.divider}`,
+                }}
+              >
+                <Box
+                  sx={{
+                    bgcolor: theme.palette.mode === 'dark' ? theme.palette.grey[900] : theme.palette.grey[100],
+                    px: 2,
+                    py: 1.5,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    borderBottom: `1px solid ${theme.palette.divider}`,
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: 0.75 }}>
+                    <Box sx={{ width: 12, height: 12, borderRadius: "50%", bgcolor: "error.main", opacity: 0.6 }} />
+                    <Box sx={{ width: 12, height: 12, borderRadius: "50%", bgcolor: "warning.main", opacity: 0.6 }} />
+                    <Box sx={{ width: 12, height: 12, borderRadius: "50%", bgcolor: "primary.main", opacity: 0.6 }} />
+                  </Box>
+                  <Box sx={{ flex: 1, textAlign: "center" }}>
+                    <Typography
+                      variant="caption"
+                      sx={{ color: "text.secondary", fontFamily: "'JetBrains Mono', monospace" }}
+                    >
+                      jobtrackr.online
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <TableContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow sx={{ bgcolor: "action.hover" }}>
+                        <TableCell>Company</TableCell>
+                        <TableCell>Job Title</TableCell>
+                        <TableCell>Location</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Applied</TableCell>
+                        <TableCell>Last Updated</TableCell>
+                        <TableCell>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {[
+                        { company: "TechCorp", jobTitle: "Senior Developer", location: "San Francisco, CA", status: "Applied", statusColor: "primary", applied: "Jan 15", updated: "Jan 18" },
+                        { company: "StartupXYZ", jobTitle: "Frontend Lead", location: "Remote", status: "Interview Scheduled", statusColor: "warning", applied: "Jan 10", updated: "Jan 22" },
+                        { company: "BigTech Inc", jobTitle: "Full Stack Engineer", location: "New York, NY", status: "Offer Received", statusColor: "success", applied: "Jan 5", updated: "Jan 24" },
+                      ].map((job, i) => (
+                        <motion.tr
+                          key={i}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
+                          style={{ display: "table-row" }}
+                        >
+                          <TableCell sx={{ fontWeight: 500 }}>{job.company}</TableCell>
+                          <TableCell sx={{ color: "text.secondary" }}>{job.jobTitle}</TableCell>
+                          <TableCell sx={{ color: "text.secondary" }}>{job.location}</TableCell>
+                          <TableCell>
+                            <Chip
+                              label={job.status}
+                              color={job.statusColor as any}
+                              size="small"
+                              sx={{ fontWeight: 500 }}
+                            />
+                          </TableCell>
+                          <TableCell sx={{ color: "text.secondary" }}>{job.applied}</TableCell>
+                          <TableCell sx={{ color: "text.secondary" }}>{job.updated}</TableCell>
+                          <TableCell>
+                            <Box sx={{ display: "flex", gap: 1 }}>
+                              <Button size="small" variant="contained" color="primary" sx={{ minWidth: 0, px: 1.5, py: 0.5, fontSize: "0.75rem" }}>
+                                Edit
+                              </Button>
+                              <Button size="small" variant="contained" color="error" sx={{ minWidth: 0, px: 1.5, py: 0.5, fontSize: "0.75rem" }}>
+                                Delete
+                              </Button>
+                            </Box>
+                          </TableCell>
+                        </motion.tr>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Paper>
+            </Box>
+          </motion.div>
+        </Container>
+      </section>
+
+      <Box
+        sx={{
+          py: 12,
+          bgcolor: theme.palette.mode === 'dark' ? theme.palette.grey[900] : theme.palette.grey[50],
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography
+            variant="h3"
+            component="h2"
+            sx={{
+              textAlign: "center",
+              mb: 8,
+              fontWeight: 700,
+              color: "text.primary",
+            }}
+          >
+            Everything You Need to Track Your Job Search
+          </Typography>
+          
+          <Grid container spacing={4} sx={{ justifyContent: "center" }}>
+            {panels.map((panel, index) => (
+              <motion.div
+                key={panel.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                <Paper
+                  sx={{
+                    flex: "1 1 300px",
+                    maxWidth: 360,
+                    minWidth: 280,
+                    p: 4,
+                    textAlign: "center",
+                    borderRadius: 3,
+                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                    "&:hover": { 
+                      transform: "translateY(-8px)",
+                      boxShadow: theme.shadows[8],
+                    },
+                    backgroundColor: theme.palette.background.paper,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box sx={{ mb: 3 }}>{panel.icon}</Box>
+                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
+                    {panel.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary", lineHeight: 1.6 }}>
+                    {panel.description}
+                  </Typography>
+                </Paper>
+              </motion.div>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
+
+      <PageFooter />
     </Box>
   );
 }

@@ -37,7 +37,6 @@ export default function PageFooter() {
     <footer className="pageFooter_container">
     <div className="pageFooter_containerInner">
       <div className="pageFooter_grid">
-        {/* ------------------- Brand Section ------------------- */}
         <div className="pageFooter_brand">
         <NavLink
         style={{ textDecoration: 'none' }}
@@ -61,7 +60,6 @@ export default function PageFooter() {
           </p>
         </div>
 
-        {/* ------------------- Product Links ------------------- */}
         <div className="pageFooter_linksGroup">
           <h3 className="pageFooter_title">Learn More</h3>
           <ul className="pageFooter_list">
@@ -93,7 +91,6 @@ export default function PageFooter() {
           </ul>
         </div>
 
-        {/* ------------------- Support Links ------------------- */}
         <div className="pageFooter_linksGroup">
           <h3 className="pageFooter_title">Support</h3>
           <ul className="pageFooter_list">
