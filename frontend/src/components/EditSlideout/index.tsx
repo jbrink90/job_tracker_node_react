@@ -247,6 +247,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           }));
           setMarkdownSource(data.job!.description);
           setHasJobBeenModified(true);
+          setLoadingLinkedIn(false);
           
           setShowLinkedInDiv(false);
         } 
