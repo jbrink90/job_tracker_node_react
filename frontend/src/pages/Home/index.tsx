@@ -18,7 +18,7 @@ import {
   Grid,
   useTheme,
 } from "@mui/material";
-import { ArrowForward, , AccessTime, Edit, TrackChanges } from "@mui/icons-material";
+import { ArrowForward, AccessTime, Edit, TrackChanges } from "@mui/icons-material";
 import { PageFooter } from "../../components";
 
 export default function Home() {
