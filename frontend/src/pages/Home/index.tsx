@@ -246,7 +246,7 @@ export default function Home() {
                       variant="caption"
                       sx={{ color: "text.secondary", fontFamily: "'JetBrains Mono', monospace" }}
                     >
-                      jobtrackr.online
+                      Your Job Applications
                     </Typography>
                   </Box>
                 </Box>
@@ -254,7 +254,19 @@ export default function Home() {
                 <TableContainer>
                   <Table>
                     <TableHead>
-                      <TableRow sx={{ bgcolor: "action.hover" }}>
+                      <TableRow 
+  sx={{ 
+    bgcolor: "action.hover",
+    cursor: "pointer",
+    transition: "background-color 0.2s ease"
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.backgroundColor = theme.palette.action.selected;
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.backgroundColor = theme.palette.action.hover;
+  }}
+>
                         <TableCell>Company</TableCell>
                         <TableCell>Job Title</TableCell>
                         <TableCell>Location</TableCell>
@@ -275,7 +287,17 @@ export default function Home() {
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
-                          style={{ display: "table-row" }}
+                          style={{ 
+                            display: "table-row",
+                            cursor: "pointer",
+                            transition: "background-color 0.2s ease"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = theme.palette.action.hover;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                          }}
                         >
                           <TableCell sx={{ fontWeight: 500 }}>{job.company}</TableCell>
                           <TableCell sx={{ color: "text.secondary" }}>{job.jobTitle}</TableCell>
@@ -283,7 +305,7 @@ export default function Home() {
                           <TableCell>
                             <Chip
                               label={job.status}
-                              color={job.statusColor as any}
+                              color={job.statusColor as "default" | "primary" | "warning" | "success" | "secondary" | "error" | "info"}
                               size="small"
                               sx={{ fontWeight: 500 }}
                             />
@@ -318,25 +340,32 @@ export default function Home() {
         }}
       >
         <Container maxWidth="lg">
-          <Typography
-            variant="h3"
-            component="h2"
-            sx={{
-              textAlign: "center",
-              mb: 8,
-              fontWeight: 700,
-              color: "text.primary",
-            }}
+          <motion.div
+            initial={{ opacity: 0, y: -60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2 }}
+            viewport={{ once: true }}
           >
-            Everything You Need to Track Your Job Search
-          </Typography>
+            <Typography
+              variant="h3"
+              component="h2"
+              sx={{
+                textAlign: "center",
+                mb: 8,
+                fontWeight: 700,
+                color: "text.primary",
+              }}
+            >
+              Everything You Need to Track Your Job Search
+            </Typography>
+          </motion.div>
           
           <Grid container spacing={4} sx={{ justifyContent: "center" }}>
             {panels.map((panel, index) => (
               <motion.div
                 key={panel.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 30, x: -80}}
+                whileInView={{ opacity: 1, y: 0, x: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 style={{ display: "flex", justifyContent: "center" }}
