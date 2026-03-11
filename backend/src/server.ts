@@ -49,7 +49,7 @@ validateEnvironment();
 const app = express();
 
 const corsOptions = {
-  origin: true,
+  origin: ['https://dev.jobtrackr.online', 'https://jobtrackr.online', 'http://localhost:5173', 'http://100.116.33.88:5173'],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: false,
 };
