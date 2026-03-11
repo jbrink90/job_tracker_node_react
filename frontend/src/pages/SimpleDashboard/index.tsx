@@ -1,9 +1,10 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import EditSlideout from "../../components/EditSlideout";
 import { NewNavBar } from "../../components";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import { Job } from "../../types/Job";
+import { LinkedInJobResponse } from "../../components/EditSlideout";
 import Tooltip from "@mui/material/Tooltip";
 import { MuiTableTest } from "../../components/MuiTableTest";
 import "./index.css";
@@ -20,8 +21,9 @@ import { PageFooter } from "../../components";
 import { Button } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { Box, Typography, IconButton, Modal, useTheme, useMediaQuery } from "@mui/material";
+import { Theme } from "@mui/material/styles";
 
-const getModalStyle = (theme: any) => ({
+const getModalStyle = (theme: Theme) => ({
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -33,49 +35,22 @@ const getModalStyle = (theme: any) => ({
   textAlign: "center",
 });
 
-interface DashBoardProps {
-  // Theme is now handled by context, no props needed
-}
-
-
-declare global {
-  interface BeforeInstallPromptEvent extends Event {
-    prompt(): Promise<void>;
-    userChoice: Promise<{
-      outcome: "accepted" | "dismissed";
-      platform: string;
-    }>;
-  }
-}
-export {};
-
-const SimpleDashboard: React.FC<DashBoardProps> = () => {
+const SimpleDashboard: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  
-  const modalStyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    bgcolor: theme.palette.background.paper,
-    border: `1px solid ${theme.palette.divider}`,
-    boxShadow: 24,
-    borderRadius: "7px",
-    textAlign: "center",
-  };
+
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
-  const defaultJob: Job = {
+  const defaultJob: Job = useMemo(() => ({
     company: "",
     job_title: "",
     description: "",
     location: "",
-    status: "",
+    status: "Applied",
     applied: new Date(),
     last_updated: new Date(),
     supabase_id: "",
-  };
+  }), []);
   const [currentEditingJob, setCurrentEditingJob] = useState<Job | null>(
     defaultJob,
   );
@@ -84,32 +59,10 @@ const SimpleDashboard: React.FC<DashBoardProps> = () => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [refreshTableTrigger, setRefreshTableTrigger] = useState<number>(0);
+  const [, setRefreshTableTrigger] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const { enqueueSnackbar } = useSnackbar();
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setAccessToken(data.session?.access_token ?? null);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (accessToken) {
-      getAllJobs();
-    }
-  }, [accessToken]);
-
-  useEffect(() => {
-    if (selectedJobId == null) {
-      setCurrentEditingJob(defaultJob);
-      return;
-    }
-
-    const job = masterJobList.find((j) => j.id === selectedJobId);
-    setCurrentEditingJob(job ?? defaultJob);
-  }, [selectedJobId, masterJobList]);
 
   /**
    * Fetch all jobs for the current user.
@@ -137,7 +90,7 @@ const SimpleDashboard: React.FC<DashBoardProps> = () => {
       console.error(error);
       enqueueSnackbar("Failed to fetch jobs. Please try again.", { variant: "error" });
     }
-  }, [accessToken]);
+  }, [accessToken, enqueueSnackbar]);
 
   /**
    * Delete a job by its ID.
@@ -228,14 +181,15 @@ const SimpleDashboard: React.FC<DashBoardProps> = () => {
     }
   };
 
-  const getLinkedInData = async (url: string) => {
-    if (!accessToken) return;
+  const getLinkedInData = async (url: string): Promise<LinkedInJobResponse> => {
+    if (!accessToken) return { success: false, error: "No access token" };
 
     try {
       return await apiPullLinkedInData(url, accessToken);
     } catch (error) {
       console.error(error);
       enqueueSnackbar("Failed to pull LinkedIn job data. Please try again.", { variant: "error" });
+      return { success: false, error: "Failed to fetch data" };
     }
   }
 
@@ -279,6 +233,29 @@ const SimpleDashboard: React.FC<DashBoardProps> = () => {
       (job.status || "").toLowerCase().includes(searchLower)
     );
   });
+
+  
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setAccessToken(data.session?.access_token ?? null);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (accessToken) {
+      getAllJobs();
+    }
+  }, [accessToken, getAllJobs]);
+
+  useEffect(() => {
+    if (selectedJobId == null) {
+      setCurrentEditingJob(defaultJob);
+      return;
+    }
+
+    const job = masterJobList.find((j) => j.id === selectedJobId);
+    setCurrentEditingJob(job ?? defaultJob);
+  }, [selectedJobId, masterJobList, defaultJob]);
 
   return (
     <>
