@@ -341,7 +341,7 @@ router.patch('/', createAuthMiddleware(false), async (req: Request, res: Respons
     }
 });
 
-router.delete('/:id', createAuthMiddleware(false), async (req: Request, res: Response) => {
+router.delete('/', createAuthMiddleware(false), async (req: Request, res: Response) => {
     const user = (req as any).supabaseUser;
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
     const { id } = req.query;
