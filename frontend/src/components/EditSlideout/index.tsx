@@ -5,7 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import MapIcon from "@mui/icons-material/Map";
 import { Job } from "../../types/Job";
 
-type LinkedInJobResponse = {
+export type LinkedInJobResponse = {
   success: boolean;
   job?: {
     job_title: string;
@@ -115,6 +115,8 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
 
     if (isAddingNewJob) {
       setLinkedinUrl("")
+      setShowLinkedInDiv(true);
+      setLoadingLinkedIn(false);
       setJobValues(defaultJob);
       setMarkdownSource("");
       editorRef.current?.setMarkdown("");
@@ -133,6 +135,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     } else {
       setIsSlideoutOpen(false);
       setShowLinkedInDiv(true);
+      setLoadingLinkedIn(false);
     }
   };
 
@@ -219,17 +222,19 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
         setJobValues(defaultJob);
         setIsSlideoutOpen(false);
         setShowLinkedInDiv(true);
-      } catch (error) {
+        setLoadingLinkedIn(false);
+      } catch {
         enqueueSnackbar("Failed to add job. Please try again.", { variant: "error" });
       }
     } else {
       try {
         saveJob(jobValues);
         setHasJobBeenModified(false);
-      } catch (error) {
+      } catch {
         enqueueSnackbar("Failed to save job. Please try again.", { variant: "error" });
       }
     }
+
   };
 
   function handleImport() {
@@ -264,7 +269,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
           }
         }
       })
-      .catch((error: any) => {
+      .catch((error: string) => {
         console.error("LinkedIn import error:", error);
         enqueueSnackbar("Failed to import from LinkedIn. Please check the URL and try again.", { variant: "error" });
         setLoadingLinkedIn(false);
