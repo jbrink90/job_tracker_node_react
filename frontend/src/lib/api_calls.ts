@@ -1,6 +1,18 @@
 // lib/api_calls.ts
 import { Job } from "../types/Job";
 
+type LinkedInJobResponse = {
+  success: boolean;
+  job?: {
+    job_title: string;
+    company: string;
+    location: string;
+    description: string;
+  };
+  error?: string;
+  details?: string;
+}
+
 const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:4444";
 
 /**
@@ -103,7 +115,7 @@ export async function apiSaveJob(job: Job, supabase_id: string | null): Promise<
  * @example
  * await apiSaveJob({ id: 42, company: 'Acme', job_title: 'Senior Dev', ... }, 'user-id-123');
  */
-export async function apiPullLinkedInData(linkedinUrl: string, supabase_id: string | null): Promise<void> {
+export async function apiPullLinkedInData(linkedinUrl: string, supabase_id: string | null): Promise<LinkedInJobResponse> {
   const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/jobs/pull`, {
         method: "POST",
         headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
