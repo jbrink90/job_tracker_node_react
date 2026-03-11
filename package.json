@@ -10,7 +10,8 @@
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "cd frontend && npm install && npm run build",
     "build:backend": "cd backend && npm install && npm run build",
-    "lint": "eslint \"{frontend,backend}/**/*.{ts,tsx,js,jsx}\" --fix",
+    "lint": "cd frontend && npx eslint . && cd ../backend && npx eslint .",
+    "lint:fix": "cd frontend && npx eslint . --fix && cd ../backend && npx eslint . --fix",
     "format": "prettier --write \"{frontend,backend}/**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "devDependencies": {

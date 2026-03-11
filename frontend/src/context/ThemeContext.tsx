@@ -17,7 +17,9 @@ const ThemeContext = createContext<ThemeContextProps>({
   setTheme: () => {},
 });
 
-export const useThemeContext = () => useContext(ThemeContext);
+/* eslint-disable react-refresh/only-export-components */
+const useThemeContext = () => useContext(ThemeContext);
+export { useThemeContext };
 
 const getSystemTheme = (): "light" | "dark" => {
   if (typeof window !== "undefined" && window.matchMedia) {
