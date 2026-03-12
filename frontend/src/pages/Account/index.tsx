@@ -82,51 +82,51 @@ const Account = () => {
 
   return (
     <>
-    <Box sx={{ mt: 4, mb: 4, display: "flex", justifyContent: "center" }}>
-      <Paper sx={{ p: 4, width: "100%", maxWidth: 420 }}>
-        {/* Back Button */}
-        <Button
-          variant="outlined"
-          sx={{ mb: 2 }}
-          onClick={() => window.history.back()}
-        >
-          &larr; Back
-        </Button>
+      <Box sx={{ mt: 4, mb: 4, display: "flex", justifyContent: "center" }}>
+        <Paper sx={{ p: 4, width: "100%", maxWidth: 420 }}>
+          {/* Back Button */}
+          <Button
+            variant="outlined"
+            sx={{ mb: 2 }}
+            onClick={() => window.history.back()}
+          >
+            &larr; Back
+          </Button>
 
-        <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-          Your Account
-        </Typography>
+          <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
+            Your Account
+          </Typography>
 
-        <Stack spacing={2}>
-          <Box>
-            <Typography variant="body2" color="text.secondary">
-              User ID
-            </Typography>
-            <Typography style={{userSelect: 'all'}}>{user.id}</Typography>
-          </Box>
+          <Stack spacing={2}>
+            <Box>
+              <Typography variant="body2" color="text.secondary">
+                User ID
+              </Typography>
+              <Typography style={{ userSelect: "all" }}>{user.id}</Typography>
+            </Box>
 
-          <Box>
-            <Typography variant="body2" color="text.secondary">
-              Email
-            </Typography>
-            <Typography>{user.email ?? "Unknown"}</Typography>
-          </Box>
+            <Box>
+              <Typography variant="body2" color="text.secondary">
+                Email
+              </Typography>
+              <Typography>{user.email ?? "Unknown"}</Typography>
+            </Box>
 
-          <Box>
-            <Typography variant="body2" color="text.secondary">
-              Joined
-            </Typography>
-            <Typography>{formatDate(user.created_at)}</Typography>
-          </Box>
+            <Box>
+              <Typography variant="body2" color="text.secondary">
+                Joined
+              </Typography>
+              <Typography>{formatDate(user.created_at)}</Typography>
+            </Box>
 
-          <Box>
-            <Typography variant="body2" color="text.secondary">
-              Last Sign-In
-            </Typography>
-            <Typography>{formatDateTime(user.last_sign_in_at)}</Typography>
-          </Box>
+            <Box>
+              <Typography variant="body2" color="text.secondary">
+                Last Sign-In
+              </Typography>
+              <Typography>{formatDateTime(user.last_sign_in_at)}</Typography>
+            </Box>
 
-          {/* <Button
+            {/* <Button
             variant="contained"
             color="error"
             onClick={handleDeleteAccount}
@@ -135,11 +135,11 @@ const Account = () => {
           >
             {deleting ? "Deleting..." : "Delete My Account"}
           </Button> */}
-        </Stack>
-      </Paper>
-    </Box>
-    
-    <PageFooter />
+          </Stack>
+        </Paper>
+      </Box>
+
+      <PageFooter />
     </>
   );
 };

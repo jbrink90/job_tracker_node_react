@@ -1,9 +1,9 @@
-import { SearchableMap } from "../../components"
+import { SearchableMap } from "../../components";
 function Map() {
- return (
+  return (
     <>
-    <SearchableMap />
+      <SearchableMap />
     </>
- )   
+  );
 }
 export default Map;

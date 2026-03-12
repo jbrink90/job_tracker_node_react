@@ -20,7 +20,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import { PageFooter } from "../../components";
 import { Button } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { Box, Typography, IconButton, Modal, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Typography,
+  IconButton,
+  Modal,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import { Theme } from "@mui/material/styles";
 
 const getModalStyle = (theme: Theme) => ({
@@ -41,16 +48,19 @@ const SimpleDashboard: React.FC = () => {
 
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
-  const defaultJob: Job = useMemo(() => ({
-    company: "",
-    job_title: "",
-    description: "",
-    location: "",
-    status: "Applied",
-    applied: new Date(),
-    last_updated: new Date(),
-    supabase_id: "",
-  }), []);
+  const defaultJob: Job = useMemo(
+    () => ({
+      company: "",
+      job_title: "",
+      description: "",
+      location: "",
+      status: "Applied",
+      applied: new Date(),
+      last_updated: new Date(),
+      supabase_id: "",
+    }),
+    [],
+  );
   const [currentEditingJob, setCurrentEditingJob] = useState<Job | null>(
     defaultJob,
   );
@@ -75,22 +85,27 @@ const SimpleDashboard: React.FC = () => {
    * @example
    * const jobs = await getAllJobs();
    */
-  const getAllJobs = useCallback(async (resetPagination: boolean = false) => {
-    if (!accessToken) return; // no token yet
-    try {
-      setIsDataLoading(true);
-      const jobs = await apiGetJobs(accessToken);
-      setMasterJobList(jobs);
-      setIsDataLoading(false);
-      // Only trigger table pagination reset if explicitly requested
-      if (resetPagination) {
-        setRefreshTableTrigger(prev => prev + 1);
+  const getAllJobs = useCallback(
+    async (resetPagination: boolean = false) => {
+      if (!accessToken) return; // no token yet
+      try {
+        setIsDataLoading(true);
+        const jobs = await apiGetJobs(accessToken);
+        setMasterJobList(jobs);
+        setIsDataLoading(false);
+        // Only trigger table pagination reset if explicitly requested
+        if (resetPagination) {
+          setRefreshTableTrigger((prev) => prev + 1);
+        }
+      } catch (error) {
+        console.error(error);
+        enqueueSnackbar("Failed to fetch jobs. Please try again.", {
+          variant: "error",
+        });
       }
-    } catch (error) {
-      console.error(error);
-      enqueueSnackbar("Failed to fetch jobs. Please try again.", { variant: "error" });
-    }
-  }, [accessToken, enqueueSnackbar]);
+    },
+    [accessToken, enqueueSnackbar],
+  );
 
   /**
    * Delete a job by its ID.
@@ -115,7 +130,9 @@ const SimpleDashboard: React.FC = () => {
       showToast("Job deleted successfully.", "success")();
     } catch (error) {
       console.error(error);
-      enqueueSnackbar("Failed to delete job. Please try again.", { variant: "error" });
+      enqueueSnackbar("Failed to delete job. Please try again.", {
+        variant: "error",
+      });
 
       //setIsDataLoading(false);
     }
@@ -147,7 +164,9 @@ const SimpleDashboard: React.FC = () => {
       showToast("Job added successfully.", "success")();
     } catch (error) {
       console.error(error);
-      enqueueSnackbar("Failed to add job. Please try again.", { variant: "error" });
+      enqueueSnackbar("Failed to add job. Please try again.", {
+        variant: "error",
+      });
     }
   };
 
@@ -177,7 +196,9 @@ const SimpleDashboard: React.FC = () => {
       showToast("Job saved successfully.", "success")();
     } catch (error) {
       console.error(error);
-      enqueueSnackbar("Failed to save job. Please try again.", { variant: "error" });
+      enqueueSnackbar("Failed to save job. Please try again.", {
+        variant: "error",
+      });
     }
   };
 
@@ -188,10 +209,12 @@ const SimpleDashboard: React.FC = () => {
       return await apiPullLinkedInData(url, accessToken);
     } catch (error) {
       console.error(error);
-      enqueueSnackbar("Failed to pull LinkedIn job data. Please try again.", { variant: "error" });
+      enqueueSnackbar("Failed to pull LinkedIn job data. Please try again.", {
+        variant: "error",
+      });
       return { success: false, error: "Failed to fetch data" };
     }
-  }
+  };
 
   const onSaveJob = (jobValues: Job) => {
     if (isAddingNewJob) {
@@ -224,7 +247,7 @@ const SimpleDashboard: React.FC = () => {
     setSearchTerm(searchTerm);
   };
 
-  const filteredJobs = masterJobList.filter(job => {
+  const filteredJobs = masterJobList.filter((job) => {
     const searchLower = searchTerm.toLowerCase();
     return (
       (job.company || "").toLowerCase().includes(searchLower) ||
@@ -234,7 +257,6 @@ const SimpleDashboard: React.FC = () => {
     );
   });
 
-  
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setAccessToken(data.session?.access_token ?? null);
@@ -273,15 +295,15 @@ const SimpleDashboard: React.FC = () => {
                   variant="contained"
                   color="primary"
                   startIcon={<RefreshIcon />}
-                  sx={{ 
-                    marginLeft: "10px", 
+                  sx={{
+                    marginLeft: "10px",
                     alignItems: "center",
                     minWidth: isMobile ? "40px" : "auto",
                     width: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "normal",
                     "& .MuiButton-startIcon": {
                       margin: isMobile ? 0 : "0 8px 0 0",
-                    }
+                    },
                   }}
                   onClick={() => {
                     setIsDataLoading(true);
@@ -296,15 +318,15 @@ const SimpleDashboard: React.FC = () => {
                   variant="contained"
                   color="primary"
                   startIcon={<AddIcon />}
-                  sx={{ 
-                    marginLeft: "10px", 
+                  sx={{
+                    marginLeft: "10px",
                     alignItems: "center",
                     minWidth: isMobile ? "40px" : "auto",
                     width: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "normal",
                     "& .MuiButton-startIcon": {
                       margin: isMobile ? 0 : "0 8px 0 0",
-                    }
+                    },
                   }}
                   onClick={slideoutNewJob}
                 >
@@ -344,7 +366,13 @@ const SimpleDashboard: React.FC = () => {
           open={isDeleteModalVisible}
           onClose={() => setIsDeleteModalVisible(false)}
         >
-          <Box sx={{ ...getModalStyle(theme), p: 2, width: { xs: "90%", sm: 400 } }}>
+          <Box
+            sx={{
+              ...getModalStyle(theme),
+              p: 2,
+              width: { xs: "90%", sm: 400 },
+            }}
+          >
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               <IconButton
                 size="small"

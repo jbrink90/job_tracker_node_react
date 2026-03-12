@@ -18,7 +18,12 @@ import {
   Grid,
   useTheme,
 } from "@mui/material";
-import { ArrowForward, AccessTime, Edit, TrackChanges } from "@mui/icons-material";
+import {
+  ArrowForward,
+  AccessTime,
+  Edit,
+  TrackChanges,
+} from "@mui/icons-material";
 import { PageFooter } from "../../components";
 
 export default function Home() {
@@ -36,13 +41,19 @@ export default function Home() {
       title: "Track Status",
       description:
         "Keep tabs on every job posting's progress, deadlines, and changes in one place.",
-      icon: <TrackChanges sx={{ fontSize: 40, color: theme.palette.primary.main }} />,
+      icon: (
+        <TrackChanges
+          sx={{ fontSize: 40, color: theme.palette.primary.main }}
+        />
+      ),
     },
     {
       title: "Magic Login",
       description:
         "No passwords required. Securely login using just your email — hassle-free and safe.",
-      icon: <AccessTime sx={{ fontSize: 40, color: theme.palette.primary.main }} />,
+      icon: (
+        <AccessTime sx={{ fontSize: 40, color: theme.palette.primary.main }} />
+      ),
     },
   ];
 
@@ -73,7 +84,10 @@ export default function Home() {
             elevation={0}
             sx={{
               backdropFilter: "blur(12px)",
-              bgcolor: theme.palette.mode === 'dark' ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.8)",
+              bgcolor:
+                theme.palette.mode === "dark"
+                  ? "rgba(0,0,0,0.8)"
+                  : "rgba(255,255,255,0.8)",
               borderBottom: `1px solid ${theme.palette.divider}`,
             }}
           >
@@ -97,15 +111,26 @@ export default function Home() {
                     alt="JobTrackr Logo"
                   />
                 </Box>
-                <Typography variant="h6" sx={{ fontWeight: 700, color: "text.primary" }}>
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: 700, color: "text.primary" }}
+                >
                   JobTrackr
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", gap: 1 }}>
-                <Button color="inherit" sx={{ color: "text.primary" }} onClick={() => navigate("/login")}>
+                <Button
+                  color="inherit"
+                  sx={{ color: "text.primary" }}
+                  onClick={() => navigate("/login")}
+                >
                   Login
                 </Button>
-                <Button variant="contained" disableElevation onClick={() => navigate("/login")}>
+                <Button
+                  variant="contained"
+                  disableElevation
+                  onClick={() => navigate("/login")}
+                >
                   Get Started
                 </Button>
               </Box>
@@ -115,7 +140,6 @@ export default function Home() {
 
         <Container sx={{ position: "relative", zIndex: 10, pt: 16, pb: 10 }}>
           <Box sx={{ maxWidth: 800, mx: "auto", textAlign: "center", pt: 10 }}>
-
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -134,7 +158,14 @@ export default function Home() {
                 }}
               >
                 Keep Track of Your{" "}
-                <span style={{ background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+                <span
+                  style={{
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
                   Dream Gig
                 </span>
               </Typography>
@@ -156,8 +187,8 @@ export default function Home() {
                   fontWeight: 400,
                 }}
               >
-                Your sidekick for tracking applications and landing that dream gig
-                with ease.
+                Your sidekick for tracking applications and landing that dream
+                gig with ease.
               </Typography>
             </motion.div>
 
@@ -205,7 +236,10 @@ export default function Home() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.7 }}
             >
-              <Typography variant="body2" sx={{ color: "text.secondary", mt: 3 }}>
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary", mt: 3 }}
+              >
                 ✨ Install as an app on any device • No credit card required
               </Typography>
             </motion.div>
@@ -227,7 +261,10 @@ export default function Home() {
               >
                 <Box
                   sx={{
-                    bgcolor: theme.palette.mode === 'dark' ? theme.palette.grey[900] : theme.palette.grey[100],
+                    bgcolor:
+                      theme.palette.mode === "dark"
+                        ? theme.palette.grey[900]
+                        : theme.palette.grey[100],
                     px: 2,
                     py: 1.5,
                     display: "flex",
@@ -237,14 +274,41 @@ export default function Home() {
                   }}
                 >
                   <Box sx={{ display: "flex", gap: 0.75 }}>
-                    <Box sx={{ width: 12, height: 12, borderRadius: "50%", bgcolor: "error.main", opacity: 0.6 }} />
-                    <Box sx={{ width: 12, height: 12, borderRadius: "50%", bgcolor: "warning.main", opacity: 0.6 }} />
-                    <Box sx={{ width: 12, height: 12, borderRadius: "50%", bgcolor: "primary.main", opacity: 0.6 }} />
+                    <Box
+                      sx={{
+                        width: 12,
+                        height: 12,
+                        borderRadius: "50%",
+                        bgcolor: "error.main",
+                        opacity: 0.6,
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        width: 12,
+                        height: 12,
+                        borderRadius: "50%",
+                        bgcolor: "warning.main",
+                        opacity: 0.6,
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        width: 12,
+                        height: 12,
+                        borderRadius: "50%",
+                        bgcolor: "primary.main",
+                        opacity: 0.6,
+                      }}
+                    />
                   </Box>
                   <Box sx={{ flex: 1, textAlign: "center" }}>
                     <Typography
                       variant="caption"
-                      sx={{ color: "text.secondary", fontFamily: "'JetBrains Mono', monospace" }}
+                      sx={{
+                        color: "text.secondary",
+                        fontFamily: "'JetBrains Mono', monospace",
+                      }}
                     >
                       Your Job Applications
                     </Typography>
@@ -254,19 +318,21 @@ export default function Home() {
                 <TableContainer>
                   <Table>
                     <TableHead>
-                      <TableRow 
-  sx={{ 
-    bgcolor: "action.hover",
-    cursor: "pointer",
-    transition: "background-color 0.2s ease"
-  }}
-  onMouseEnter={(e) => {
-    e.currentTarget.style.backgroundColor = theme.palette.action.selected;
-  }}
-  onMouseLeave={(e) => {
-    e.currentTarget.style.backgroundColor = theme.palette.action.hover;
-  }}
->
+                      <TableRow
+                        sx={{
+                          bgcolor: "action.hover",
+                          cursor: "pointer",
+                          transition: "background-color 0.2s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor =
+                            theme.palette.action.selected;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor =
+                            theme.palette.action.hover;
+                        }}
+                      >
                         <TableCell>Company</TableCell>
                         <TableCell>Job Title</TableCell>
                         <TableCell>Location</TableCell>
@@ -278,46 +344,111 @@ export default function Home() {
                     </TableHead>
                     <TableBody>
                       {[
-                        { company: "TechCorp", jobTitle: "Senior Developer", location: "San Francisco, CA", status: "Applied", statusColor: "primary", applied: "Jan 15", updated: "Jan 18" },
-                        { company: "StartupXYZ", jobTitle: "Frontend Lead", location: "Remote", status: "Interview Scheduled", statusColor: "warning", applied: "Jan 10", updated: "Jan 22" },
-                        { company: "BigTech Inc", jobTitle: "Full Stack Engineer", location: "New York, NY", status: "Offer Received", statusColor: "success", applied: "Jan 5", updated: "Jan 24" },
+                        {
+                          company: "TechCorp",
+                          jobTitle: "Senior Developer",
+                          location: "San Francisco, CA",
+                          status: "Applied",
+                          statusColor: "primary",
+                          applied: "Jan 15",
+                          updated: "Jan 18",
+                        },
+                        {
+                          company: "StartupXYZ",
+                          jobTitle: "Frontend Lead",
+                          location: "Remote",
+                          status: "Interview Scheduled",
+                          statusColor: "warning",
+                          applied: "Jan 10",
+                          updated: "Jan 22",
+                        },
+                        {
+                          company: "BigTech Inc",
+                          jobTitle: "Full Stack Engineer",
+                          location: "New York, NY",
+                          status: "Offer Received",
+                          statusColor: "success",
+                          applied: "Jan 5",
+                          updated: "Jan 24",
+                        },
                       ].map((job, i) => (
                         <motion.tr
                           key={i}
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
-                          style={{ 
+                          style={{
                             display: "table-row",
                             cursor: "pointer",
-                            transition: "background-color 0.2s ease"
+                            transition: "background-color 0.2s ease",
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = theme.palette.action.hover;
+                            e.currentTarget.style.backgroundColor =
+                              theme.palette.action.hover;
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "transparent";
+                            e.currentTarget.style.backgroundColor =
+                              "transparent";
                           }}
                         >
-                          <TableCell sx={{ fontWeight: 500 }}>{job.company}</TableCell>
-                          <TableCell sx={{ color: "text.secondary" }}>{job.jobTitle}</TableCell>
-                          <TableCell sx={{ color: "text.secondary" }}>{job.location}</TableCell>
+                          <TableCell sx={{ fontWeight: 500 }}>
+                            {job.company}
+                          </TableCell>
+                          <TableCell sx={{ color: "text.secondary" }}>
+                            {job.jobTitle}
+                          </TableCell>
+                          <TableCell sx={{ color: "text.secondary" }}>
+                            {job.location}
+                          </TableCell>
                           <TableCell>
                             <Chip
                               label={job.status}
-                              color={job.statusColor as "default" | "primary" | "warning" | "success" | "secondary" | "error" | "info"}
+                              color={
+                                job.statusColor as
+                                  | "default"
+                                  | "primary"
+                                  | "warning"
+                                  | "success"
+                                  | "secondary"
+                                  | "error"
+                                  | "info"
+                              }
                               size="small"
                               sx={{ fontWeight: 500 }}
                             />
                           </TableCell>
-                          <TableCell sx={{ color: "text.secondary" }}>{job.applied}</TableCell>
-                          <TableCell sx={{ color: "text.secondary" }}>{job.updated}</TableCell>
+                          <TableCell sx={{ color: "text.secondary" }}>
+                            {job.applied}
+                          </TableCell>
+                          <TableCell sx={{ color: "text.secondary" }}>
+                            {job.updated}
+                          </TableCell>
                           <TableCell>
                             <Box sx={{ display: "flex", gap: 1 }}>
-                              <Button size="small" variant="contained" color="primary" sx={{ minWidth: 0, px: 1.5, py: 0.5, fontSize: "0.75rem" }}>
+                              <Button
+                                size="small"
+                                variant="contained"
+                                color="primary"
+                                sx={{
+                                  minWidth: 0,
+                                  px: 1.5,
+                                  py: 0.5,
+                                  fontSize: "0.75rem",
+                                }}
+                              >
                                 Edit
                               </Button>
-                              <Button size="small" variant="contained" color="error" sx={{ minWidth: 0, px: 1.5, py: 0.5, fontSize: "0.75rem" }}>
+                              <Button
+                                size="small"
+                                variant="contained"
+                                color="error"
+                                sx={{
+                                  minWidth: 0,
+                                  px: 1.5,
+                                  py: 0.5,
+                                  fontSize: "0.75rem",
+                                }}
+                              >
                                 Delete
                               </Button>
                             </Box>
@@ -336,7 +467,10 @@ export default function Home() {
       <Box
         sx={{
           py: 12,
-          bgcolor: theme.palette.mode === 'dark' ? theme.palette.grey[900] : theme.palette.grey[50],
+          bgcolor:
+            theme.palette.mode === "dark"
+              ? theme.palette.grey[900]
+              : theme.palette.grey[50],
         }}
       >
         <Container maxWidth="lg">
@@ -359,12 +493,12 @@ export default function Home() {
               Everything You Need to Track Your Job Search
             </Typography>
           </motion.div>
-          
+
           <Grid container spacing={4} sx={{ justifyContent: "center" }}>
             {panels.map((panel, index) => (
               <motion.div
                 key={panel.title}
-                initial={{ opacity: 0, y: 30, x: -80}}
+                initial={{ opacity: 0, y: 30, x: -80 }}
                 whileInView={{ opacity: 1, y: 0, x: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
@@ -379,7 +513,7 @@ export default function Home() {
                     textAlign: "center",
                     borderRadius: 3,
                     transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    "&:hover": { 
+                    "&:hover": {
                       transform: "translateY(-8px)",
                       boxShadow: theme.shadows[8],
                     },
@@ -391,10 +525,17 @@ export default function Home() {
                   }}
                 >
                   <Box sx={{ mb: 3 }}>{panel.icon}</Box>
-                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    sx={{ fontWeight: 600, mb: 2 }}
+                  >
                     {panel.title}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary", lineHeight: 1.6 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.secondary", lineHeight: 1.6 }}
+                  >
                     {panel.description}
                   </Typography>
                 </Paper>

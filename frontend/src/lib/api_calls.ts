@@ -11,7 +11,7 @@ type LinkedInJobResponse = {
   };
   error?: string;
   details?: string;
-}
+};
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:4444";
 
@@ -30,7 +30,10 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:4444";
 export async function apiGetJobs(supabase_id: string | null): Promise<Job[]> {
   const res = await fetch(`${baseUrl}/jobs`, {
     method: "GET",
-    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${supabase_id}`,
+    },
   });
   if (!res.ok) throw new Error("Failed to fetch jobs");
   return res.json();
@@ -49,10 +52,16 @@ export async function apiGetJobs(supabase_id: string | null): Promise<Job[]> {
  * @example
  * const newJob = await apiAddJob({ company: 'Acme', job_title: 'Developer', ... }, 'user-id-123');
  */
-export async function apiAddJob(job: Job, supabase_id: string | null): Promise<Job> {
+export async function apiAddJob(
+  job: Job,
+  supabase_id: string | null,
+): Promise<Job> {
   const res = await fetch(`${baseUrl}/jobs`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${supabase_id}`,
+    },
     body: JSON.stringify(job),
   });
   if (!res.ok) throw new Error("Failed to add job");
@@ -72,10 +81,16 @@ export async function apiAddJob(job: Job, supabase_id: string | null): Promise<J
  * @example
  * await apiDeleteJob(42, 'user-id-123');
  */
-export async function apiDeleteJob(jobId: number, supabase_id: string | null): Promise<void> {
+export async function apiDeleteJob(
+  jobId: number,
+  supabase_id: string | null,
+): Promise<void> {
   const res = await fetch(`${baseUrl}/jobs/${jobId}`, {
     method: "DELETE",
-    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${supabase_id}`,
+    },
   });
   if (!res.ok) throw new Error("Failed to delete job");
 }
@@ -93,10 +108,16 @@ export async function apiDeleteJob(jobId: number, supabase_id: string | null): P
  * @example
  * await apiSaveJob({ id: 42, company: 'Acme', job_title: 'Senior Dev', ... }, 'user-id-123');
  */
-export async function apiSaveJob(job: Job, supabase_id: string | null): Promise<void> {
+export async function apiSaveJob(
+  job: Job,
+  supabase_id: string | null,
+): Promise<void> {
   const res = await fetch(`${baseUrl}/jobs`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${supabase_id}`,
+    },
     body: JSON.stringify(job),
   });
   if (!res.ok) throw new Error("Failed to save job");
@@ -115,13 +136,19 @@ export async function apiSaveJob(job: Job, supabase_id: string | null): Promise<
  * @example
  * await apiSaveJob({ id: 42, company: 'Acme', job_title: 'Senior Dev', ... }, 'user-id-123');
  */
-export async function apiPullLinkedInData(linkedinUrl: string, supabase_id: string | null): Promise<LinkedInJobResponse> {
+export async function apiPullLinkedInData(
+  linkedinUrl: string,
+  supabase_id: string | null,
+): Promise<LinkedInJobResponse> {
   const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/jobs/pull`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
-        body: JSON.stringify({
-          url: linkedinUrl,
-        }),
-      });
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${supabase_id}`,
+    },
+    body: JSON.stringify({
+      url: linkedinUrl,
+    }),
+  });
   return res.json();
 }
