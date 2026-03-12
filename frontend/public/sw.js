@@ -1,23 +1,25 @@
-const CACHE_VERSION = 'v7';
+const CACHE_VERSION = "v7";
 const CACHE_NAME = `jobtrackr-cache-${CACHE_VERSION}`;
 const OFFLINE_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.add(OFFLINE_URL))
+    caches.open(CACHE_NAME).then((cache) => cache.add(OFFLINE_URL)),
   );
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
-      )
-    )
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((key) => key !== CACHE_NAME)
+            .map((key) => caches.delete(key)),
+        ),
+      ),
   );
   self.clients.claim();
 });
@@ -40,7 +42,7 @@ self.addEventListener("fetch", (event) => {
       fetch(request).catch(async () => {
         const cache = await caches.open(CACHE_NAME);
         return cache.match(OFFLINE_URL);
-      })
+      }),
     );
   }
 });

@@ -1,24 +1,23 @@
 // Using Mapbox
-import {useState} from 'react';
-import Map, { Source, Layer} from 'react-map-gl/mapbox';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import { useState } from "react";
+import Map, { Source, Layer } from "react-map-gl/mapbox";
+import "mapbox-gl/dist/mapbox-gl.css";
 // import { SearchBox } from "@mapbox/search-js-react";
-import type {FeatureCollection} from 'geojson';
+import type { FeatureCollection } from "geojson";
 import "./index.css";
 
-
 const geojson: FeatureCollection = {
-  type: 'FeatureCollection',
+  type: "FeatureCollection",
   features: [
     {
-      type: 'Feature',
+      type: "Feature",
       geometry: {
-        type: 'Point',
-        coordinates: [-86.529808, 39.166554]
+        type: "Point",
+        coordinates: [-86.529808, 39.166554],
       },
-      properties: {title: 'Some address'}
-    }
-  ]
+      properties: { title: "Some address" },
+    },
+  ],
 };
 
 const circleLayer = {
@@ -35,7 +34,7 @@ export default function SearchableMap() {
   const [, setViewState] = useState({
     longitude: -86.529808,
     latitude: 39.166554,
-    zoom: 3.5
+    zoom: 3.5,
   });
 
   // {/* @ts-expect-error- Work in progress */ }
@@ -71,8 +70,8 @@ export default function SearchableMap() {
 
   return (
     <>
-    <div className='searchableMap_searchDiv'>
-      {/* @ts-expect-error- App continues to work despite error: 'SearchBox' cannot be used as a JSX component. 
+      <div className="searchableMap_searchDiv">
+        {/* @ts-expect-error- App continues to work despite error: 'SearchBox' cannot be used as a JSX component. 
       <SearchBox
         options={{
           proximity: {
@@ -86,23 +85,23 @@ export default function SearchableMap() {
         onRetrieve={retrieveChange}
         theme={theme}
       /> */}
-    </div>
-    <Map
-      reuseMaps 
-      mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
-      initialViewState={{
-        longitude: -86.529808,
-        latitude: 39.166554,
-        zoom: 7
-      }}
-      style={{width: 600, height: 400}}
-      mapStyle="mapbox://styles/mapbox/satellite-streets-v12"
-      onMove={evt => setViewState(evt.viewState)}
-    >
-      <Source id="my-data" type="geojson" data={geojson}>
-        <Layer {...circleLayer} />
-      </Source>
-    </Map>    
+      </div>
+      <Map
+        reuseMaps
+        mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
+        initialViewState={{
+          longitude: -86.529808,
+          latitude: 39.166554,
+          zoom: 7,
+        }}
+        style={{ width: 600, height: 400 }}
+        mapStyle="mapbox://styles/mapbox/satellite-streets-v12"
+        onMove={(evt) => setViewState(evt.viewState)}
+      >
+        <Source id="my-data" type="geojson" data={geojson}>
+          <Layer {...circleLayer} />
+        </Source>
+      </Map>
     </>
   );
 }

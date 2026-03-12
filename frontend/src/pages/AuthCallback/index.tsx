@@ -9,14 +9,19 @@ export default function AuthCallback() {
     const doCallback = async () => {
       try {
         const hashParams = new URLSearchParams(
-          window.location.hash.substring(1)
+          window.location.hash.substring(1),
         );
         const queryParams = new URLSearchParams(window.location.search);
 
-        const access_token = hashParams.get("access_token") ?? queryParams.get("access_token");
-        const refresh_token = hashParams.get("refresh_token") ?? queryParams.get("refresh_token");
+        const access_token =
+          hashParams.get("access_token") ?? queryParams.get("access_token");
+        const refresh_token =
+          hashParams.get("refresh_token") ?? queryParams.get("refresh_token");
         const code = hashParams.get("code") ?? queryParams.get("code");
-        const redirectTo = hashParams.get("redirect") ?? queryParams.get("redirect") ?? "/dashboard";
+        const redirectTo =
+          hashParams.get("redirect") ??
+          queryParams.get("redirect") ??
+          "/dashboard";
 
         if (access_token && refresh_token) {
           const { error } = await supabase.auth.setSession({

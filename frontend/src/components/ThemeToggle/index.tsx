@@ -1,5 +1,12 @@
 import React from "react";
-import { IconButton, Tooltip, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  IconButton,
+  Tooltip,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { Brightness4, Brightness7, Settings } from "@mui/icons-material";
 import { useThemeContext } from "../../context/ThemeContext";
 
@@ -43,7 +50,7 @@ const ThemeToggle: React.FC = () => {
           {getThemeIcon()}
         </IconButton>
       </Tooltip>
-      
+
       <Menu
         anchorEl={anchorEl}
         open={open}
@@ -64,7 +71,7 @@ const ThemeToggle: React.FC = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem 
+        <MenuItem
           onClick={() => handleThemeSelect("light")}
           selected={siteTheme === "light"}
         >
@@ -73,8 +80,8 @@ const ThemeToggle: React.FC = () => {
           </ListItemIcon>
           <ListItemText>Light</ListItemText>
         </MenuItem>
-        
-        <MenuItem 
+
+        <MenuItem
           onClick={() => handleThemeSelect("dark")}
           selected={siteTheme === "dark"}
         >
@@ -83,8 +90,8 @@ const ThemeToggle: React.FC = () => {
           </ListItemIcon>
           <ListItemText>Dark</ListItemText>
         </MenuItem>
-        
-        <MenuItem 
+
+        <MenuItem
           onClick={() => handleThemeSelect("system")}
           selected={siteTheme === "system"}
         >

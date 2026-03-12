@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import "./index.css";
-import { 
-  Button, 
-  Paper, 
-  Typography, 
-  TextField, 
-  Box, 
+import {
+  Button,
+  Paper,
+  Typography,
+  TextField,
+  Box,
   Alert,
   CircularProgress,
-  Divider
+  Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PageFooter } from "../../components";
 
-
-const frontEndUrl = import.meta.env.VITE_FRONTEND_BASE_URL || "http://localhost:5173";
+const frontEndUrl =
+  import.meta.env.VITE_FRONTEND_BASE_URL || "http://localhost:5173";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -49,7 +49,7 @@ const Login = () => {
 
   const handleDemoLogin = async () => {
     setLoading(true);
-    const {error} = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email: "demo@jobtrackr.online",
       password: import.meta.env.VITE_DEMO_PASSWORD,
     });
@@ -68,7 +68,12 @@ const Login = () => {
     <>
       <Box sx={{ mt: 4, mb: 4, display: "flex", justifyContent: "center" }}>
         <Paper sx={{ p: 4, width: "100%", maxWidth: 420 }}>
-          <Typography component="h1" variant="h5" fontWeight="bold" gutterBottom>
+          <Typography
+            component="h1"
+            variant="h5"
+            fontWeight="bold"
+            gutterBottom
+          >
             Sign in
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
@@ -76,7 +81,7 @@ const Login = () => {
           </Typography>
 
           {!sent ? (
-            <Box component="form" onSubmit={handleLogin} sx={{ width: '100%' }}>
+            <Box component="form" onSubmit={handleLogin} sx={{ width: "100%" }}>
               <TextField
                 fullWidth
                 id="email"
@@ -100,7 +105,7 @@ const Login = () => {
                 disabled={loading}
                 startIcon={loading && <CircularProgress size={20} />}
               >
-                {loading ? 'Sending...' : 'Send Magic Link'}
+                {loading ? "Sending..." : "Send Magic Link"}
               </Button>
 
               {error && (
@@ -124,14 +129,15 @@ const Login = () => {
                 disabled={loading}
                 startIcon={loading && <CircularProgress size={20} />}
               >
-                {loading ? 'Signing in...' : 'Try the Demo Account'}
+                {loading ? "Signing in..." : "Try the Demo Account"}
               </Button>
             </Box>
           ) : (
-            <Box sx={{ textAlign: 'center', py: 2 }}>
+            <Box sx={{ textAlign: "center", py: 2 }}>
               <Alert severity="success">
                 <Typography variant="body1" fontWeight={500}>
-                  ✔ Magic link sent! <br/> Check your inbox and click the link to sign in.
+                  ✔ Magic link sent! <br /> Check your inbox and click the link
+                  to sign in.
                 </Typography>
               </Alert>
             </Box>

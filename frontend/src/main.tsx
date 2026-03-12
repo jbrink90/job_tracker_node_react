@@ -1,7 +1,23 @@
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { Home, SimpleDashboard, Map, Login, Logout, AuthCallback, Account, PrivacyPolicy, Terms, Contact } from "./pages";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import {
+  Home,
+  SimpleDashboard,
+  Map,
+  Login,
+  Logout,
+  AuthCallback,
+  Account,
+  PrivacyPolicy,
+  Terms,
+  Contact,
+} from "./pages";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { supabase } from "./lib/supabase";
@@ -9,9 +25,8 @@ import { initPwaListener } from "./lib/pwa";
 import { User } from "@supabase/supabase-js";
 import "./main.css";
 import { CssBaseline } from "@mui/material";
-import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider } from "notistack";
 import { AppThemeProvider } from "./context/ThemeContext";
-
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
@@ -29,23 +44,26 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return children;
 }
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async () => {
     try {
-      const reg = await navigator.serviceWorker.register('/sw.js');
-      console.log('Service worker registered.');
+      const reg = await navigator.serviceWorker.register("/sw.js");
+      console.log("Service worker registered.");
 
-      reg.addEventListener('updatefound', () => {
+      reg.addEventListener("updatefound", () => {
         const newWorker = reg.installing;
-        newWorker?.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+        newWorker?.addEventListener("statechange", () => {
+          if (
+            newWorker.state === "installed" &&
+            navigator.serviceWorker.controller
+          ) {
             // a new servicewroker is available; prompt the user to refresh and
             // call navigator.serviceWorker.controller.postMessage({type: 'SKIP_WAITING'})
           }
         });
       });
     } catch (err) {
-      console.error('SW registration failed:', err);
+      console.error("SW registration failed:", err);
     }
   });
 }
@@ -54,45 +72,44 @@ function AppWrapper() {
   useEffect(() => {
     initPwaListener();
   }, []);
-  
-return (
-  <AppThemeProvider>
-    <CssBaseline />
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <SnackbarProvider maxSnack={3}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <SimpleDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={<Logout />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/map" element={<Map />} />
-          <Route path="/auth/callback" element={<AuthCallback />} />
-          <Route
-            path="/account"
-            element={
-              <ProtectedRoute>
-                <Account />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </Router>
-      </SnackbarProvider>
-    </LocalizationProvider>
-  </AppThemeProvider>
-);
+
+  return (
+    <AppThemeProvider>
+      <CssBaseline />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <SnackbarProvider maxSnack={3}>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <SimpleDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={<Logout />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/map" element={<Map />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route
+                path="/account"
+                element={
+                  <ProtectedRoute>
+                    <Account />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Router>
+        </SnackbarProvider>
+      </LocalizationProvider>
+    </AppThemeProvider>
+  );
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(<AppWrapper />);
-

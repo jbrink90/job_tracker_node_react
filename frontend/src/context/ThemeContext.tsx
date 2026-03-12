@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useMemo, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  useEffect,
+} from "react";
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 
 type Theme = "light" | "dark" | "system";
@@ -23,15 +29,21 @@ export { useThemeContext };
 
 const getSystemTheme = (): "light" | "dark" => {
   if (typeof window !== "undefined" && window.matchMedia) {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
   }
   return "light";
 };
 
-export const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [siteTheme, setSiteTheme] = useState<Theme>(() => {
     const stored = localStorage.getItem("theme") as Theme;
-    return stored === "light" || stored === "dark" || stored === "system" ? stored : "system";
+    return stored === "light" || stored === "dark" || stored === "system"
+      ? stored
+      : "system";
   });
 
   const resolvedTheme = siteTheme === "system" ? getSystemTheme() : siteTheme;
@@ -78,11 +90,13 @@ export const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         shape: { borderRadius: 7 },
         typography: { button: { textTransform: "none" } },
       }),
-    [resolvedTheme]
+    [resolvedTheme],
   );
 
   return (
-    <ThemeContext.Provider value={{ siteTheme, resolvedTheme, toggleTheme, setTheme }}>
+    <ThemeContext.Provider
+      value={{ siteTheme, resolvedTheme, toggleTheme, setTheme }}
+    >
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}
