@@ -3,6 +3,7 @@ import cors from "cors";
 import jobRoutes from "./routes/jobs";
 import dotenv from "dotenv";
 import { createDatabase, addDemoData, createTables } from "./routes/jobs";
+const pkg = require('../package.json');
 
 dotenv.config();
 
@@ -57,6 +58,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/jobs", jobRoutes);
+
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    version: pkg.version,
+    environment: process.env.NODE_ENV || 'development',
+    uptime: process.uptime().toFixed(0) + 's'
+  });
+});
 
 const initDatabase = async () => {
   try {

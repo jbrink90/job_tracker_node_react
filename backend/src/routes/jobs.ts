@@ -341,23 +341,18 @@ router.patch('/', createAuthMiddleware(false), async (req: Request, res: Respons
     }
 });
 
-router.delete('/', createAuthMiddleware(false), async (req: Request, res: Response) => {
+router.delete('/:id', createAuthMiddleware(false), async (req: Request, res: Response) => {
     const user = (req as any).supabaseUser;
     const db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE);
-    const { id } = req.query;
+    const { id } = req.params;
     
-    if (!id) {
-        throw new HttpError(40, "Missing id parameter");
-        return;
-    }
-
     if (!user) {
         throw new HttpError(401, "Unauthorized");
         return;
     }
 
     try {
-        await deleteJob(db, parseInt(id as string, 10), user.id);
+        await deleteJob(db, parseInt(id, 10), user.id);
         res.json({ message: "Job: '" + id + "' deleted successfully" });
     } catch (error: any) {
         throw new HttpError(500,  error.message);

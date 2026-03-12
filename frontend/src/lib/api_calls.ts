@@ -73,7 +73,7 @@ export async function apiAddJob(job: Job, supabase_id: string | null): Promise<J
  * await apiDeleteJob(42, 'user-id-123');
  */
 export async function apiDeleteJob(jobId: number, supabase_id: string | null): Promise<void> {
-  const res = await fetch(`${baseUrl}/jobs?id=${jobId}`, {
+  const res = await fetch(`${baseUrl}/jobs/${jobId}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${supabase_id}` },
   });
