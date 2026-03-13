@@ -315,149 +315,137 @@ export default function Home() {
                   </Box>
                 </Box>
 
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow
-                        sx={{
-                          bgcolor: "action.hover",
-                          cursor: "pointer",
-                          transition: "background-color 0.2s ease",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor =
-                            theme.palette.action.selected;
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor =
-                            theme.palette.action.hover;
-                        }}
-                      >
-                        <TableCell>Company</TableCell>
-                        <TableCell>Job Title</TableCell>
-                        <TableCell>Location</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Applied</TableCell>
-                        <TableCell>Last Updated</TableCell>
-                        <TableCell>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {[
-                        {
-                          company: "TechCorp",
-                          jobTitle: "Senior Developer",
-                          location: "San Francisco, CA",
-                          status: "Applied",
-                          statusColor: "primary",
-                          applied: "Jan 15",
-                          updated: "Jan 18",
-                        },
-                        {
-                          company: "StartupXYZ",
-                          jobTitle: "Frontend Lead",
-                          location: "Remote",
-                          status: "Interview Scheduled",
-                          statusColor: "warning",
-                          applied: "Jan 10",
-                          updated: "Jan 22",
-                        },
-                        {
-                          company: "BigTech Inc",
-                          jobTitle: "Full Stack Engineer",
-                          location: "New York, NY",
-                          status: "Offer Received",
-                          statusColor: "success",
-                          applied: "Jan 5",
-                          updated: "Jan 24",
-                        },
-                      ].map((job, i) => (
-                        <motion.tr
-                          key={i}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
-                          style={{
-                            display: "table-row",
+                  
+                  <TableContainer>
+                    <Table sx={{ tableLayout: "fixed" }}>
+                      <TableHead>
+                        <TableRow
+                          sx={{
+                            bgcolor: "action.hover",
                             cursor: "pointer",
                             transition: "background-color 0.2s ease",
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor =
-                              theme.palette.action.hover;
+                              theme.palette.action.selected;
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.backgroundColor =
-                              "transparent";
+                              theme.palette.action.hover;
                           }}
                         >
-                          <TableCell sx={{ fontWeight: 500 }}>
-                            {job.company}
-                          </TableCell>
-                          <TableCell sx={{ color: "text.secondary" }}>
-                            {job.jobTitle}
-                          </TableCell>
-                          <TableCell sx={{ color: "text.secondary" }}>
-                            {job.location}
-                          </TableCell>
-                          <TableCell>
-                            <Chip
-                              label={job.status}
-                              color={
-                                job.statusColor as
-                                  | "default"
-                                  | "primary"
-                                  | "warning"
-                                  | "success"
-                                  | "secondary"
-                                  | "error"
-                                  | "info"
-                              }
-                              size="small"
-                              sx={{ fontWeight: 500 }}
-                            />
-                          </TableCell>
-                          <TableCell sx={{ color: "text.secondary" }}>
-                            {job.applied}
-                          </TableCell>
-                          <TableCell sx={{ color: "text.secondary" }}>
-                            {job.updated}
-                          </TableCell>
-                          <TableCell>
-                            <Box sx={{ display: "flex", gap: 1 }}>
-                              <Button
+                          <TableCell sx={{ p: 1, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", width: { xs: "25%", md: "20%" } }}>Company</TableCell>
+                          <TableCell sx={{ p: 1, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", width: { xs: "25%", md: "15%" } }}>Job Title</TableCell>
+                          <TableCell sx={{ p: 1, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", width: { xs: "25%", md: "20%" } }}>Location</TableCell>
+                          <TableCell sx={{ p: 1, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", width: { xs: "25%", md: "15%" } }}>Status</TableCell>
+                          <TableCell sx={{ p: 1, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", display: { xs: "none", md: "table-cell" }, width: { md: "10%" } }}>Applied</TableCell>
+                          <TableCell sx={{ p: 1, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", display: { xs: "none", md: "table-cell" }, width: { md: "10%" } }}>Updated</TableCell>
+                          <TableCell sx={{ p: 1, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", display: { xs: "none", md: "table-cell" }, width: { md: "10%" } }}>Actions</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {[
+                          {
+                            company: "TechCorp",
+                            jobTitle: "Senior Developer",
+                            location: "San Francisco, CA",
+                            status: "Applied",
+                            statusColor: "primary",
+                            applied: "Jan 15",
+                            updated: "Jan 18",
+                          },
+                          {
+                            company: "StartupXYZ",
+                            jobTitle: "Frontend Lead",
+                            location: "Remote",
+                            status: "Interview Scheduled",
+                            statusColor: "warning",
+                            applied: "Jan 10",
+                            updated: "Jan 22",
+                          },
+                          {
+                            company: "BigTech Inc",
+                            jobTitle: "Full Stack Engineer",
+                            location: "New York, NY",
+                            status: "Offer Received",
+                            statusColor: "success",
+                            applied: "Jan 5",
+                            updated: "Jan 24",
+                          },
+                        ].map((job, i) => (
+                          <motion.tr
+                            key={i}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
+                            style={{
+                              display: "table-row",
+                              cursor: "pointer",
+                              transition: "background-color 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor =
+                                theme.palette.action.hover;
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor =
+                                "transparent";
+                            }}
+                          >
+                            <TableCell sx={{ p: 1, fontWeight: 500, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", width: { xs: "25%", md: "20%" } }}>
+                              {job.company}
+                            </TableCell>
+                            <TableCell sx={{ p: 1, color: "text.secondary", maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", width: { xs: "25%", md: "15%" } }}>
+                              {job.jobTitle}
+                            </TableCell>
+                            <TableCell sx={{ p: 1, color: "text.secondary", maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", width: { xs: "25%", md: "20%" } }}>
+                              {job.location}
+                            </TableCell>
+                            <TableCell sx={{ p: 1, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", width: { xs: "25%", md: "15%" } }}>
+                              <Chip
+                                label={job.status}
+                                color={
+                                  job.statusColor as
+                                    | "default"
+                                    | "primary"
+                                    | "warning"
+                                    | "success"
+                                    | "secondary"
+                                    | "error"
+                                    | "info"
+                                }
                                 size="small"
-                                variant="contained"
-                                color="primary"
-                                sx={{
-                                  minWidth: 0,
-                                  px: 1.5,
-                                  py: 0.5,
-                                  fontSize: "0.75rem",
-                                }}
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                size="small"
-                                variant="contained"
-                                color="error"
-                                sx={{
-                                  minWidth: 0,
-                                  px: 1.5,
-                                  py: 0.5,
-                                  fontSize: "0.75rem",
-                                }}
-                              >
-                                Delete
-                              </Button>
-                            </Box>
-                          </TableCell>
-                        </motion.tr>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                                sx={{ fontWeight: 500, fontSize: "0.7rem" }}
+                              />
+                            </TableCell>
+                            <TableCell sx={{ p: 1, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", display: { xs: "none", md: "table-cell" }, width: { md: "10%" } }}>
+                              {job.applied}
+                            </TableCell>
+                            <TableCell sx={{ p: 1, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", display: { xs: "none", md: "table-cell" }, width: { md: "10%" } }}>
+                              {job.updated}
+                            </TableCell>
+                            <TableCell sx={{ p: 1, maxWidth: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.75rem", display: { xs: "none", md: "table-cell" }, width: { md: "10%" } }}>
+                              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                                <Button
+                                  size="small"
+                                  variant="contained"
+                                  color="primary"
+                                  sx={{
+                                    minWidth: 0,
+                                    px: 1,
+                                    py: 0.25,
+                                    fontSize: "0.65rem",
+                                  }}
+                                >
+                                  Edit
+                                </Button>
+                              </Box>
+                            </TableCell>
+                          </motion.tr>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
               </Paper>
             </Box>
           </motion.div>
