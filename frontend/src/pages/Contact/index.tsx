@@ -74,6 +74,7 @@ export default function Contact() {
           <Button
             type="submit"
             variant="contained"
+            color="success"
             sx={{
               px: 6,
               py: 1.5,
@@ -90,10 +91,11 @@ export default function Contact() {
           >
             Send Message
           </Button>
+        <Box sx={{ textAlign: "center", mt: 6 }}>
           <Button
-            type="submit"
             variant="contained"
-            color="error"
+            color="primary"
+            size="large"
             onClick={() => navigate(-1)}
             sx={{
               px: 6,
@@ -109,8 +111,9 @@ export default function Contact() {
               transition: "all 0.3s ease",
             }}
           >
-            Go Back
+            Back
           </Button>
+          </Box>
         </Box>
       </Box>
 
