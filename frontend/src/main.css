@@ -11,7 +11,6 @@
 body {
   margin: 0 auto;
   padding: 0;
-  user-select: none;
 }
 
 /* Prevent body padding changes when Material-UI modals open */
