@@ -91,28 +91,28 @@ export default function Contact() {
           >
             Send Message
           </Button>
-        <Box sx={{ textAlign: "center", mt: 6 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={() => navigate(-1)}
-            sx={{
-              px: 6,
-              py: 1.5,
-              fontSize: "1.1rem",
-              fontWeight: 600,
-              borderRadius: 3,
-              boxShadow: "0px 4px 15px rgba(0,0,0,0.25)",
-              "&:hover": {
-                transform: "scale(1.05)",
-                boxShadow: "0px 6px 20px rgba(0,0,0,0.35)",
-              },
-              transition: "all 0.3s ease",
-            }}
-          >
-            Back
-          </Button>
+          <Box sx={{ textAlign: "center", mt: 6 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={() => navigate(-1)}
+              sx={{
+                px: 6,
+                py: 1.5,
+                fontSize: "1.1rem",
+                fontWeight: 600,
+                borderRadius: 3,
+                boxShadow: "0px 4px 15px rgba(0,0,0,0.25)",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  boxShadow: "0px 6px 20px rgba(0,0,0,0.35)",
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              Back
+            </Button>
           </Box>
         </Box>
       </Box>
