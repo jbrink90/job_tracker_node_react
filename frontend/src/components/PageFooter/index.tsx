@@ -10,20 +10,18 @@ export default function PageFooter() {
   async function onInstallClick() {
     const promptEvent = getDeferredPrompt();
 
-    if (!promptEvent) {
-      console.log("No install prompt available yet");
-      return;
-    }
+    // if (!promptEvent) {
+    //   console.log("No install prompt available yet");
+    //   return;
+    // }
 
     try {
       await promptEvent.prompt();
       const choice = await promptEvent.userChoice;
       if (choice.outcome === "accepted") {
-        console.log("User accepted install");
         localStorage.setItem("pwa-installed", "1");
         localStorage.setItem("pwa-install-dismissed", "0");
       } else {
-        console.log("User dismissed install");
         localStorage.setItem("pwa-installed", "0");
         localStorage.setItem("pwa-install-dismissed", "1");
       }
@@ -61,12 +59,16 @@ export default function PageFooter() {
             <h3 className="pageFooter_title">Learn More</h3>
             <ul className="pageFooter_list">
               <li>
-                <NavLink className="pageFooter_link" to="/login">
+                <NavLink 
+                  className="pageFooter_link" 
+                  to="/login"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
                   Try the demo
                 </NavLink>
               </li>
               <li>
-                <NavLink className="pageFooter_link" to="/features">
+                <NavLink className="pageFooter_link" to="#">
                   Features
                 </NavLink>
               </li>
@@ -89,17 +91,29 @@ export default function PageFooter() {
             <h3 className="pageFooter_title">Support</h3>
             <ul className="pageFooter_list">
               <li>
-                <NavLink className="pageFooter_link" to="/privacy">
+                <NavLink 
+                  className="pageFooter_link" 
+                  to="/privacy"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
                   Privacy Policy
                 </NavLink>
               </li>
               <li>
-                <NavLink className="pageFooter_link" to="/terms">
+                <NavLink 
+                  className="pageFooter_link" 
+                  to="/terms"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
                   Terms &amp; Conditions
                 </NavLink>
               </li>
               <li>
-                <NavLink className="pageFooter_link" to="/contact">
+                <NavLink 
+                  className="pageFooter_link" 
+                  to="/contact"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
                   Contact Us
                 </NavLink>
               </li>
