@@ -83,7 +83,7 @@ const Account = () => {
   return (
     <>
       <Box sx={{ mt: 4, mb: 4, display: "flex", justifyContent: "center" }}>
-        <Paper sx={{ p: 4, width: "100%", maxWidth: 420 }}>
+        <Paper sx={{ p: 4, width: "100%", maxWidth: { xs: "90%", sm: 420 } }}>
           {/* Back Button */}
           <Button
             variant="outlined"

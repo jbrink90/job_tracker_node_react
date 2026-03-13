@@ -31,7 +31,7 @@ const Logout = () => {
   return (
     <>
       <Box sx={{ mt: 4, mb: 4, display: "flex", justifyContent: "center" }}>
-        <Paper sx={{ p: 4, width: "100%", maxWidth: 420, textAlign: "center" }}>
+        <Paper sx={{ p: 4, width: "100%", maxWidth: { xs: "90%", sm: 420 } }}>
           <Typography
             component="h1"
             variant="h5"
