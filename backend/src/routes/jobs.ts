@@ -65,7 +65,6 @@ const getAuthBearer = (req: Request): string | null => {
 };
 
 const extractLinkedInJob = async (url: string) => {
-
   const res = await axios.get(url, {
     headers: {
       "User-Agent":

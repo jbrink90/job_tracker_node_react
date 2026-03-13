@@ -59,8 +59,8 @@ export default function PageFooter() {
             <h3 className="pageFooter_title">Learn More</h3>
             <ul className="pageFooter_list">
               <li>
-                <NavLink 
-                  className="pageFooter_link" 
+                <NavLink
+                  className="pageFooter_link"
                   to="/login"
                   onClick={() => window.scrollTo(0, 0)}
                 >
@@ -91,8 +91,8 @@ export default function PageFooter() {
             <h3 className="pageFooter_title">Support</h3>
             <ul className="pageFooter_list">
               <li>
-                <NavLink 
-                  className="pageFooter_link" 
+                <NavLink
+                  className="pageFooter_link"
                   to="/privacy"
                   onClick={() => window.scrollTo(0, 0)}
                 >
@@ -100,8 +100,8 @@ export default function PageFooter() {
                 </NavLink>
               </li>
               <li>
-                <NavLink 
-                  className="pageFooter_link" 
+                <NavLink
+                  className="pageFooter_link"
                   to="/terms"
                   onClick={() => window.scrollTo(0, 0)}
                 >
@@ -109,8 +109,8 @@ export default function PageFooter() {
                 </NavLink>
               </li>
               <li>
-                <NavLink 
-                  className="pageFooter_link" 
+                <NavLink
+                  className="pageFooter_link"
                   to="/contact"
                   onClick={() => window.scrollTo(0, 0)}
                 >
