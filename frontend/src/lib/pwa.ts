@@ -4,7 +4,6 @@ export function initPwaListener() {
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredPrompt = e as BeforeInstallPromptEvent;
-    console.log("PWA deferredPrompt saved");
   });
 }
 
