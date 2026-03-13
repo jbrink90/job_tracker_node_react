@@ -65,7 +65,6 @@ const getAuthBearer = (req: Request): string | null => {
 };
 
 const extractLinkedInJob = async (url: string) => {
-  console.log("Fetching:", url);
 
   const res = await axios.get(url, {
     headers: {
@@ -86,9 +85,8 @@ const extractLinkedInJob = async (url: string) => {
   if (jsonLd) {
     try {
       const structuredData = JSON.parse(jsonLd);
-      console.log("Found structured data:", structuredData);
     } catch (e) {
-      console.log("Failed to parse JSON-LD");
+      console.error("Failed to parse JSON-LD", e);
     }
   }
 
