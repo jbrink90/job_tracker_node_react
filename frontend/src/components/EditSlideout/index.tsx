@@ -36,8 +36,9 @@ import {
   MDXEditor,
   headingsPlugin,
   listsPlugin,
-  quotePlugin,
-  thematicBreakPlugin,
+  linkPlugin,
+  linkDialogPlugin,
+  markdownShortcutPlugin,
   toolbarPlugin,
   UndoRedo,
   BoldItalicUnderlineToggles,
@@ -45,6 +46,10 @@ import {
   InsertImage,
   ListsToggle,
   MDXEditorMethods,
+  BlockTypeSelect,
+  CreateLink,
+  HighlightToggle,
+  StrikeThroughSupSubToggles,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import { Button } from "@mui/material";
@@ -477,15 +482,20 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
                     imagePlugin(),
                     headingsPlugin(),
                     listsPlugin(),
-                    quotePlugin(),
-                    thematicBreakPlugin(),
+                    linkPlugin(),
+                    linkDialogPlugin(),
+                    markdownShortcutPlugin(),
                     toolbarPlugin({
                       toolbarClassName: "editSlideout_mdxeditor_toolbar",
                       toolbarContents: () => (
                         <>
+                          <BlockTypeSelect />
                           <UndoRedo />
                           <BoldItalicUnderlineToggles />
+                          <StrikeThroughSupSubToggles />
+                          <HighlightToggle />
                           <ListsToggle />
+                          <CreateLink />
                           <InsertImage />
                         </>
                       ),
