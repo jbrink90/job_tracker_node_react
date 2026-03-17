@@ -2,7 +2,8 @@
   "name": "job_tracker_node_react",
   "version": "1.5.0",
   "private": true,
-  "description": "A job tracking application with a Node.js backend and React frontend.",
+  "author": "jbrink90",
+  "description": "Your sidekick for tracking applications and landing that dream gig with ease.",
   "scripts": {
     "dev": "concurrently --kill-others-on-fail \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "cd frontend && npm run dev",
