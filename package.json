@@ -1,6 +1,6 @@
 {
   "name": "job_tracker_node_react",
-  "version": "1.5.2",
+  "version": "1.5.1",
   "private": true,
   "description": "A job tracking application with a Node.js backend and React frontend.",
   "scripts": {
