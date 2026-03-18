@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
+import { Paper, Typography, Box, Alert, CircularProgress } from "@mui/material";
 import "./index.css";
+import { PageFooter } from "../../components";
 
 const Logout = () => {
   const [status, setStatus] = useState<"pending" | "done" | "error">("pending");
@@ -22,57 +24,59 @@ const Logout = () => {
     }, 1200);
   };
 
-  useState(() => {
+  useEffect(() => {
     handleLogout();
-  });
+  }, []);
 
   return (
-    <div className="reactTrackerPage_main">
-      <div className="reactTrackerPage_leftPane">
-        <div className="reactTrackerPage_buttonsContainer">
-          <div className="reactTrackerPage_buttonsInner">
-            <header className="reactTrackerPage_header">Logout</header>
-          </div>
-        </div>
-
-        <div className="reactTrackerPage_tableContainer">
-          <div
-            style={{
-              maxWidth: 400,
-              margin: "40px auto",
-              padding: 30,
-              borderRadius: 12,
-              boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-              backgroundColor: "#fff",
-              textAlign: "center",
-            }}
+    <>
+      <Box sx={{ mt: 4, mb: 4, display: "flex", justifyContent: "center" }}>
+        <Paper sx={{ p: 4, width: "100%", maxWidth: { xs: "90%", sm: 420 } }}>
+          <Typography
+            component="h1"
+            variant="h5"
+            fontWeight="bold"
+            gutterBottom
           >
-            <h2 style={{ marginBottom: 10, fontWeight: 700, color: "#333" }}>
-              Signing you out...
-            </h2>
+            Log out
+          </Typography>
 
-            {status === "pending" && (
-              <p style={{ marginTop: 12, color: "#555" }}>
-                Kicking your session out the door… hold up.
-              </p>
-            )}
+          {status === "pending" && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                py: 3,
+              }}
+            >
+              <CircularProgress size={40} sx={{ mb: 2 }} />
+              <Typography variant="body1" color="text.secondary">
+                Kicking your session out the door, please hold.
+              </Typography>
+            </Box>
+          )}
 
-            {status === "done" && (
-              <p style={{ marginTop: 12, color: "#4caf50", fontWeight: 500 }}>
-                ✔ You're logged out! <br /> 
-                Taking you to the login page…
-              </p>
-            )}
+          {status === "done" && (
+            <Alert severity="success" sx={{ mt: 2 }}>
+              <Typography variant="body1" fontWeight={500}>
+                ✔ You're logged out! <br />
+                Hang tight while we take you home.
+              </Typography>
+            </Alert>
+          )}
 
-            {status === "error" && (
-              <p style={{ marginTop: 12, color: "red" }}>
-                Something went sideways: {error}
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
+          {status === "error" && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              <Typography variant="body1">
+                Something went wrong: {error}
+              </Typography>
+            </Alert>
+          )}
+        </Paper>
+      </Box>
+      <PageFooter />
+    </>
   );
 };
 

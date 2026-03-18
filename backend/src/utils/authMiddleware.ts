@@ -10,7 +10,11 @@ const adminEmail = process.env.ADMIN_EMAIL;
 
 // Flexible middleware that can handle both regular auth and admin-only access
 export const createAuthMiddleware = (requireAdmin: boolean = false) => {
-  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     try {
       const authHeader = req.headers.authorization;
       if (!authHeader?.startsWith("Bearer ")) {
@@ -21,7 +25,10 @@ export const createAuthMiddleware = (requireAdmin: boolean = false) => {
       const token = authHeader.split(" ")[1];
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      const { data: { user }, error } = await supabase.auth.getUser(token);
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser(token);
 
       if (error || !user) {
         res.status(401).json({ error: "Unauthorized" });

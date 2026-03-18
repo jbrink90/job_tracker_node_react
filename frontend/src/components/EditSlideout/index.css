@@ -156,18 +156,84 @@
   width: 100%;
   padding-right: 40px; /* space for the icon */
 }
+
 .editSlideout_mdxeditor {
   border-radius: 7px;
 }
 .editSlideout_mdxeditor_text {
   background-color: #d8d8d873;
   border-radius: 10px;
-  padding: 1px 5px 1px 5px !important;
-  min-height: 0;
+  padding: 8px 12px !important;
+  min-height: 120px;
   overflow-y: auto;
 }
+
+/* Style links inside MDXEditor */
+.editSlideout_mdxeditor_text a,
+.editSlideout_mdxeditor_text a:hover,
+.editSlideout_mdxeditor_text a:visited,
+.editSlideout_mdxeditor_text a:active,
+.editSlideout_mdxeditor .mdx-editor-content a,
+.editSlideout_mdxeditor .mdx-editor-content a:hover,
+.editSlideout_mdxeditor .mdx-editor-content a:visited,
+.editSlideout_mdxeditor .mdx-editor-content a:active {
+  color: #1976d2 !important;
+  text-decoration: underline !important;
+}
+
+.editSlideout_mdxeditor_text a:hover,
+.editSlideout_mdxeditor .mdx-editor-content a:hover {
+  color: #1565c0 !important;
+  text-decoration: underline !important;
+}
+
 .editSlideout_mdxeditor_toolbar {
   background-color: #009ce8 !important;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+}
+
+/* Mobile responsive toolbar fixes */
+@media screen and (max-width: 700px) {
+  .editSlideout_mdxeditor_toolbar {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 2px;
+  }
+  
+  /* Ensure all toolbar buttons are visible and properly sized */
+  .editSlideout_mdxeditor_toolbar button,
+  .editSlideout_mdxeditor_toolbar [role="button"],
+  .editSlideout_mdxeditor_toolbar .mdxeditor-button {
+    min-width: 32px !important;
+    min-height: 32px !important;
+    margin: 1px !important;
+    flex-shrink: 0;
+  }
+  
+  /* Fix dropdown buttons on mobile */
+  .editSlideout_mdxeditor_toolbar .mdxeditor-dropdown-button,
+  .editSlideout_mdxeditor_toolbar .block-type-select-button {
+    min-width: 40px !important;
+    padding: 4px !important;
+  }
+  
+  /* Ensure toggle groups are visible */
+  .editSlideout_mdxeditor_toolbar .mdxeditor-toggle-group {
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+  
+  /* Fix toolbar overflow */
+  .editSlideout_mdxeditor_toolbar .mdxeditor-toolbar-contents {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    overflow-x: visible;
+  }
 }
 .editSlideout_deleteButton {
   background-color: #e80000;
@@ -201,4 +267,69 @@
 }
 .mdxeditor-popup-container {
   overflow: hidden;
+}
+
+/* Fix z-index for MDXEditor dropdowns and popups */
+.mdxeditor-popup-container,
+.mdxeditor-dropdown,
+.mdxeditor-popup,
+[class*="mdxeditor"][class*="popup"],
+[class*="mdxeditor"][class*="dropdown"],
+[class*="mdxeditor"][class*="popover"] {
+  z-index: 1300 !important;
+}
+
+/* Ensure toolbar dropdowns appear above everything */
+.editSlideout_mdxeditor .mdxeditor-toolbar-dropdown,
+.editSlideout_mdxeditor .mdxeditor-popup,
+.editSlideout_mdxeditor [role="menu"],
+.editSlideout_mdxeditor [role="listbox"] {
+  z-index: 1400 !important;
+}
+
+/* Specific fix for BlockTypeSelect dropdown */
+.editSlideout_mdxeditor .block-type-select-dropdown,
+.editSlideout_mdxeditor .mdxeditor-block-type-select,
+.editSlideout_mdxeditor .mdxeditor-toolbar-contents > div:first-child {
+  z-index: 1500 !important;
+}
+
+/* Additional fix for any floating elements */
+.editSlideout_mdxeditor [data-floating-ui-portal],
+.editSlideout_mdxeditor [data-portal] {
+  z-index: 1600 !important;
+}
+
+/* Mobile-specific dropdown fixes */
+@media screen and (max-width: 700px) {
+  /* Ensure dropdowns are visible and positioned correctly */
+  .editSlideout_mdxeditor .mdxeditor-popup-container,
+  .editSlideout_mdxeditor .mdxeditor-dropdown,
+  .editSlideout_mdxeditor .block-type-select-dropdown {
+    position: fixed !important;
+    left: 10px !important;
+    right: 10px !important;
+    width: auto !important;
+    max-width: calc(100vw - 40px) !important;
+    z-index: 2000 !important;
+  }
+  
+  /* Fix BlockTypeSelect dropdown on mobile */
+  .editSlideout_mdxeditor .block-type-select-dropdown {
+    bottom: auto !important;
+    top: 60px !important;
+  }
+  
+  /* Ensure toolbar doesn't overflow */
+  .editSlideout_mdxeditor {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  /* Make toolbar scrollable if needed */
+  .editSlideout_mdxeditor_toolbar {
+    max-height: 80px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 }
