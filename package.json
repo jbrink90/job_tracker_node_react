@@ -1,9 +1,8 @@
 {
   "name": "job_tracker_node_react",
-  "version": "1.5.0",
+  "version": "1.5.2",
   "private": true,
-  "author": "jbrink90",
-  "description": "Your sidekick for tracking applications and landing that dream gig with ease.",
+  "description": "A job tracking application with a Node.js backend and React frontend.",
   "scripts": {
     "dev": "concurrently --kill-others-on-fail \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "cd frontend && npm run dev",
@@ -11,7 +10,8 @@
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "cd frontend && npm install && npm run build",
     "build:backend": "cd backend && npm install && npm run build",
-    "lint": "eslint \"{frontend,backend}/**/*.{ts,tsx,js,jsx}\" --fix",
+    "lint": "cd frontend && npx eslint . && cd ../backend && npx eslint .",
+    "lint:fix": "cd frontend && npx eslint . --fix && cd ../backend && npx eslint . --fix",
     "format": "prettier --write \"{frontend,backend}/**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "devDependencies": {

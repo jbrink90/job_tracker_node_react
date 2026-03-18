@@ -5,11 +5,11 @@ const adminEmail = process.env.ADMIN_EMAIL;
 export const adminAuthMiddleware = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const user = (req as any).supabaseUser;
-    
+
     if (!user) {
       res.status(401).json({ error: "User not authenticated" });
       return;

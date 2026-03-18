@@ -3,7 +3,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: node_backend
+      env_file:
+      - .env.docker
     ports:
       - "4444:4444"
     environment:
@@ -20,7 +21,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: react_frontend
+      env_file:
+      - .env.docker
     ports:
       - "42000:80"
     depends_on:

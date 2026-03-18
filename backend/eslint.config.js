@@ -1,24 +1,31 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
-import node from 'eslint-plugin-node';
+const js = require("@eslint/js");
+const globals = require("globals");
+const tseslint = require("@typescript-eslint/eslint-plugin");
+const tsParser = require("@typescript-eslint/parser");
+const node = require("eslint-plugin-node");
 
-export default tseslint.config(
-  { ignores: ['dist'] },
+module.exports = [
+  { ignores: ["dist"] },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
+    files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.node, // Use Node.js globals
+      sourceType: "module",
+      globals: globals.node,
+      parser: tsParser,
+      parserOptions: {
+        project: "./tsconfig.json",
+        tsconfigRootDir: __dirname,
+      },
     },
     plugins: {
       node,
+      "@typescript-eslint": tseslint,
     },
     rules: {
-      'node/no-missing-import': 'off', // TypeScript handles imports
-      'node/no-unsupported-features/es-syntax': 'off', // Allow ES modules
-      '@typescript-eslint/no-floating-promises': 'error', // Ensure promises are handled
+      "node/no-missing-import": "off",
+      "node/no-unsupported-features/es-syntax": "off",
+      "@typescript-eslint/no-floating-promises": "error",
     },
-  }
-);
+  },
+];
