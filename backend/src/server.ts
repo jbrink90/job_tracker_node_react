@@ -56,6 +56,7 @@ const corsOptions = {
     "https://jobtrackr.online",
     "http://localhost:5173",
     "http://100.116.33.88:5173",
+    "http://192.168.1.14:5173",
   ],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: false,
