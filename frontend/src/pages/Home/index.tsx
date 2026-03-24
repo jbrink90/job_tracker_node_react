@@ -24,7 +24,7 @@ import {
   Edit,
   TrackChanges,
 } from "@mui/icons-material";
-import { PageFooter } from "../../components";
+import PageFooter from "../../components/PageFooter";
 
 export default function Home() {
   const navigate = useNavigate();

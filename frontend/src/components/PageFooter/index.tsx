@@ -31,7 +31,7 @@ export default function PageFooter() {
   }
 
   return (
-    <footer className="pageFooter_container">
+    <footer className="pageFooter_container" data-testid="page-footer">
       <div className="pageFooter_containerInner">
         <div className="pageFooter_grid">
           <div className="pageFooter_brand">
