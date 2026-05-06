@@ -129,7 +129,7 @@ export default function Home() {
                 <Button
                   variant="contained"
                   disableElevation
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigate("/dashboard")}
                 >
                   Get Started
                 </Button>
