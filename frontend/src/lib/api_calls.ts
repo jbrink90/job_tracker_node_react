@@ -23,6 +23,14 @@ export async function apiGetJobsSupabase(userId: string): Promise<Job[]> {
   return jobs || [];
 }
 
+export async function apiGetAllJobsSupabase(): Promise<Job[]> {
+  const { data: jobs, error } = await supabase
+    .from('jobs')
+    .select()
+  if (error) throw new Error("Failed to fetch jobs: " + error.message);
+  return jobs || [];
+}
+
 export async function apiAddJobSupabase(
   job: Job): Promise<Job> {
   const { data, error } = await supabase

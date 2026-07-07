@@ -10,6 +10,7 @@ import { MuiTableTest } from "../../components/MuiTableTest";
 import "./index.css";
 import {
   apiGetJobsSupabase,
+  apiGetAllJobsSupabase,
   apiDeleteJobSupabase,
   apiUpdateJobSupabase,
   apiAddJobSupabase,
@@ -29,7 +30,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Theme } from "@mui/material/styles";
-import { v4 as uuidv4 } from 'uuid';
 
 const getModalStyle = (theme: Theme) => ({
   position: "absolute",
