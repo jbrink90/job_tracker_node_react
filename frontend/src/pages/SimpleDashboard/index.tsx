@@ -9,13 +9,13 @@ import Tooltip from "@mui/material/Tooltip";
 import { MuiTableTest } from "../../components/MuiTableTest";
 import "./index.css";
 import {
-  apiGetJobs,
-  apiAddJob,
-  apiDeleteJob,
-  apiSaveJob,
+  apiGetJobsSupabase,
+  apiDeleteJobSupabase,
+  apiUpdateJobSupabase,
+  apiAddJobSupabase,
   apiPullLinkedInData,
 } from "../../lib/api_calls";
-import { supabase } from "../../lib/supabase";
+import { supabase, getCurrentUser } from "../../lib/supabase";
 import CloseIcon from "@mui/icons-material/Close";
 import { PageFooter } from "../../components";
 import { Button } from "@mui/material";
@@ -29,6 +29,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Theme } from "@mui/material/styles";
+import { v4 as uuidv4 } from 'uuid';
 
 const getModalStyle = (theme: Theme) => ({
   position: "absolute",
@@ -47,17 +48,18 @@ const SimpleDashboard: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [masterJobList, setMasterJobList] = useState<Job[]>([]);
-  const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const defaultJob: Job = useMemo(
     () => ({
       company: "",
-      job_title: "",
+      jobTitle: "",
       description: "",
       location: "",
       status: "Applied",
       applied: new Date(),
-      last_updated: new Date(),
-      supabase_id: "",
+      lastUpdated: new Date(),
+      userId: "",
+      createdAt: new Date(),
     }),
     [],
   );
@@ -74,93 +76,62 @@ const SimpleDashboard: React.FC = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  /**
-   * Fetch all jobs for the current user.
-   *
-   * @async
-   * @function
-   * @returns {Promise<Job[]>} Array of Job objects
-   * @throws Will throw an error if the fetch fails
-   *
-   * @example
-   * const jobs = await getAllJobs();
-   */
-  const getAllJobs = useCallback(
+  const getAllJobsSupabase = useCallback(
     async (resetPagination: boolean = false) => {
-      if (!accessToken) return; // no token yet
       try {
         setIsDataLoading(true);
-        const jobs = await apiGetJobs(accessToken);
+        const currentUser = await getCurrentUser();
+        if (!currentUser?.id) {
+          throw new Error("No user found");
+        }
+        const jobs = await apiGetJobsSupabase(currentUser.id);
         setMasterJobList(jobs);
         setIsDataLoading(false);
-        // Only trigger table pagination reset if explicitly requested
         if (resetPagination) {
           setRefreshTableTrigger((prev) => prev + 1);
         }
       } catch (error) {
+        setIsDataLoading(false);
         console.error(error);
         enqueueSnackbar("Failed to fetch jobs. Please try again.", {
           variant: "error",
         });
       }
     },
-    [accessToken, enqueueSnackbar],
+    [],
   );
 
-  /**
-   * Delete a job by its ID.
-   *
-   * @async
-   * @function
-   * @param {number} jobId - The ID of the job to delete
-   * @returns {Promise<void>}
-   * @throws Will throw an error if the delete fails
-   *
-   * @example
-   * await deleteJob(57);
-   */
-  const deleteJob = async (jobId: number) => {
+  const deleteJob = async (jobId: string) => {
     if (!accessToken) return;
+    const currentUser = await getCurrentUser();
+    if (!currentUser?.id) return;
+
     try {
-      //setIsDataLoading(true);
-      await apiDeleteJob(jobId, accessToken);
-      setMasterJobList((prev) => prev.filter((job) => job.id !== jobId));
-      setIsSlideoutOpen(false);
-      //setIsDataLoading(false);
-      showToast("Job deleted successfully.", "success")();
+      await apiDeleteJobSupabase(jobId, currentUser.id);
+      getAllJobsSupabase();
     } catch (error) {
       console.error(error);
       enqueueSnackbar("Failed to delete job. Please try again.", {
         variant: "error",
       });
-
-      //setIsDataLoading(false);
     }
   };
 
-  /**
-   * Add a new job.
-   *
-   * @async
-   * @function
-   * @param {Job} jobValues - The job data to add
-   * @returns {Promise<void>}
-   * @throws Will throw an error if adding the job fails
-   *
-   * @example
-   * await addJob({ company: 'ABC', job_title: 'Dev', ... });
-   */
-  const addJob = async (jobValues: Job) => {
+  const addJob = async (job: Job) => {
     if (!accessToken) return;
-    jobValues.last_updated = new Date();
+    const currentUser = await getCurrentUser();
+    if (!currentUser?.id) return;
+    
+    job.lastUpdated = new Date();
+    job.createdAt = new Date();
+    job.userId = currentUser.id;
+    
     try {
-      //setIsDataLoading(true);
-      const newJob = await apiAddJob(jobValues, accessToken);
-      setMasterJobList((prev) => [...prev, newJob]);
+      const insertedJob = await apiAddJobSupabase(job);
+      setMasterJobList((prev) => [...prev, insertedJob]);
       setIsSlideoutOpen(false);
       setIsDeleteModalVisible(false);
       setSelectedJobId(null);
-      //setIsDataLoading(false);
       showToast("Job added successfully.", "success")();
     } catch (error) {
       console.error(error);
@@ -170,30 +141,20 @@ const SimpleDashboard: React.FC = () => {
     }
   };
 
-  /**
-   * Save updates to an existing job.
-   *
-   * @async
-   * @function
-   * @param {Job} jobValues - The updated job data
-   * @returns {Promise<void>}
-   * @throws Will throw an error if saving the job fails
-   *
-   * @example
-   * await saveJob({ company: 'ABC', job_title: 'Dev', ... });
-   */
-  const saveJob = async (jobValues: Job) => {
+  const updateJob = async (job: Job) => {
     if (!accessToken) return;
-    jobValues.last_updated = new Date();
+    job.lastUpdated = new Date();
+
     try {
-      await apiSaveJob(jobValues, accessToken);
+      await apiUpdateJobSupabase(job);
       setMasterJobList(
         masterJobList.map((item) =>
-          item.id === jobValues.id ? jobValues : item,
+          item.id === job.id ? job : item,
         ),
       );
       setIsSlideoutOpen(false);
       showToast("Job saved successfully.", "success")();
+
     } catch (error) {
       console.error(error);
       enqueueSnackbar("Failed to save job. Please try again.", {
@@ -220,7 +181,7 @@ const SimpleDashboard: React.FC = () => {
     if (isAddingNewJob) {
       addJob(jobValues);
     } else {
-      saveJob(jobValues);
+      updateJob(jobValues);
     }
   };
 
@@ -240,8 +201,8 @@ const SimpleDashboard: React.FC = () => {
     };
 
   const refreshTable = useCallback(() => {
-    getAllJobs(true); // Explicitly reset pagination on refresh
-  }, [getAllJobs]);
+    getAllJobsSupabase(true); // Explicitly reset pagination on refresh
+  }, [getAllJobsSupabase]);
 
   const handleSearchChange = (searchTerm: string) => {
     setSearchTerm(searchTerm);
@@ -251,7 +212,7 @@ const SimpleDashboard: React.FC = () => {
     const searchLower = searchTerm.toLowerCase();
     return (
       (job.company || "").toLowerCase().includes(searchLower) ||
-      (job.job_title || "").toLowerCase().includes(searchLower) ||
+      (job.jobTitle || "").toLowerCase().includes(searchLower) ||
       (job.location || "").toLowerCase().includes(searchLower) ||
       (job.status || "").toLowerCase().includes(searchLower)
     );
@@ -265,9 +226,9 @@ const SimpleDashboard: React.FC = () => {
 
   useEffect(() => {
     if (accessToken) {
-      getAllJobs();
+      getAllJobsSupabase();
     }
-  }, [accessToken, getAllJobs]);
+  }, [accessToken, getAllJobsSupabase]);
 
   useEffect(() => {
     if (selectedJobId == null) {
@@ -307,7 +268,7 @@ const SimpleDashboard: React.FC = () => {
                   }}
                   onClick={() => {
                     setIsDataLoading(true);
-                    getAllJobs(true);
+                    getAllJobsSupabase(true);
                   }}
                 >
                   {isMobile ? "" : "Refresh"}
@@ -357,7 +318,7 @@ const SimpleDashboard: React.FC = () => {
           setIsSlideoutOpen={setIsSlideoutOpen}
           isAddingNewJob={isAddingNewJob}
           addJob={addJob}
-          saveJob={saveJob}
+          saveJob={updateJob}
           onSaveJob={onSaveJob}
           setIsDeleteModalVisible={setIsDeleteModalVisible}
           getLinkedInData={getLinkedInData}
@@ -388,7 +349,7 @@ const SimpleDashboard: React.FC = () => {
                 component="span"
                 sx={{ fontWeight: 700, color: "error.main", mx: 0.5 }}
               >
-                {currentEditingJob?.job_title}
+                {currentEditingJob?.jobTitle}
               </Box>
               application to
               <Box

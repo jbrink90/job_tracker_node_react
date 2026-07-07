@@ -1,11 +1,12 @@
 export interface Job {
-  id?: number;
+  id?: string;
   company?: string;
-  job_title?: string;
+  jobTitle?: string;
   description?: string;
   location?: string;
   status?: string;
   applied: Date | null;
-  last_updated: Date | null;
-  supabase_id: string;
+  lastUpdated: Date | null;
+  createdAt: Date | null;
+  userId: string;
 }

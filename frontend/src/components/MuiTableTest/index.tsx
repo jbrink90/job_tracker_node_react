@@ -15,11 +15,11 @@ import { Button } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
 interface ReactTableProps {
-  selectedJobId: number | null;
-  setSelectedJobId: React.Dispatch<React.SetStateAction<number | null>>;
+  selectedJobId: string | null;
+  setSelectedJobId: React.Dispatch<React.SetStateAction<string | null>>;
   setIsSlideoutOpen: React.Dispatch<React.SetStateAction<boolean>>;
   jobs: Job[];
-  deleteJob: (arg: number) => void;
+  deleteJob: (arg: string) => void;
   setIsAddingNewJob: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDeleteModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isDataLoading: boolean;
@@ -90,7 +90,7 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
       filterable: true,
     },
     {
-      field: "job_title",
+      field: "jobTitle",
       headerName: "Job Title",
       flex: 1,
       sortable: true,
@@ -120,7 +120,7 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
       type: "date",
     },
     {
-      field: "last_updated",
+      field: "lastUpdated",
       headerName: "Last Updated",
       flex: 1,
       sortable: true,
@@ -184,7 +184,7 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
     id: job.id,
     ...job,
     applied: job.applied ? new Date(job.applied) : null,
-    last_updated: job.last_updated ? new Date(job.last_updated) : null,
+    lastUpdated: job.lastUpdated ? new Date(job.lastUpdated) : null,
   }));
 
   return (
