@@ -154,8 +154,7 @@ export default {
     */
 
     // Origin check - only allow requests from allowed domains
-    console.log(req.headers.get("origin"));
-    console.log(req.headers.get("referer"));
+
     const origin = req.headers.get("origin") || req.headers.get("referer");
     const allowedOrigins = ["jobtrackr.online", "http://localhost:5173"];
     
@@ -167,8 +166,6 @@ export default {
     }
 
     const { url } = await req.json();
-
-    console.log(`authMode: ${ctx.authMode}`);
     const { data: userData, error: userError } = await ctx.supabase.auth.getUser();
 
     if (userData.user) {
