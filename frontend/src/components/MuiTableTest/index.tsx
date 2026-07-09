@@ -4,6 +4,7 @@ import {
   GridColumnVisibilityModel,
   GridRenderCellParams,
   GridPaginationModel,
+  GridSortModel,
 } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import "@fontsource/roboto/400.css";
@@ -41,6 +42,11 @@ function applyChipsToStatus(params: GridRenderCellParams) {
         <Chip label="Offer Received" color="success" sx={{ height: 25 }} />
       );
       break;
+    case "Hired":
+      return (
+        <Chip label="Hired" color="success" sx={{ height: 25 }} />
+      );
+      break;
     case "Rejected":
       return <Chip label="Rejected" color="error" sx={{ height: 25 }} />;
       break;
@@ -51,7 +57,7 @@ function applyChipsToStatus(params: GridRenderCellParams) {
       return;
       break;
     default:
-      return <Chip label={params.value} sx={{ height: 25 }} />;
+      return <Chip label={params.value} color="primary" sx={{ height: 25 }} />;
       break;
   }
 }
@@ -72,7 +78,7 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
     React.useState<GridColumnVisibilityModel>({
       location: false,
       applied: false,
-      last_updated: false,
+      lastUpdated: true,
     });
 
   const [paginationModel, setPaginationModel] =
@@ -80,6 +86,13 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
       pageSize: 15,
       page: 0,
     });
+
+  const [sortModel, setSortModel] = React.useState<GridSortModel>([
+    {
+      field: "applied",
+      sort: "desc",
+    },
+  ]);
 
   const desktopColumns: GridColDef[] = [
     {
@@ -118,6 +131,12 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
       sortable: true,
       filterable: true,
       type: "date",
+      renderCell: (params) => {
+        if (!params.value) return "";
+        const date = new Date(params.value as string);
+        // Use UTC methods to avoid timezone shifting
+        return date.toLocaleDateString(undefined, { timeZone: 'UTC' });
+      },
     },
     {
       field: "lastUpdated",
@@ -126,6 +145,12 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
       sortable: true,
       filterable: true,
       type: "date",
+      renderCell: (params) => {
+        if (!params.value) return "";
+        const date = new Date(params.value as string);
+        // Use UTC methods to avoid timezone shifting
+        return date.toLocaleDateString(undefined, { timeZone: 'UTC' });
+      },
     },
     {
       field: "actions",
@@ -199,6 +224,8 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
           pageSizeOptions={[10, 15, 25, 50, 100]}
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
+          sortModel={sortModel}
+          onSortModelChange={(model) => setSortModel(model)}
           loading={isDataLoading}
           slotProps={{
             loadingOverlay: {
