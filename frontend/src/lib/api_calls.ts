@@ -82,3 +82,18 @@ export async function apiPullLinkedInData(
   });
   return res.json();
 }
+export async function apiPullLinkedInDataSupabase(
+  linkedinUrl: string): Promise<LinkedInJobResponse> {
+  const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/linkedin-scraper`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apiKey": import.meta.env.VITE_SUPABASE_ANON,
+      "origin": "jobtrackr.online"
+    },
+    body: JSON.stringify({
+      url: linkedinUrl,
+    }),
+  });
+  return res.json();
+}

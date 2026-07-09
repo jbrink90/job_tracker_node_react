@@ -1,0 +1,12 @@
+{
+  "imports": {
+    "@supabase/functions-js": "jsr:@supabase/functions-js@^2",
+    "@supabase/server": "npm:@supabase/server@^1",
+    "@types/deno": "npm:@types/deno@^2",
+    "axios": "npm:axios",
+    "cheerio": "npm:cheerio@^1.0.0"
+  },
+  "compilerOptions": {
+    "lib": ["deno.window"]
+  }
+}

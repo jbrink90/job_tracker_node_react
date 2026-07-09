@@ -10,11 +10,10 @@ import { MuiTableTest } from "../../components/MuiTableTest";
 import "./index.css";
 import {
   apiGetJobsSupabase,
-  apiGetAllJobsSupabase,
   apiDeleteJobSupabase,
   apiUpdateJobSupabase,
   apiAddJobSupabase,
-  apiPullLinkedInData,
+  apiPullLinkedInDataSupabase,
 } from "../../lib/api_calls";
 import { supabase, getCurrentUser } from "../../lib/supabase";
 import CloseIcon from "@mui/icons-material/Close";
@@ -167,7 +166,7 @@ const SimpleDashboard: React.FC = () => {
     if (!accessToken) return { success: false, error: "No access token" };
 
     try {
-      return await apiPullLinkedInData(url, accessToken);
+      return await apiPullLinkedInDataSupabase(url);
     } catch (error) {
       console.error(error);
       enqueueSnackbar("Failed to pull LinkedIn job data. Please try again.", {

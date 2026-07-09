@@ -285,6 +285,11 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               );
               break;
           }
+        } else {
+          enqueueSnackbar(
+            "Failed to import from LinkedIn. Please notify support of this issue.",
+            { variant: "error" },
+          );
         }
       })
       .catch((error: string) => {
