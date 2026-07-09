@@ -16,7 +16,7 @@ type LinkedInJobResponse = {
 
 export async function apiGetJobsSupabase(userId: string): Promise<Job[]> {
   const { data: jobs, error } = await supabase
-    .from('jobs')
+    .from(import.meta.env.VITE_SUPABASE_JOBS_TABLE)
     .select()
     .eq('userId', userId);
   if (error) throw new Error("Failed to fetch jobs: " + error.message);
@@ -25,7 +25,7 @@ export async function apiGetJobsSupabase(userId: string): Promise<Job[]> {
 
 export async function apiGetAllJobsSupabase(): Promise<Job[]> {
   const { data: jobs, error } = await supabase
-    .from('jobs')
+    .from(import.meta.env.VITE_SUPABASE_JOBS_TABLE)
     .select()
   if (error) throw new Error("Failed to fetch jobs: " + error.message);
   return jobs || [];
@@ -34,7 +34,7 @@ export async function apiGetAllJobsSupabase(): Promise<Job[]> {
 export async function apiAddJobSupabase(
   job: Job): Promise<Job> {
   const { data, error } = await supabase
-    .from('jobs')
+    .from(import.meta.env.VITE_SUPABASE_JOBS_TABLE)
     .insert(job)
     .select()
     .single();
@@ -49,7 +49,7 @@ export async function apiDeleteJobSupabase(
   userId: string,
 ): Promise<void> {
   const { error } = await supabase
-    .from("jobs")
+    .from(import.meta.env.VITE_SUPABASE_JOBS_TABLE)
     .delete()
     .eq("id", jobId)
     .eq("userId", userId);
@@ -59,7 +59,7 @@ export async function apiDeleteJobSupabase(
 export async function apiUpdateJobSupabase(
   job: Job): Promise<void> {
   const { error } = await supabase
-    .from('jobs')
+    .from(import.meta.env.VITE_SUPABASE_JOBS_TABLE)
     .update(job)
     .eq('id', job.id)
     .eq('userId', job.userId);
@@ -85,7 +85,7 @@ export async function apiPullLinkedInData(
 
 export async function apiPullLinkedInDataSupabase(
   linkedinUrl: string): Promise<LinkedInJobResponse> {
-  const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/linkedin-scraper`, {
+  const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/${import.meta.env.VITE_SUPABASE_LINKEDIN_FUNCTION}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
