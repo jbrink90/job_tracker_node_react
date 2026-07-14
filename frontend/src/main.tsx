@@ -28,6 +28,7 @@ import { CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import { AppThemeProvider } from "./context/ThemeContext";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
@@ -79,7 +80,7 @@ function AppWrapper() {
         <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <SnackbarProvider maxSnack={3}>
-            <Router>
+            <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route
@@ -111,6 +112,7 @@ function AppWrapper() {
         </LocalizationProvider>
       </AppThemeProvider>
       <Analytics />
+      <SpeedInsights />
     </>
   );
 }
