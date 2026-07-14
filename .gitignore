@@ -54,4 +54,3 @@ jest.config.ts
 *.cache
 docker-compose.yaml
 *.zip
-backend/job_data.sqlite

@@ -1,21 +1,4 @@
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: node_backend
-    ports:
-      - "4444:4444"
-    environment:
-      API_PORT: 4444
-      SQLITE_FILENAME: /usr/src/app/data/job_data.sqlite
-      SUPABASE_URL: https://yoursite.supabase.co
-      SUPABASE_ANON: your_secret_key
-
-    volumes:
-      - ./data:/usr/src/app/data
-    restart: unless-stopped
-
   frontend:
     build:
       context: ./frontend
@@ -23,11 +6,10 @@ services:
     container_name: react_frontend
     ports:
       - "42000:80"
-    depends_on:
-      - backend
     restart: unless-stopped
     environment:
       VITE_SUPABASE_URL: https://yoursite.supabase.co
       VITE_SUPABASE_ANON: your_secret_key
-      VITE_API_BASE_URL: https://api.jobtrackr.online
       VITE_FRONTEND_BASE_URL: https://jobtrackr.online
+      VITE_SUPABASE_JOBS_TABLE: jobs_table
+      VITE_SUPABASE_LINKEDIN_FUNCTION: v1/linkedin-scrape_func

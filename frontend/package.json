@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "private": true,
-  "version": "1.5.1",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -26,6 +26,7 @@
     "@mui/x-date-pickers": "^7.28.3",
     "@supabase/supabase-js": "^2.93.3",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "dayjs": "^1.11.13",
     "framer-motion": "^12.35.0",
     "mapbox-gl": "^3.11.0",

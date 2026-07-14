@@ -66,23 +66,6 @@ export async function apiUpdateJobSupabase(
   if (error) throw new Error("Failed to save job: " + error.message);
 }
 
-export async function apiPullLinkedInData(
-  linkedinUrl: string,
-  supabase_id: string | null,
-): Promise<LinkedInJobResponse> {
-  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/jobs/pull`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${supabase_id}`,
-    },
-    body: JSON.stringify({
-      url: linkedinUrl,
-    }),
-  });
-  return res.json();
-}
-
 export async function apiPullLinkedInDataSupabase(
   linkedinUrl: string): Promise<LinkedInJobResponse> {
   const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/${import.meta.env.VITE_SUPABASE_LINKEDIN_FUNCTION}`, {
