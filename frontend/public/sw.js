@@ -6,6 +6,7 @@ const OFFLINE_URL = "/offline.html";
 const STATIC_ASSETS = [
   "/offline.html",
   "/search.png",
+  "/icon-128x128.png",
 ];
 
 self.addEventListener("install", (event) => {
