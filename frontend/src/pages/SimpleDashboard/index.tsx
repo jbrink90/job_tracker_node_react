@@ -366,9 +366,11 @@ const SimpleDashboard: React.FC = () => {
                 color="error"
                 onClick={() =>
                   selectedJobId &&
-                  deleteJob(selectedJobId).then(() =>
-                    setIsDeleteModalVisible(false),
-                  )
+                  deleteJob(selectedJobId).then(() => {
+                    setIsDeleteModalVisible(false);
+                    setIsSlideoutOpen(false);
+                    setSelectedJobId(null);
+                  })
                 }
               >
                 Yes
