@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, CircularProgress, Alert } from "@mui/material";
 import { supabase } from "../../lib/supabase";
 import { useNavigate } from "react-router-dom";
 import { PageFooter } from "../../components";
@@ -8,6 +8,9 @@ export default function Contact() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,9 +28,38 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ name, email, message });
-    // send to your backend/email service
-    setMessage(""); // reset after send
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    setErrorMessage("");
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/${import.meta.env.VITE_SUPABASE_CONTACT_FUNCTION}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apiKey": `${import.meta.env.VITE_SUPABASE_ANON}`,
+          },
+          body: JSON.stringify({ name, email, message }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send message");
+      }
+
+      setSubmitStatus("success");
+      setMessage("");
+    } catch (error) {
+      setSubmitStatus("error");
+      setErrorMessage(error instanceof Error ? error.message : "Failed to send message");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -40,6 +72,18 @@ export default function Contact() {
           Have a question or feedback? Fill out the form below and we'll get
           back to you.
         </Typography>
+
+        {submitStatus === "success" && (
+          <Alert severity="success" sx={{ mt: 3 }}>
+            Message sent successfully! We'll get back to you soon.
+          </Alert>
+        )}
+
+        {submitStatus === "error" && (
+          <Alert severity="error" sx={{ mt: 3 }}>
+            {errorMessage}
+          </Alert>
+        )}
 
         <Box
           component="form"
