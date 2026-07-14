@@ -54,6 +54,7 @@ export default function Contact() {
 
       setSubmitStatus("success");
       setMessage("");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       setSubmitStatus("error");
       setErrorMessage(error instanceof Error ? error.message : "Failed to send message");
