@@ -41,11 +41,12 @@ self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Never touch auth / supabase / api
+  // Never touch auth / supabase / api / vercel
   if (
     url.pathname.startsWith("/auth") ||
     url.hostname.includes("supabase") ||
-    request.url.includes("/api/")
+    request.url.includes("/api/") ||
+    url.pathname.startsWith("/_vercel/")
   ) {
     return;
   }
