@@ -123,10 +123,22 @@ export default {
     }
 
     const { data, error } = await resend.emails.send({
-      from: "JobTrackr Contact <onboarding@resend.dev>",
+      from: "JobTrackr Support <support@jobtrackr.online>",
       to: destination,
       replyTo: safeEmail,
       subject: `JobTrackr Contact: ${escapeHtml(safeName)}`,
+      text: `
+      New Contact Form Submission
+
+      Name: ${escapeHtml(safeName)}
+      Email: ${escapeHtml(safeEmail)}
+
+      Message:
+
+      ${escapeHtml(safeMessage)}
+
+      Reply-To: ${escapeHtml(safeEmail)}
+      `,
       html: `
         <!DOCTYPE html>
         <html>
