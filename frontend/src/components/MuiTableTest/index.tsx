@@ -78,8 +78,16 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
     React.useState<GridColumnVisibilityModel>({
       location: false,
       applied: false,
-      lastUpdated: true,
+      lastUpdated: !isMobile,
     });
+
+  // Update column visibility when screen size changes
+  React.useEffect(() => {
+    setColumnVisibilityModel(prev => ({
+      ...prev,
+      lastUpdated: !isMobile,
+    }));
+  }, [isMobile]);
 
   const [paginationModel, setPaginationModel] =
     React.useState<GridPaginationModel>({
