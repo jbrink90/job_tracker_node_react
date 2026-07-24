@@ -29,36 +29,64 @@ interface ReactTableProps {
 
 function applyChipsToStatus(params: GridRenderCellParams) {
   switch (params.value) {
+    case "Not Applied":
+      return <Chip label="Not Applied" color="default" sx={{ height: 25 }} />;
+    case "Looking":
+      return <Chip label="Looking" color="primary" sx={{ height: 25 }} />;
+    case "Researching":
+      return <Chip label="Researching" color="primary" sx={{ height: 25 }} />;
     case "Applied":
       return <Chip label="Applied" color="primary" sx={{ height: 25 }} />;
-      break;
     case "Interview Scheduled":
       return (
         <Chip label="Interview Scheduled" color="warning" sx={{ height: 25 }} />
       );
-      break;
+    case "First Interview":
+      return (
+        <Chip label="First Interview" color="info" sx={{ height: 25 }} />
+      );
+    case "Second Interview":
+      return (
+        <Chip label="Second Interview" color="info" sx={{ height: 25 }} />
+      );
+    case "Technical Interview":
+      return (
+        <Chip label="Technical Interview" color="info" sx={{ height: 25 }} />
+      );
+    case "Manager Interview":
+      return (
+        <Chip label="Manager Interview" color="info" sx={{ height: 25 }} />
+      );
     case "Offer Received":
       return (
         <Chip label="Offer Received" color="success" sx={{ height: 25 }} />
       );
-      break;
+    case "Negotiating Offer":
+      return (
+        <Chip label="Negotiating Offer" color="warning" sx={{ height: 25 }} />
+      );
+    case "Accepted":
+      return (
+        <Chip label="Accepted" color="success" sx={{ height: 25 }} />
+      );
+    case "Rejected":
+      return <Chip label="Rejected" color="error" sx={{ height: 25 }} />;
+    case "No Response":
+      return <Chip label="No Response" color="default" sx={{ height: 25 }} />;
+    case "On Hold":
+      return (
+        <Chip label="On Hold" color="secondary" sx={{ height: 25 }} />
+      );
     case "Hired":
       return (
         <Chip label="Hired" color="success" sx={{ height: 25 }} />
       );
-      break;
-    case "Rejected":
-      return <Chip label="Rejected" color="error" sx={{ height: 25 }} />;
-      break;
     case "Not Selected":
       return <Chip label="Rejected" color="error" sx={{ height: 25 }} />;
-      break;
     case "":
       return;
-      break;
     default:
       return <Chip label={params.value} color="primary" sx={{ height: 25 }} />;
-      break;
   }
 }
 

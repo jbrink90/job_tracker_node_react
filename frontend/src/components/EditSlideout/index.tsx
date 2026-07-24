@@ -52,7 +52,7 @@ import {
   StrikeThroughSupSubToggles,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-import { Button } from "@mui/material";
+import { Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 
 interface EditSlideoutProps {
   isSlideoutOpen: boolean;
@@ -145,7 +145,26 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Common job application statuses
+  const statusOptions = [
+    "Not Applied",
+    "Looking",
+    "Researching",
+    "Applied",
+    "Interview Scheduled",
+    "First Interview",
+    "Second Interview",
+    "Technical Interview",
+    "Manager Interview",
+    "Offer Received",
+    "Negotiating Offer",
+    "Accepted",
+    "Rejected",
+    "No Response",
+    "On Hold",
+  ];
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setJobValues((prev) => ({ ...prev, [name]: value }));
     setHasJobBeenModified(true);
@@ -530,18 +549,39 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               }}
             />
 
-            <TextField
-              label="Status"
-              name="status"
-              value={jobValues?.status || ""}
-              onChange={handleInputChange}
-              fullWidth
-              required
-              size="small"
-              slotProps={{
-                htmlInput: { min: 1, max: 30 }
-              }}
-            />
+            <FormControl fullWidth>
+              <InputLabel
+                id="status-select-label"
+                sx={{
+                  "&.MuiInputLabel-shrink": {
+                    color: theme.palette.text.secondary,
+                  },
+                }}
+              >
+                Status
+              </InputLabel>
+
+              <Select
+                labelId="status-select-label"
+                label="Status"
+                name="status"
+                value={jobValues?.status || "Applied"}
+                onChange={(e) => {
+                  const { name, value } = e.target as HTMLInputElement;
+                  setJobValues((prev) => ({ ...prev, [name]: value }));
+                  setHasJobBeenModified(true);
+                }}
+                required
+                size="small"
+                displayEmpty
+              >
+                {statusOptions.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
             <DatePicker
               label="Date Applied"
