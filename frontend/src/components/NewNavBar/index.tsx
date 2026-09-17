@@ -67,7 +67,7 @@ interface NewNavBarProps {
   onSearchChange?: (searchTerm: string) => void;
 }
 
-const NewNavBar: React.FC<NewNavBarProps> = ({ onSearchChange }) => {
+const NewNavBar = ({ onSearchChange }: NewNavBarProps): React.JSX.Element => {
   const { siteTheme, setTheme } = useThemeContext();
   const theme = useTheme();
 

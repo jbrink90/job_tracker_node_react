@@ -27,6 +27,8 @@ import "./main.css";
 import { CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import { AppThemeProvider } from "./context/ThemeContext";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
@@ -73,41 +75,45 @@ function AppWrapper() {
   }, []);
 
   return (
-    <AppThemeProvider>
-      <CssBaseline />
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <SnackbarProvider maxSnack={3}>
-          <Router>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <SimpleDashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/login" element={<Login />} />
-              <Route path="/logout" element={<Logout />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/map" element={<Map />} />
-              <Route path="/auth/callback" element={<AuthCallback />} />
-              <Route
-                path="/account"
-                element={
-                  <ProtectedRoute>
-                    <Account />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </Router>
-        </SnackbarProvider>
-      </LocalizationProvider>
-    </AppThemeProvider>
+    <>
+      <AppThemeProvider>
+        <CssBaseline />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <SnackbarProvider maxSnack={3}>
+            <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <SimpleDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/login" element={<Login />} />
+                <Route path="/logout" element={<Logout />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/map" element={<Map />} />
+                <Route path="/auth/callback" element={<AuthCallback />} />
+                <Route
+                  path="/account"
+                  element={
+                    <ProtectedRoute>
+                      <Account />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </Router>
+          </SnackbarProvider>
+        </LocalizationProvider>
+      </AppThemeProvider>
+      <Analytics />
+      <SpeedInsights />
+    </>
   );
 }
 

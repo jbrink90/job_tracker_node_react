@@ -23,10 +23,10 @@
 - 📱 **Mobile Optimized** - Responsive design that works on all devices
 
 ### 🛠️ **Developer Experience**
-- ⚡ **TypeScript** - Full type safety across frontend and backend
+- ⚡ **TypeScript** - Full type safety across frontend
 - 🎨 **Material-UI** - Beautiful, consistent UI components
 - 🐳 **Docker Ready** - Containerized deployment with Docker Compose
-- 🔄 **Hot Reload** - Fast development with Vite and Nodemon
+- 🔄 **Hot Reload** - Fast development with Vite
 
 ---
 
@@ -40,17 +40,16 @@
 - **Maps**: Mapbox GL JS for location visualization
 - **PWA**: Service worker with offline caching
 
-### **Backend (Node.js + Express)**
-- **API**: RESTful endpoints with Express.js
-- **Database**: SQLite for lightweight, portable storage
-- **Authentication**: Supabase JWT integration
-- **Web Scraping**: Cheerio + Axios for LinkedIn job import
+### **Backend (Supabase)**
+- **Database**: PostgreSQL via Supabase
+- **Authentication**: Supabase Auth (passwordless email login)
+- **Edge Functions**: Deno-based serverless functions for LinkedIn scraping
 
 ### **Infrastructure**
-- **Deployment**: Docker containers with nginx reverse proxy
+- **Deployment**: Docker container with nginx reverse proxy
 - **Environment**: Production-ready environment variable validation
-- **Security**: CORS, JWT authentication, admin middleware
-- **Monitoring**: Structured error handling and logging
+- **Security**: Row Level Security (RLS) policies, JWT authentication
+- **Edge Functions**: Serverless functions for web scraping
 
 ---
 
@@ -80,50 +79,39 @@ npm install
 cp .env.example .env
 
 # Edit .env with your Supabase credentials
-# Required: SUPABASE_URL, SUPABASE_ANON, ADMIN_EMAIL
-# Optional: API_PORT, SQLITE_FILENAME, NODE_ENV
+# Required: VITE_SUPABASE_URL, VITE_SUPABASE_ANON
+# Optional: VITE_DEMO_PASSWORD
 ```
 
 4. **Start Development**
 ```bash
-# Start both frontend and backend
+# Start development server
 npm run dev
-
-# Or start individually
-npm run dev:frontend  # Frontend on http://localhost:5173
-npm run dev:backend   # Backend on http://localhost:4444
 ```
 
 5. **Access the App**
 - 🌐 **Frontend**: http://localhost:5173
-- 🔧 **Backend API**: http://localhost:4444
-- 📊 **API Docs**: Check `/api_docs` for Bruno/Postman collections
 
 ---
 
-## � API Documentation
+## 📡 API Documentation
 
-### **Authentication**
-All protected endpoints require a Bearer token from Supabase authentication:
-```http
-Authorization: Bearer <your-supabase-jwt-token>
-```
+### **Supabase Database**
+All data operations use Supabase client SDK with Row Level Security (RLS):
+- Jobs are stored in the `jobs_table`
+- Each user can only access their own jobs
+- Authentication handled by Supabase Auth
 
-### **Core Endpoints**
+### **Edge Functions**
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| `GET` | `/jobs` | Get user's job listings | ✅ |
-| `POST` | `/jobs` | Create new job entry | ✅ |
-| `PATCH` | `/jobs` | Update existing job | ✅ |
-| `DELETE` | `/jobs/:id` | Delete job entry | ✅ |
-| `POST` | `/jobs/pull` | Import from LinkedIn | ✅ |
-| `GET` | `/jobs/all` | Get all jobs (admin only) | 🔐 |
+| Function | Description | Auth Required |
+|----------|-------------|---------------|
+| `linkedin-scrape_func` | Import job details from LinkedIn URL | ✅ |
 
 ### **LinkedIn Integration**
 ```bash
-curl -X POST http://localhost:4444/jobs/pull \
-  -H "Authorization: Bearer <token>" \
+curl -X POST https://your-project.supabase.co/functions/v1/linkedin-scrape_func \
+  -H "Authorization: Bearer <your-anon-key>" \
   -H "Content-Type: application/json" \
   -d '{"url": "https://www.linkedin.com/jobs/view/12345"}'
 ```
@@ -150,23 +138,6 @@ curl -X POST http://localhost:4444/jobs/pull \
 ### **Production Docker Compose**
 ```yaml
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: jobtrackr_backend
-    ports:
-      - "4444:4444"
-    environment:
-      API_PORT: 4444
-      SQLITE_FILENAME: /usr/src/app/data/job_data.sqlite
-      SUPABASE_URL: https://your-project.supabase.co
-      SUPABASE_ANON: your-anon-key
-      ADMIN_EMAIL: admin@example.com
-    volumes:
-      - ./data:/usr/src/app/data
-    restart: unless-stopped
-
   frontend:
     build:
       context: ./frontend
@@ -174,13 +145,12 @@ services:
     container_name: jobtrackr_frontend
     ports:
       - "80:80"
-    depends_on:
-      - backend
     restart: unless-stopped
     environment:
       VITE_SUPABASE_URL: https://your-project.supabase.co
       VITE_SUPABASE_ANON: your-anon-key
-      VITE_API_BASE_URL: https://api.jobtrackr.online
+      VITE_SUPABASE_JOBS_TABLE: jobs_table
+      VITE_SUPABASE_LINKEDIN_FUNCTION: v1/linkedin-scrape_func
       VITE_FRONTEND_BASE_URL: https://jobtrackr.online
 ```
 
@@ -201,13 +171,6 @@ npm run test:ui      # Run tests with UI
 ### **Project Structure**
 ```
 job_tracker_node_react/
-├── backend/                 # Node.js API server
-│   ├── src/
-│   │   ├── routes/         # API endpoints
-│   │   ├── utils/          # Authentication & utilities
-│   │   └── server.ts       # Main server file
-│   ├── api_docs/           # Bruno API collections
-│   └── Dockerfile
 ├── frontend/               # React PWA
 │   ├── src/
 │   │   ├── components/    # Reusable UI components
@@ -216,6 +179,10 @@ job_tracker_node_react/
 │   │   └── main.tsx       # App entry point
 │   ├── public/            # Static assets & service worker
 │   └── Dockerfile
+├── edge_functions/        # Supabase Edge Functions
+│   └── supabase/
+│       └── functions/
+│           └── linkedin-scraper/  # LinkedIn scraping function
 ├── compose.yaml           # Docker Compose configuration
 └── README.md
 ```
@@ -225,23 +192,24 @@ job_tracker_node_react/
 ## 🚀 Future Roadmap
 
 ### **Completed Features** ✅
-- [x] Supabase authentication integration
-- [x] Advanced search and filtering
-- [x] LinkedIn job import functionality
-- [x] Rich markdown editor
-- [x] PWA capabilities
-- [x] Docker deployment
+- [✔] Supabase authentication integration
+- [✔] Advanced search and filtering
+- [✔] LinkedIn job import functionality
+- [✔] Rich markdown editor
+- [✔] PWA capabilities
+- [✔] Docker deployment
+- [✔] Context / Theme Improvements
+- [✔] Supabase database integration
 
 ### **In Development** 🚧
 - [ ] Unit Testing
-- [ ] Context / Theme Improvements
 - [ ] Limiting free users
 
 ### **Planned Features** 📋
 - [ ] Interview Scheduling with calendar integration
 - [ ] Email notifications for interview reminders
 - [ ] Job application analytics dashboard
-- [ ] Job export functionality
+- [ ] Job list export functionality
 
 ---
 
@@ -263,11 +231,10 @@ This project is licensed under the ISC License - see the package.json file for d
 
 ## 🙏 Acknowledgments
 
-- **Supabase** - Authentication and database services
+- **Supabase** - Backend services (database, auth, edge functions)
 - **Material-UI** - React component library
 - **Mapbox** - Mapping and location services
 - **Vite** - Fast build tool and development server
-- **Express.js** - Backend web framework
 
 ---
 

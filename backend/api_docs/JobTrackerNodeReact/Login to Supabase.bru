@@ -1,7 +1,7 @@
 meta {
   name: Login to Supabase
   type: http
-  seq: 11
+  seq: 10
 }
 
 post {
@@ -15,7 +15,7 @@ params:query {
 }
 
 headers {
-  apikey: {{SUPABASE_ANON_KEY}}
+  apikey: {{job_tracker_supabase_apikey}}
   Content-Type: application/json
 }
 
@@ -30,9 +30,8 @@ body:json {
 tests {
   const body = res.getBody();
   
-  bru.setEnvVar("access_token", body.access_token);
-  bru.setEnvVar("refresh_token", body.refresh_token);
+  bru.setVar("access_token", body.access_token);
+  bru.setVar("refresh_token", body.refresh_token);
   
   console.log("✅ Supabase tokens saved");
-  
 }

@@ -52,7 +52,7 @@ import {
   StrikeThroughSupSubToggles,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-import { Button } from "@mui/material";
+import { Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 
 interface EditSlideoutProps {
   isSlideoutOpen: boolean;
@@ -68,13 +68,14 @@ interface EditSlideoutProps {
 
 const defaultJob: Job = {
   company: "",
-  job_title: "",
+  jobTitle: "",
   description: "",
   location: "",
   status: "Applied",
   applied: new Date(),
-  last_updated: new Date(),
-  supabase_id: "",
+  lastUpdated: new Date(),
+  userId: "",
+  createdAt: new Date(),
 };
 
 const modalStyle = {
@@ -144,7 +145,26 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Common job application statuses
+  const statusOptions = [
+    "Not Applied",
+    "Looking",
+    "Researching",
+    "Applied",
+    "Interview Scheduled",
+    "First Interview",
+    "Second Interview",
+    "Technical Interview",
+    "Manager Interview",
+    "Offer Received",
+    "Negotiating Offer",
+    "Accepted",
+    "Rejected",
+    "No Response",
+    "On Hold",
+  ];
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setJobValues((prev) => ({ ...prev, [name]: value }));
     setHasJobBeenModified(true);
@@ -196,7 +216,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
     if (!jobValues.company?.trim()) {
       missingFields.push("Company");
     }
-    if (!jobValues.job_title?.trim()) {
+    if (!jobValues.jobTitle?.trim()) {
       missingFields.push("Position");
     }
     if (!jobValues.location?.trim()) {
@@ -256,7 +276,7 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
         if (data.success && data.job) {
           setJobValues((prev) => ({
             ...prev,
-            job_title: data.job!.job_title,
+            jobTitle: data.job!.job_title,
             company: data.job!.company,
             location: data.job!.location,
             description: data.job!.description,
@@ -457,15 +477,21 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
               fullWidth
               required
               size="small"
+              slotProps={{
+                htmlInput: { min: 1, max: 30 }
+              }}
             />
             <TextField
               label="Position"
-              name="job_title"
-              value={jobValues?.job_title || ""}
+              name="jobTitle"
+              value={jobValues?.jobTitle || ""}
               onChange={handleInputChange}
               fullWidth
               required
               size="small"
+              slotProps={{
+                htmlInput: { min: 1, max: 50 }
+              }}
             />
 
             <Box>
@@ -518,17 +544,44 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
                   <MapIcon sx={{ cursor: "pointer" }} onClick={openMapModal} />
                 ),
               }}
+              slotProps={{
+                htmlInput: { min: 1, max: 30 }
+              }}
             />
 
-            <TextField
-              label="Status"
-              name="status"
-              value={jobValues?.status || ""}
-              onChange={handleInputChange}
-              fullWidth
-              required
-              size="small"
-            />
+            <FormControl fullWidth>
+              <InputLabel
+                id="status-select-label"
+                sx={{
+                  "&.MuiInputLabel-shrink": {
+                    color: theme.palette.text.secondary,
+                  },
+                }}
+              >
+                Status
+              </InputLabel>
+
+              <Select
+                labelId="status-select-label"
+                label="Status"
+                name="status"
+                value={jobValues?.status || "Applied"}
+                onChange={(e) => {
+                  const { name, value } = e.target as HTMLInputElement;
+                  setJobValues((prev) => ({ ...prev, [name]: value }));
+                  setHasJobBeenModified(true);
+                }}
+                required
+                size="small"
+                displayEmpty
+              >
+                {statusOptions.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
             <DatePicker
               label="Date Applied"
@@ -548,8 +601,8 @@ const EditSlideout: React.FC<EditSlideoutProps> = ({
             <TextField
               label="Last Update"
               value={
-                jobValues?.last_updated
-                  ? dayjs(jobValues.last_updated).format("MM/DD/YYYY")
+                jobValues?.lastUpdated
+                  ? dayjs(jobValues.lastUpdated).format("MM/DD/YYYY")
                   : ""
               }
               disabled

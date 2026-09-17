@@ -4,6 +4,7 @@ import {
   GridColumnVisibilityModel,
   GridRenderCellParams,
   GridPaginationModel,
+  GridSortModel,
 } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import "@fontsource/roboto/400.css";
@@ -15,11 +16,11 @@ import { Button } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
 interface ReactTableProps {
-  selectedJobId: number | null;
-  setSelectedJobId: React.Dispatch<React.SetStateAction<number | null>>;
+  selectedJobId: string | null;
+  setSelectedJobId: React.Dispatch<React.SetStateAction<string | null>>;
   setIsSlideoutOpen: React.Dispatch<React.SetStateAction<boolean>>;
   jobs: Job[];
-  deleteJob: (arg: number) => void;
+  deleteJob: (arg: string) => void;
   setIsAddingNewJob: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDeleteModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isDataLoading: boolean;
@@ -28,31 +29,64 @@ interface ReactTableProps {
 
 function applyChipsToStatus(params: GridRenderCellParams) {
   switch (params.value) {
+    case "Not Applied":
+      return <Chip label="Not Applied" color="default" sx={{ height: 25 }} />;
+    case "Looking":
+      return <Chip label="Looking" color="primary" sx={{ height: 25 }} />;
+    case "Researching":
+      return <Chip label="Researching" color="primary" sx={{ height: 25 }} />;
     case "Applied":
       return <Chip label="Applied" color="primary" sx={{ height: 25 }} />;
-      break;
     case "Interview Scheduled":
       return (
         <Chip label="Interview Scheduled" color="warning" sx={{ height: 25 }} />
       );
-      break;
+    case "First Interview":
+      return (
+        <Chip label="First Interview" color="info" sx={{ height: 25 }} />
+      );
+    case "Second Interview":
+      return (
+        <Chip label="Second Interview" color="info" sx={{ height: 25 }} />
+      );
+    case "Technical Interview":
+      return (
+        <Chip label="Technical Interview" color="info" sx={{ height: 25 }} />
+      );
+    case "Manager Interview":
+      return (
+        <Chip label="Manager Interview" color="info" sx={{ height: 25 }} />
+      );
     case "Offer Received":
       return (
         <Chip label="Offer Received" color="success" sx={{ height: 25 }} />
       );
-      break;
+    case "Negotiating Offer":
+      return (
+        <Chip label="Negotiating Offer" color="warning" sx={{ height: 25 }} />
+      );
+    case "Accepted":
+      return (
+        <Chip label="Accepted" color="success" sx={{ height: 25 }} />
+      );
     case "Rejected":
       return <Chip label="Rejected" color="error" sx={{ height: 25 }} />;
-      break;
+    case "No Response":
+      return <Chip label="No Response" color="default" sx={{ height: 25 }} />;
+    case "On Hold":
+      return (
+        <Chip label="On Hold" color="secondary" sx={{ height: 25 }} />
+      );
+    case "Hired":
+      return (
+        <Chip label="Hired" color="success" sx={{ height: 25 }} />
+      );
     case "Not Selected":
       return <Chip label="Rejected" color="error" sx={{ height: 25 }} />;
-      break;
     case "":
       return;
-      break;
     default:
-      return <Chip label={params.value} sx={{ height: 25 }} />;
-      break;
+      return <Chip label={params.value} color="primary" sx={{ height: 25 }} />;
   }
 }
 
@@ -72,14 +106,29 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
     React.useState<GridColumnVisibilityModel>({
       location: false,
       applied: false,
-      last_updated: false,
+      lastUpdated: !isMobile,
     });
+
+  // Update column visibility when screen size changes
+  React.useEffect(() => {
+    setColumnVisibilityModel(prev => ({
+      ...prev,
+      lastUpdated: !isMobile,
+    }));
+  }, [isMobile]);
 
   const [paginationModel, setPaginationModel] =
     React.useState<GridPaginationModel>({
       pageSize: 15,
       page: 0,
     });
+
+  const [sortModel, setSortModel] = React.useState<GridSortModel>([
+    {
+      field: "applied",
+      sort: "desc",
+    },
+  ]);
 
   const desktopColumns: GridColDef[] = [
     {
@@ -90,7 +139,7 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
       filterable: true,
     },
     {
-      field: "job_title",
+      field: "jobTitle",
       headerName: "Job Title",
       flex: 1,
       sortable: true,
@@ -118,14 +167,26 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
       sortable: true,
       filterable: true,
       type: "date",
+      renderCell: (params) => {
+        if (!params.value) return "";
+        const date = new Date(params.value as string);
+        // Use UTC methods to avoid timezone shifting
+        return date.toLocaleDateString(undefined, { timeZone: 'UTC' });
+      },
     },
     {
-      field: "last_updated",
+      field: "lastUpdated",
       headerName: "Last Updated",
       flex: 1,
       sortable: true,
       filterable: true,
       type: "date",
+      renderCell: (params) => {
+        if (!params.value) return "";
+        const date = new Date(params.value as string);
+        // Use UTC methods to avoid timezone shifting
+        return date.toLocaleDateString(undefined, { timeZone: 'UTC' });
+      },
     },
     {
       field: "actions",
@@ -184,7 +245,7 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
     id: job.id,
     ...job,
     applied: job.applied ? new Date(job.applied) : null,
-    last_updated: job.last_updated ? new Date(job.last_updated) : null,
+    lastUpdated: job.lastUpdated ? new Date(job.lastUpdated) : null,
   }));
 
   return (
@@ -199,6 +260,8 @@ export const MuiTableTest: React.FC<ReactTableProps> = ({
           pageSizeOptions={[10, 15, 25, 50, 100]}
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
+          sortModel={sortModel}
+          onSortModelChange={(model) => setSortModel(model)}
           loading={isDataLoading}
           slotProps={{
             loadingOverlay: {

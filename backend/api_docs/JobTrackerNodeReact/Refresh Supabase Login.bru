@@ -1,7 +1,7 @@
 meta {
   name: Refresh Supabase Login
   type: http
-  seq: 12
+  seq: 11
 }
 
 post {
@@ -29,8 +29,8 @@ body:json {
 tests {
   const body = res.getBody();
   
-  bru.setEnvVar("access_token", body.access_token);
-  bru.setEnvVar("refresh_token", body.refresh_token);
+  bru.setVar("access_token", body.access_token);
+  bru.setVar("refresh_token", body.refresh_token);
   
   console.log("🔄 Token refreshed");
   

@@ -1,5 +1,6 @@
 // lib/api_calls.ts
 import { Job } from "../types/Job";
+import { supabase } from "../lib/supabase";
 
 type LinkedInJobResponse = {
   success: boolean;
@@ -13,138 +14,66 @@ type LinkedInJobResponse = {
   details?: string;
 };
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:4444";
-
-/**
- * Fetch all jobs for a specific user.
- *
- * @async
- * @function
- * @param {string | null} supabase_id - The Supabase user ID to fetch jobs for. Can be null.
- * @returns {Promise<Job[]>} Resolves with an array of Job objects.
- * @throws Will throw an error if the fetch fails or the response is not OK.
- *
- * @example
- * const jobs = await apiGetJobs('user-id-123');
- */
-export async function apiGetJobs(supabase_id: string | null): Promise<Job[]> {
-  const res = await fetch(`${baseUrl}/jobs`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${supabase_id}`,
-    },
-  });
-  if (!res.ok) throw new Error("Failed to fetch jobs");
-  return res.json();
+export async function apiGetJobsSupabase(userId: string): Promise<Job[]> {
+  const { data: jobs, error } = await supabase
+    .from(import.meta.env.VITE_SUPABASE_JOBS_TABLE)
+    .select()
+    .eq('userId', userId);
+  if (error) throw new Error("Failed to fetch jobs: " + error.message);
+  return jobs || [];
 }
 
-/**
- * Add a new job for a specific user.
- *
- * @async
- * @function
- * @param {Job} job - The job data to add.
- * @param {string | null} supabase_id - The Supabase user ID to associate the job with. Can be null.
- * @returns {Promise<Job>} Resolves with the newly added Job object.
- * @throws Will throw an error if the fetch fails or the response is not OK.
- *
- * @example
- * const newJob = await apiAddJob({ company: 'Acme', job_title: 'Developer', ... }, 'user-id-123');
- */
-export async function apiAddJob(
-  job: Job,
-  supabase_id: string | null,
-): Promise<Job> {
-  const res = await fetch(`${baseUrl}/jobs`, {
+export async function apiGetAllJobsSupabase(): Promise<Job[]> {
+  const { data: jobs, error } = await supabase
+    .from(import.meta.env.VITE_SUPABASE_JOBS_TABLE)
+    .select()
+  if (error) throw new Error("Failed to fetch jobs: " + error.message);
+  return jobs || [];
+}
+
+export async function apiAddJobSupabase(
+  job: Job): Promise<Job> {
+  const { data, error } = await supabase
+    .from(import.meta.env.VITE_SUPABASE_JOBS_TABLE)
+    .insert(job)
+    .select()
+    .single();
+  if (error) {
+    throw new Error("Failed to add job: " + error.message);
+  }
+  return data;
+}
+
+export async function apiDeleteJobSupabase(
+  jobId: string,
+  userId: string,
+): Promise<void> {
+  const { error } = await supabase
+    .from(import.meta.env.VITE_SUPABASE_JOBS_TABLE)
+    .delete()
+    .eq("id", jobId)
+    .eq("userId", userId);
+  if (error) throw new Error("Failed to delete job: " + error.message);
+}
+
+export async function apiUpdateJobSupabase(
+  job: Job): Promise<void> {
+  const { error } = await supabase
+    .from(import.meta.env.VITE_SUPABASE_JOBS_TABLE)
+    .update(job)
+    .eq('id', job.id)
+    .eq('userId', job.userId);
+  if (error) throw new Error("Failed to save job: " + error.message);
+}
+
+export async function apiPullLinkedInDataSupabase(
+  linkedinUrl: string): Promise<LinkedInJobResponse> {
+  const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/${import.meta.env.VITE_SUPABASE_LINKEDIN_FUNCTION}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${supabase_id}`,
-    },
-    body: JSON.stringify(job),
-  });
-  if (!res.ok) throw new Error("Failed to add job");
-  return res.json();
-}
-
-/**
- * Delete a job by its ID for a specific user.
- *
- * @async
- * @function
- * @param {number} jobId - The ID of the job to delete.
- * @param {string | null} supabase_id - The Supabase user ID to authorize the deletion. Can be null.
- * @returns {Promise<void>} Resolves with nothing on success.
- * @throws Will throw an error if the fetch fails or the response is not OK.
- *
- * @example
- * await apiDeleteJob(42, 'user-id-123');
- */
-export async function apiDeleteJob(
-  jobId: number,
-  supabase_id: string | null,
-): Promise<void> {
-  const res = await fetch(`${baseUrl}/jobs/${jobId}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${supabase_id}`,
-    },
-  });
-  if (!res.ok) throw new Error("Failed to delete job");
-}
-
-/**
- * Save updates to an existing job for a specific user.
- *
- * @async
- * @function
- * @param {Job} job - The updated job data.
- * @param {string | null} supabase_id - The Supabase user ID to authorize the save. Can be null.
- * @returns {Promise<void>} Resolves with nothing on success.
- * @throws Will throw an error if the fetch fails or the response is not OK.
- *
- * @example
- * await apiSaveJob({ id: 42, company: 'Acme', job_title: 'Senior Dev', ... }, 'user-id-123');
- */
-export async function apiSaveJob(
-  job: Job,
-  supabase_id: string | null,
-): Promise<void> {
-  const res = await fetch(`${baseUrl}/jobs`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${supabase_id}`,
-    },
-    body: JSON.stringify(job),
-  });
-  if (!res.ok) throw new Error("Failed to save job");
-}
-
-/**
- * Pull LinkedIn information about a job posting
- *
- * @async
- * @function
- * @param {Job} job - The updated job data.
- * @param {string | null} supabase_id - The Supabase user ID to authorize the save. Can be null.
- * @returns {Promise<void>} Resolves with nothing on success.
- * @throws Will throw an error if the fetch fails or the response is not OK.
- *
- * @example
- * await apiSaveJob({ id: 42, company: 'Acme', job_title: 'Senior Dev', ... }, 'user-id-123');
- */
-export async function apiPullLinkedInData(
-  linkedinUrl: string,
-  supabase_id: string | null,
-): Promise<LinkedInJobResponse> {
-  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/jobs/pull`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${supabase_id}`,
+      "apiKey": import.meta.env.VITE_SUPABASE_ANON,
+      "origin": "jobtrackr.online"
     },
     body: JSON.stringify({
       url: linkedinUrl,
