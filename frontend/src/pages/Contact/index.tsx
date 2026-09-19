@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { Box, Button, TextField, Typography, CircularProgress, Alert } from "@mui/material";
+import { Box, Button, TextField, Typography, Alert } from "@mui/material";
 import { supabase } from "../../lib/supabase";
 import { useNavigate } from "react-router-dom";
 import { PageFooter } from "../../components";
+import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 
 export default function Contact() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [captchaInput, setCaptchaInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -24,6 +26,8 @@ export default function Contact() {
       }
     };
     getSession();
+
+    loadCaptchaEnginge(6);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,8 +36,15 @@ export default function Contact() {
     setSubmitStatus(null);
     setErrorMessage("");
 
+    if (!validateCaptcha(captchaInput)) {
+      setSubmitStatus("error");
+      setErrorMessage("Invalid captcha. Please try again.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      await supabase.auth.getSession();
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/${import.meta.env.VITE_SUPABASE_CONTACT_FUNCTION}`,
         {
@@ -54,6 +65,7 @@ export default function Contact() {
 
       setSubmitStatus("success");
       setMessage("");
+      setCaptchaInput("");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       setSubmitStatus("error");
@@ -62,6 +74,7 @@ export default function Contact() {
       setIsSubmitting(false);
     }
   };
+
 
   return (
     <>
@@ -115,11 +128,30 @@ export default function Contact() {
             minRows={4}
             required
           />
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            <Box
+              sx={(theme) => ({
+                "& a": {
+                  color: `${theme.palette.text.primary} !important`,
+                },
+              })}
+            >
+              <LoadCanvasTemplate />
+            </Box>
+            <TextField
+              label="Enter Captcha"
+              value={captchaInput}
+              onChange={(e) => setCaptchaInput(e.target.value)}
+              required
+              sx={{ flex: 1 }}
+            />
+          </Box>
 
           <Button
             type="submit"
             variant="contained"
             color="success"
+            disabled={isSubmitting}
             sx={{
               px: 6,
               py: 1.5,
@@ -134,7 +166,7 @@ export default function Contact() {
               transition: "all 0.3s ease",
             }}
           >
-            Send Message
+            {isSubmitting ? "Sending..." : "Send Message"}
           </Button>
           <Box sx={{ textAlign: "center", mt: 6 }}>
             <Button
